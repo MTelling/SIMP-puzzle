@@ -1,5 +1,12 @@
+import java.awt.Point;
 import java.util.ArrayList;
+
+import javafx.animation.TranslateTransition;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 public class BoardPane extends Pane {
 	
@@ -7,13 +14,15 @@ public class BoardPane extends Pane {
 	private double boardSize;
 	private Board board;
 	private Pane boardContainer;
+	private double tileSize;
+
 	
 	public BoardPane(double size) {
 		
 		this.boardSize = size;
 		
 		//Init board. 
-		this.board = new Board(15);
+		this.board = new Board(4);
 		board.init();
 		
 		
@@ -35,13 +44,35 @@ public class BoardPane extends Pane {
 		boardContainer.setLayoutY(BOARD_MARGIN);
 		boardContainer.setStyle("-fx-background-color: lightgrey");
 		
+		this.tileSize = this.boardSize / this.board.getGridSize();
+		
 		createTiles();
 	
-		
+		boardContainer.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				int xPosClicked = (int)(event.getX() / tileSize);
+				int yPosClicked = (int)(event.getY() / tileSize);
+				
+				Point newPosition = new Point(board.getEmptySpot().x, board.getEmptySpot().y);
+
+				if (board.moveTile(xPosClicked, yPosClicked)) {
+					String clickedTile = "" + board.getGrid()[xPosClicked][yPosClicked].getTileNum();
+					Node selectPane = getChildren().get(0).lookup("#" + clickedTile);
+					TranslateTransition translateTile = new TranslateTransition(Duration.millis(1000), selectPane);
+					translateTile.setByX(tileSize*(newPosition.x-xPosClicked));
+					translateTile.setByY(tileSize*(newPosition.y-yPosClicked));
+					translateTile.play();
+					
+					
+				}
+				
+			}
+		});
 	}
 	
 	public void createTiles() {
-		double tileSize = this.boardSize / this.board.getGridSize();
 		Tile tile;
 		ArrayList<TilePane> tilePanes = new ArrayList<>();
 		

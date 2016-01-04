@@ -18,12 +18,14 @@ public class TilePane extends Label{
 			this.text = "" + this.tile.getTileNum();
 			
 			this.setText(text);
+			this.setId(text);
 			this.setFont(new Font(25));
 			this.setStyle("-fx-background-color: grey");
 			this.setPrefSize(tileSize, tileSize);
 			this.setAlignment(Pos.CENTER);
 			this.setLayoutX(tileSize*xPos);
 			this.setLayoutY(tileSize*yPos);
+
 		}
 		
 		this.setId(""+ tile.getTileNum());
