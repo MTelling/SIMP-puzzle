@@ -1,140 +1,100 @@
-import java.awt.Point;
-import java.util.Random;
+import java.awt.event.KeyEvent;
 
 public class Board {
 
-	private Tile[][] grid;
-	private Point emptySpot;
-	private int gridSize;
+	private int boardSize;
+	private int[][] tiles;
+	private int emptyX, emptyY;
 	
-	public Board(int n) {
-		if( !(n < 1) ){
-			this.gridSize = n;
-			this.grid = new Tile[n][n];
+	public Board(int boardSize) {
+		if(boardSize >= 3 && boardSize <= 100) {
+			this.boardSize = boardSize;
+			this.tiles = new int[boardSize][boardSize];
 		} else {
-			throw new IllegalArgumentException("Invalid grid size");
+			throw new IllegalArgumentException("Invalid board size");
 		}
-		
-		
 	}
 	
 	public void init() {
-		//placeRandomTilesInGrid();
+		this.tiles[0][0] = 2;
+		this.tiles[1][0] = 3;
+		this.tiles[2][0] = 1;
 		
-		int counter = 1;
-		for(int y = 0; y < gridSize; y++) {
-			for(int x = 0; x < gridSize; x++) {
-				if(y == 0 && (x == 0 || x == 1 || x == 2)) {
-					switch(x) {
-					case 0:
-						if( !(x == gridSize-1 && y == gridSize-1) ) {
-							grid[x][y] = new Tile(2);
-							counter++;
-						} else {
-							// Don't put a tile on the last space.
-							// save coordinates for the empty spot though
-							emptySpot = new Point (x,y);
-						}
-						break;
-					case 1:
-						if( !(x == gridSize-1 && y == gridSize-1) ) {
-							grid[x][y] = new Tile(3);
-							counter++;
-						} else {
-							// Don't put a tile on the last space.
-							// save coordinates for the empty spot though
-							emptySpot = new Point (x,y);
-						}
-						break;
-					case 2:
-						if( !(x == gridSize-1 && y == gridSize-1) ) {
-							grid[x][y] = new Tile(1);
-							counter++;
-						} else {
-							// Don't put a tile on the last space.
-							// save coordinates for the empty spot though
-							emptySpot = new Point (x,y);
-						}
-						break;
-					}
-				} else {
-					if( !(x == gridSize-1 && y == gridSize-1) ) {
-						grid[x][y] = new Tile(counter);
-						counter++;
-					} else {
-						// Don't put a tile on the last space.
-						// save coordinates for the empty spot though
-						emptySpot = new Point (x,y);
-					}
+		int tileCount = 4;
+		for(int y = 0; y < this.boardSize; y++) {
+			for(int x = 0; x < this.boardSize; x++) {
+				if((y == 0 && x > 2) || y > 0) {
+					this.tiles[x][y] = tileCount;
+					tileCount++;
 				}
 			}
 		}
-	}
-	
-	private void placeRandomTilesInGrid() {
-		int[] uniqueNumbers = getRandomSequence(gridSize);
 		
-		int counter = 0;
-		for(int y = 0; y < gridSize; y++) {
-			
-			for(int x = 0; x < gridSize; x++) {
-				// We need only n^2 - 1 tiles. Last corner needs to be empty.
-				if( !(x == gridSize-1 && y == gridSize-1) ) {
-					grid[x][y] = new Tile(uniqueNumbers[counter]);
-					counter++;
-				} else {
-					// Don't put a tile on the last space.
-					// save coordinates for the empty spot though
-					emptySpot = new Point (x,y);
-				}
-			}
-		}
-	}
-	
-	public boolean isWithinGrid(int x, int y) {
-		if ( x < gridSize && y < gridSize && x >= 0 && x >= 0 ) {
-			return true;
-		} else {
-			return false;
-		}
+		emptyX = emptyY = this.boardSize - 1;
+		this.tiles[emptyX][emptyY] = 0;
 	}
 	
 	public boolean moveTile(int x, int y) {
-		// Check if the empty spot is a neighbor
-		if ( 		(x == emptySpot.x && ( y == emptySpot.y - 1 || y == emptySpot.y + 1 ))
-				|| 	(y == emptySpot.y && ( x == emptySpot.x - 1 || x == emptySpot.x + 1 )) 
-				&& isWithinGrid(x,y) ) {
-			// If so, switch tile with empty spot
-			
-			grid[emptySpot.x][emptySpot.y] = grid[x][y];
-			
-			emptySpot.setLocation(x, y);			
-			
-			// Return true
-			return true;
-		} else {
-			// Empty spot was not a neighbor. Return false
+		if(x == emptyX - 1 && y == emptyY)
+			return moveTile(KeyEvent.VK_LEFT);
+		else if(x == emptyX + 1 && y == emptyY)
+			return moveTile(KeyEvent.VK_RIGHT);
+		else if(x == emptyX && y == emptyY - 1)
+			return moveTile(KeyEvent.VK_UP);
+		else if(x == emptyX && y == emptyY + 1)
+			return moveTile(KeyEvent.VK_DOWN);
+		else
+			return false;
+	}
+	
+	public boolean moveTile(int keyCode) {
+		switch(keyCode) {
+		case KeyEvent.VK_LEFT:
+			if(emptyX > 0) {
+				this.tiles[emptyX][emptyY] = this.tiles[emptyX - 1][emptyY];
+				this.tiles[emptyX - 1][emptyY] = 0;
+				emptyX--;
+				return true;
+			} else {
+				return false;
+			}
+		case KeyEvent.VK_RIGHT:
+			if(emptyX < this.boardSize - 1) {
+				this.tiles[emptyX][emptyY] = this.tiles[emptyX + 1][emptyY];
+				this.tiles[emptyX + 1][emptyY] = 0;
+				emptyX++;
+				return true;
+			} else {
+				return false;
+			}
+		case KeyEvent.VK_UP:
+			if(emptyY > 0) {
+				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY - 1];
+				this.tiles[emptyX][emptyY - 1] = 0;
+				emptyY--;
+				return true;
+			} else {
+				return false;
+			}
+		case KeyEvent.VK_DOWN:
+			if(emptyY < this.boardSize - 1) {
+				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY + 1];
+				this.tiles[emptyX][emptyY + 1] = 0;
+				emptyY++;
+				return true;
+			} else {
+				return false;
+			}
+		default:
 			return false;
 		}
 	}
 	
-	public Point getEmptySpot() {
-		return emptySpot;
+	public int[][] getTiles() {
+		return this.tiles;
 	}
 	
-	private int[] getRandomSequence(int n) {
-		if( !(n < 1) ) {
-			// Get random numbers, between 1 and n, make them distinct, and limit to n numbers. Return in an array.
-			return new Random().ints(1, n).distinct().limit(n).toArray();
-		}
-		throw new IllegalArgumentException("Random Sequence Length cannot be less than one!");
-	}
-	
-	public Tile[][] getGrid() {
-		return this.grid;
-	}
-	
-	public int getGridSize() {
-		return this.gridSize;
+	public int getBoardSize() {
+		return this.boardSize;
 	}
 }
