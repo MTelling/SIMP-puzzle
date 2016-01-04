@@ -11,8 +11,8 @@ public class Board {
 	{
 		if( !(n < 1) )
 		{
-			gridSize = n;
-			grid = new Tile[n][n];
+			this.gridSize = n;
+			this.grid = new Tile[n][n];
 			
 		//	placeRandomTilesInGrid();
 			
@@ -167,5 +167,9 @@ public class Board {
 		}
 
 		throw new IllegalArgumentException("Random Sequence Length cannot be less than one!");
+	}
+	
+	public Tile[][] getGrid() {
+		return this.grid;
 	}
 }

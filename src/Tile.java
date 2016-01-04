@@ -10,6 +10,10 @@ public class Tile
 		tileNum = num;
 	}
 	
+	public int getTileNum() {
+		return this.tileNum;
+	}
+	
 
 	
 }
