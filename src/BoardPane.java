@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import javafx.scene.layout.Pane;
 
 public class BoardPane extends Pane {
@@ -14,7 +13,7 @@ public class BoardPane extends Pane {
 		this.boardSize = size;
 		
 		//Init board. 
-		this.board = new Board(3);
+		this.board = new Board(15);
 		board.init();
 		
 		
@@ -37,6 +36,7 @@ public class BoardPane extends Pane {
 		boardContainer.setStyle("-fx-background-color: lightgrey");
 		
 		createTiles();
+	
 		
 	}
 	

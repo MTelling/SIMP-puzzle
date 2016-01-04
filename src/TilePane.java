@@ -1,10 +1,10 @@
+import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 
-public class TilePane extends StackPane{
+public class TilePane extends Label{
 	
 	private String text;
 	private Tile tile;
@@ -17,26 +17,16 @@ public class TilePane extends StackPane{
 		if (tile.getTileNum() != 0) {
 			this.text = "" + this.tile.getTileNum();
 			
-			Label textLabel = new Label(""+ this.text);
-			textLabel.setFont(new Font(25));
-			this.getChildren().add(textLabel);
+			this.setText(text);
+			this.setFont(new Font(25));
 			this.setStyle("-fx-background-color: grey");
 			this.setPrefSize(tileSize, tileSize);
+			this.setAlignment(Pos.CENTER);
 			this.setLayoutX(tileSize*xPos);
 			this.setLayoutY(tileSize*yPos);
 		}
 		
 		this.setId(""+ tile.getTileNum());
-
-		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
-				System.out.println(getId());
-				
-			}
-			
-		});
 		
 	}
 }

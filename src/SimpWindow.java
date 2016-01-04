@@ -8,7 +8,7 @@ public class SimpWindow extends Application
 {
 	
 	private static final double CONTROLPANEL_SIZE = 50;
-	private static final double MIN_WINDOW_WIDTH = 400;
+	private static final double MIN_WINDOW_WIDTH = 800;
 	
 	public static void main(String[] args)
 	{
