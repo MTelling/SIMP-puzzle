@@ -27,17 +27,16 @@ public class Board {
 			}
 		}
 		
-		
-		
 	}
 	
 	private int[] getRandomSequence(int n)
 	{
-		if(n < 1)
+		if( !(n < 1) )
 		{
-			throw new IllegalArgumentException("Random Sequence Length cannot be less than one!");
+			// Get random numbers, between 1 and n, make them distinct, and limit to n numbers. Return in an array.
+			return new Random().ints(1, n).distinct().limit(n).toArray();
 		}
-		
-		return new Random().ints(1, n).distinct().limit(n).toArray();
+
+		throw new IllegalArgumentException("Random Sequence Length cannot be less than one!");
 	}
 }
