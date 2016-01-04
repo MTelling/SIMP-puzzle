@@ -10,9 +10,9 @@ public class BoardPane extends Pane {
 	private Pane boardContainer;
 	
 	public BoardPane(double size) {
-		System.out.println("Got here");
-
-		this.board = new Board(3);
+		
+		this.boardSize = size;
+		this.board = new Board(5);
 		
 		
 		//Set minimum height and width + the starting width and height for the boardPane. 
@@ -22,7 +22,7 @@ public class BoardPane extends Pane {
 		this.setWidth(size+BOARD_MARGIN*2);
 		
 		//Set color. 
-		this.setStyle("-fx-background-color: red");
+		this.setStyle("-fx-background-color: aliceblue");
 		
 		
 		//Make a container for the board. 
@@ -31,22 +31,34 @@ public class BoardPane extends Pane {
 		this.getChildren().add(boardContainer);
 		boardContainer.setLayoutX(BOARD_MARGIN);
 		boardContainer.setLayoutY(BOARD_MARGIN);
+		boardContainer.setStyle("-fx-background-color: lightgrey");
 		
-		
-		System.out.println("got here as well");
 		createTiles();
 		
 	}
 	
 	public void createTiles() {
 		double tileSize = this.boardSize / this.board.gridSize;
+
 		ArrayList<TilePane> tilePanes = new ArrayList<>();
 		
 		int i = 0;
 		for (int y = 0; y < this.board.gridSize; y++) {
 			for (int x = 0; x < this.board.gridSize; x++) {
-				tilePanes.add(new TilePane(this.board.getGrid()[x][y].getTileNum(), tileSize, x, y));
-				this.getChildren().add(tilePanes.get(i));
+				
+				
+				//Find the tileNumber for the current position.
+				//If the current position is the free spot, a nullpointer exception is thrown.
+				//In this case do nothing and let the tileNum be 0.
+				int tileNum = 0;
+				try {
+					tileNum = this.board.getGrid()[x][y].getTileNum();
+				} catch (NullPointerException e) {
+					//Do nothing
+				}
+				
+				tilePanes.add(new TilePane(tileNum, tileSize, x, y));
+				boardContainer.getChildren().add(tilePanes.get(i));
 				
 				i++;
 				
