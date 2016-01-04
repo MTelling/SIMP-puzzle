@@ -20,6 +20,8 @@ public class TilePane extends StackPane{
 			this.setLayoutX(tileSize*xPos);
 			this.setLayoutY(tileSize*yPos);
 		}
+		
+		this.setId(""+ tileNum);
 
 		
 		

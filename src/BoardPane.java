@@ -12,7 +12,8 @@ public class BoardPane extends Pane {
 	public BoardPane(double size) {
 		
 		this.boardSize = size;
-		this.board = new Board(5);
+		this.board = new Board(10);
+		board.init();
 		
 		
 		//Set minimum height and width + the starting width and height for the boardPane. 
@@ -38,13 +39,13 @@ public class BoardPane extends Pane {
 	}
 	
 	public void createTiles() {
-		double tileSize = this.boardSize / this.board.gridSize;
+		double tileSize = this.boardSize / this.board.getGridSize();
 
 		ArrayList<TilePane> tilePanes = new ArrayList<>();
 		
 		int i = 0;
-		for (int y = 0; y < this.board.gridSize; y++) {
-			for (int x = 0; x < this.board.gridSize; x++) {
+		for (int y = 0; y < this.board.getGridSize(); y++) {
+			for (int x = 0; x < this.board.getGridSize(); x++) {
 				
 				
 				//Find the tileNumber for the current position.

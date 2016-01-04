@@ -133,4 +133,8 @@ public class Board {
 	public Tile[][] getGrid() {
 		return this.grid;
 	}
+	
+	public int getGridSize() {
+		return this.gridSize;
+	}
 }
