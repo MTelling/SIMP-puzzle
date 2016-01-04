@@ -39,8 +39,8 @@ public class Board {
 	public boolean moveTile(int x, int y)
 	{
 		// Check if the empty spot is a neighbor
-		if ( (x == emptySpot.x && ( y == emptySpot.y - 1 || y == emptySpot.y + 1 ))
-				|| (y == emptySpot.y && ( x == emptySpot.x - 1 || x == emptySpot.x + 1 )) )
+		if ( 		(x == emptySpot.x && ( y == emptySpot.y - 1 || y == emptySpot.y + 1 ))
+				|| 	(y == emptySpot.y && ( x == emptySpot.x - 1 || x == emptySpot.x + 1 )) )
 		{
 			// If so, switch tile with empty spot
 			
