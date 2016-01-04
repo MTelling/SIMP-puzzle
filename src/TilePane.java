@@ -6,6 +6,7 @@ public class TilePane extends Label{
 	
 	private String text;
 	private Tile tile;
+	private static final int BORDER_SIZE = 2;
 	
 	public TilePane(Tile tile, double tileSize, int xPos, int yPos) {
 		
@@ -19,11 +20,11 @@ public class TilePane extends Label{
 			this.setId(text);
 			this.setFont(new Font(25));
 			this.setStyle("-fx-background-color: grey");
-			this.setPrefSize(tileSize, tileSize);
+			this.setPrefSize(tileSize-BORDER_SIZE, tileSize-BORDER_SIZE);
 			this.setAlignment(Pos.CENTER);
-			this.setLayoutX(tileSize*xPos);
-			this.setLayoutY(tileSize*yPos);
-
+			this.setLayoutX(tileSize*xPos+(BORDER_SIZE/2));
+			this.setLayoutY(tileSize*yPos+(BORDER_SIZE/2));
+			
 		}
 		
 		this.setId(""+ tile.getTileNum());
