@@ -1,0 +1,50 @@
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+public class SimpWindow extends Application
+{
+	
+	private static final double CONTROLPANEL_SIZE = 50;
+	private static final double BOARD_MARGIN = 25;
+	private static final double MIN_WINDOW_WIDTH = 400;
+	private static final double MIN_WINDOW_HEIGHT = MIN_WINDOW_WIDTH + CONTROLPANEL_SIZE;
+	
+	public static void main(String[] args)
+	{
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("SIMP-puzzle");
+		
+		//Create root
+		Group root = new Group();
+		
+		//Set the minimum size of the window. 
+		primaryStage.setMinHeight(MIN_WINDOW_HEIGHT);
+		primaryStage.setMinWidth(MIN_WINDOW_WIDTH);
+		primaryStage.setWidth(MIN_WINDOW_WIDTH);
+		
+		//Create boardPane
+		Pane boardPane = new BoardPane(MIN_WINDOW_WIDTH - (BOARD_MARGIN * 2), MIN_WINDOW_WIDTH - (BOARD_MARGIN * 2));
+		boardPane.setLayoutY(CONTROLPANEL_SIZE);
+		boardPane.setLayoutX(BOARD_MARGIN);
+		
+		//Create controlPane
+		Pane controlPane = new ControlPane(CONTROLPANEL_SIZE, MIN_WINDOW_WIDTH);
+		controlPane.setLayoutX(BOARD_MARGIN);
+		
+		//Add all panes to root. 
+		root.getChildren().addAll(boardPane, controlPane);
+		
+		
+		
+		//Set stage and show. 
+		primaryStage.setScene(new Scene(root));
+		primaryStage.show();
+	}
+}
