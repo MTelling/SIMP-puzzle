@@ -1,4 +1,3 @@
-
 public class SimpDriver
 {
 	
@@ -6,6 +5,8 @@ public class SimpDriver
 	{
 		
 		System.out.println("Du er en tissemand! HIHIHIHIHIHI\n\n\n");
+		System.out.println("Det er du ogsÃ¥!!!");
+		System.out.println("Men vi skal nok klare den!!");
 		
 		System.out.println("Shia is how strong?");
 		
@@ -16,8 +17,5 @@ public class SimpDriver
 		
 		System.out.println("SHIA IS 10 STRONG!");
 		System.out.println("STRONG LIKE A BULL!");
-		
-		System.out.println("Det er du også!!!");
-		
 	}
 }
