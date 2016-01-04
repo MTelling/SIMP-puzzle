@@ -12,7 +12,9 @@ public class BoardPane extends Pane {
 	public BoardPane(double size) {
 		
 		this.boardSize = size;
-		this.board = new Board(10);
+		
+		//Init board. 
+		this.board = new Board(3);
 		board.init();
 		
 		
@@ -40,7 +42,7 @@ public class BoardPane extends Pane {
 	
 	public void createTiles() {
 		double tileSize = this.boardSize / this.board.getGridSize();
-
+		Tile tile;
 		ArrayList<TilePane> tilePanes = new ArrayList<>();
 		
 		int i = 0;
@@ -51,14 +53,14 @@ public class BoardPane extends Pane {
 				//Find the tileNumber for the current position.
 				//If the current position is the free spot, a nullpointer exception is thrown.
 				//In this case do nothing and let the tileNum be 0.
-				int tileNum = 0;
-				try {
-					tileNum = this.board.getGrid()[x][y].getTileNum();
-				} catch (NullPointerException e) {
-					//Do nothing
+
+				if (this.board.getGrid()[x][y] != null) {
+					tile = this.board.getGrid()[x][y];
+				} else {
+					tile = new Tile(0);
 				}
 				
-				tilePanes.add(new TilePane(tileNum, tileSize, x, y));
+				tilePanes.add(new TilePane(tile, tileSize, x, y));
 				boardContainer.getChildren().add(tilePanes.get(i));
 				
 				i++;

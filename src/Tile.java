@@ -2,7 +2,7 @@
 public class Tile 
 {
 
-	protected int tileNum;
+	private int tileNum;
 	
 	
 	public Tile (int num)
