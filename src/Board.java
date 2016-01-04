@@ -14,28 +14,8 @@ public class Board {
 			gridSize = n;
 			grid = new Tile[n][n];
 			
-			int[] uniqueNumbers = getRandomSequence(n);
-			
-			int counter = 0;
-			for(int y = 0; y < n; y++)
-			{
-				
-				for(int x = 0; x < n; x++)
-				{
-					// We need only n^2 - 1 tiles. Last corner needs to be empty.
-					if( !(x == n-1 && y == n-1) )
-					{
-						grid[x][y] = new Tile(uniqueNumbers[counter]);
-						counter++;
-					}
-					else
-					{
-						// Don't put a tile on the last space.
-						// save coordinates for the empty spot though
-						emptySpot = new Point (x,y);
-					}
-				}
-			}
+			placeRandomTilesInGrid();
+
 		}
 		else
 		{
@@ -43,6 +23,32 @@ public class Board {
 		}
 		
 		
+	}
+	
+	private void placeRandomTilesInGrid()
+	{
+		int[] uniqueNumbers = getRandomSequence(gridSize);
+		
+		int counter = 0;
+		for(int y = 0; y < gridSize; y++)
+		{
+			
+			for(int x = 0; x < gridSize; x++)
+			{
+				// We need only n^2 - 1 tiles. Last corner needs to be empty.
+				if( !(x == gridSize-1 && y == gridSize-1) )
+				{
+					grid[x][y] = new Tile(uniqueNumbers[counter]);
+					counter++;
+				}
+				else
+				{
+					// Don't put a tile on the last space.
+					// save coordinates for the empty spot though
+					emptySpot = new Point (x,y);
+				}
+			}
+		}
 	}
 	
 	public boolean isWithinGrid(int x, int y)
