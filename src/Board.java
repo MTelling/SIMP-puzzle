@@ -14,7 +14,74 @@ public class Board {
 			gridSize = n;
 			grid = new Tile[n][n];
 			
-			placeRandomTilesInGrid();
+		//	placeRandomTilesInGrid();
+			
+			int counter = 1;
+			for(int y = 0; y < gridSize; y++)
+			{
+				for(int x = 0; x < gridSize; x++)
+				{
+					if(y == 0 && (x == 0 || x == 1 || x == 2))
+					{
+						switch(x)
+						{
+						case 0:
+							if( !(x == gridSize-1 && y == gridSize-1) )
+							{
+								grid[x][y] = new Tile(2);
+								counter++;
+							}
+							else
+							{
+								// Don't put a tile on the last space.
+								// save coordinates for the empty spot though
+								emptySpot = new Point (x,y);
+							}
+							break;
+						case 1:
+							if( !(x == gridSize-1 && y == gridSize-1) )
+							{
+								grid[x][y] = new Tile(3);
+								counter++;
+							}
+							else
+							{
+								// Don't put a tile on the last space.
+								// save coordinates for the empty spot though
+								emptySpot = new Point (x,y);
+							}
+							break;
+						case 2:
+							if( !(x == gridSize-1 && y == gridSize-1) )
+							{
+								grid[x][y] = new Tile(1);
+								counter++;
+							}
+							else
+							{
+								// Don't put a tile on the last space.
+								// save coordinates for the empty spot though
+								emptySpot = new Point (x,y);
+							}
+							break;
+						}
+					}
+					else
+					{
+						if( !(x == gridSize-1 && y == gridSize-1) )
+						{
+							grid[x][y] = new Tile(counter);
+							counter++;
+						}
+						else
+						{
+							// Don't put a tile on the last space.
+							// save coordinates for the empty spot though
+							emptySpot = new Point (x,y);
+						}
+					}
+				}
+			}
 
 		}
 		else
