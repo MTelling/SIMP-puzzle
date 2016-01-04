@@ -8,7 +8,6 @@ public class SimpWindow extends Application
 {
 	
 	private static final double CONTROLPANEL_SIZE = 50;
-	private static final double BOARD_MARGIN = 25;
 	private static final double MIN_WINDOW_WIDTH = 400;
 	private static final double MIN_WINDOW_HEIGHT = MIN_WINDOW_WIDTH + CONTROLPANEL_SIZE;
 	
@@ -24,19 +23,21 @@ public class SimpWindow extends Application
 		//Create root
 		Group root = new Group();
 		
+		
 		//Set the minimum size of the window. 
-		primaryStage.setMinHeight(MIN_WINDOW_HEIGHT);
+		/*primaryStage.setMinHeight(MIN_WINDOW_HEIGHT);
 		primaryStage.setMinWidth(MIN_WINDOW_WIDTH);
 		primaryStage.setWidth(MIN_WINDOW_WIDTH);
+		*/
+		primaryStage.sizeToScene();
 		
 		//Create boardPane
-		Pane boardPane = new BoardPane(MIN_WINDOW_WIDTH - (BOARD_MARGIN * 2), MIN_WINDOW_WIDTH - (BOARD_MARGIN * 2));
+		Pane boardPane = new BoardPane(MIN_WINDOW_WIDTH, MIN_WINDOW_WIDTH);
 		boardPane.setLayoutY(CONTROLPANEL_SIZE);
-		boardPane.setLayoutX(BOARD_MARGIN);
 		
 		//Create controlPane
 		Pane controlPane = new ControlPane(CONTROLPANEL_SIZE, MIN_WINDOW_WIDTH);
-		controlPane.setLayoutX(BOARD_MARGIN);
+		controlPane.setLayoutY(0);
 		
 		//Add all panes to root. 
 		root.getChildren().addAll(boardPane, controlPane);

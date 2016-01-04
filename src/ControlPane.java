@@ -17,10 +17,8 @@ public class ControlPane extends Pane {
 	
 	public Button menuButton() {
 		Button menuButton = new Button("Menu");
-		menuButton.setLayoutY(12);
-		
-		
 		
 		return menuButton;
 	}
+	
 }
