@@ -11,6 +11,7 @@ import javafx.util.Duration;
 public class BoardPane extends Pane {
 	
 	public static final double BOARD_MARGIN = 25;
+	public static final int ANIMATION_SPEED = 600; //This is in milliseconds. 
 	private double boardSize;
 	private Board board;
 	private Pane boardContainer;
@@ -57,10 +58,13 @@ public class BoardPane extends Pane {
 				
 				Point newPosition = new Point(board.getEmptySpot().x, board.getEmptySpot().y);
 
+				
+				//Move new tile if there is a place to move it. 
 				if (board.moveTile(xPosClicked, yPosClicked)) {
 					String clickedTile = "" + board.getGrid()[xPosClicked][yPosClicked].getTileNum();
 					Node selectPane = getChildren().get(0).lookup("#" + clickedTile);
-					TranslateTransition translateTile = new TranslateTransition(Duration.millis(1000), selectPane);
+			
+					TranslateTransition translateTile = new TranslateTransition(Duration.millis(ANIMATION_SPEED), selectPane);
 					translateTile.setByX(tileSize*(newPosition.x-xPosClicked));
 					translateTile.setByY(tileSize*(newPosition.y-yPosClicked));
 					translateTile.play();

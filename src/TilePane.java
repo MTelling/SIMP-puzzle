@@ -1,5 +1,3 @@
-import javafx.animation.TranslateTransition;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
