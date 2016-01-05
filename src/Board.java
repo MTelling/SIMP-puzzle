@@ -5,6 +5,7 @@ public class Board {
 	private int boardSize;
 	private int[][] tiles;
 	private int emptyX, emptyY;
+	private boolean inGame = true;
 	
 	public Board(int boardSize) {
 		if(boardSize >= 3 && boardSize <= 100) {
@@ -13,6 +14,19 @@ public class Board {
 		} else {
 			throw new IllegalArgumentException("Invalid board size");
 		}
+	}
+	
+	public boolean isGameOver(){		
+		if( this.tiles[boardSize - 1][boardSize - 1] == Math.pow(boardSize, 2) ){ // TO-DO
+			for(int y = 0; y < boardSize; y++){
+				for(int x = 0; x < boardSize; x++){
+					if( !(tiles[x][y] == y*boardSize + x) ){
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 	
 	public void init() {
@@ -31,7 +45,6 @@ public class Board {
 		}
 		
 		emptyX = emptyY = this.boardSize - 1;
-		this.tiles[emptyX][emptyY] = 0;
 	}
 	
 	public boolean moveTile(int x, int y) {
