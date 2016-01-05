@@ -33,7 +33,7 @@ public class SimpController implements KeyListener, MouseListener {
 		System.out.println("X: " + xPos);
 		System.out.println("Y: " + yPos);
 		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
-			controlView.update();
+			controlView.updateMoves();
 			puzzleView.repaint();
 		}
 	}

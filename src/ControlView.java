@@ -15,11 +15,13 @@ public class ControlView extends JPanel {
 
 	public ControlView(Score score) {
 		
+		this.score = score;
+		
 		JButton menuButton = new JButton("Menu");
 		menuButton.setFocusable(false);
-		//TODO: add score.getMoves() and score.getSeconds()
-		this.movesLabel = new JLabel("Moves: "); 
-		this.timeLabel = new JLabel("Time Spent: "); 
+		
+		this.movesLabel = new JLabel("Moves: " + this.score.getMoves()); 
+		this.timeLabel = new JLabel("Time Spent: " + this.score.getSeconds()); 
 		
 		this.add(menuButton);
 		this.add(movesLabel);
@@ -35,9 +37,7 @@ public class ControlView extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// Update the timer. +1 second
-			score.addSeconds(1);
 			updateSeconds();
-			
 		}
 		
 	});
@@ -51,13 +51,13 @@ public class ControlView extends JPanel {
 	}
 	
 	public void updateSeconds() {
-		
-		this.timeLabel.setText("Time Spent: " + score.getSeconds()); //add score.getSeconds()
+		this.score.addSeconds(1);
+		this.timeLabel.setText("Time Spent: " + score.getSeconds());
 	}
 	
 	public void updateMoves() {
 		score.addMoves(1);
-		this.movesLabel.setText("Moves: " + score.getMoves());
+		this.movesLabel.setText("Moves: " + this.score.getMoves());
 		
 	}
 }

@@ -1,17 +1,8 @@
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
-
 public class Score {
 
 	private int moves;
 	private int seconds;
 	
-
-
-
 	public Score () {
 		reset();
 	}
@@ -23,25 +14,24 @@ public class Score {
 	}
 	
 	public int getSeconds () {
-		return seconds;
+		return this.seconds;
 	}
 	
 	public int getMoves () {
-		return moves;
+		return this.moves;
 	}
 	
-	public void addSeconds (int howMuch) {
-		seconds += howMuch;
+	public void addSeconds (int seconds) {
+		this.seconds += seconds;
 	}
 	
-	public void addMoves (int howMany) {
-		moves += howMany;
+	public void addMoves (int moves) {
+		this.moves += moves;
 	}
-	
 	
 	public void reset () {
-		moves = 0;
-		seconds = 0;
+		this.moves = 0;
+		this.seconds = 0;
 	}
 	
 	
