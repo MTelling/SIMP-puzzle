@@ -24,7 +24,7 @@ public class ControlView extends JPanel {
 		
 		//Create movesLabel and timeLabel. 
 		this.movesLabel = new JLabel("Moves: " + this.score.getMoves()); 
-		this.timeLabel = new JLabel("Time Spent: " + this.score.getSeconds()); 
+		this.timeLabel = new JLabel("Time Spent: " + this.score.timeToString()); 
 		
 		//Add labels and buttons to view. 
 		this.add(menuButton);
@@ -55,7 +55,7 @@ public class ControlView extends JPanel {
 	
 	public void updateSeconds() {
 		this.score.addSeconds(1);
-		this.timeLabel.setText("Time Spent: " + score.getSeconds());
+		this.timeLabel.setText("Time Spent: " + score.timeToString());
 	}
 	
 	
@@ -64,10 +64,6 @@ public class ControlView extends JPanel {
 		this.movesLabel.setText("Moves: " + score.getMoves());
 	}
 	
-	public void update() {
-		//TODO: Add connection to model. 
-		this.movesLabel.setText("Score: "); //add score.getScore()
-		this.timeLabel.setText("Time Spent: "); //add score.getSeconds()
+	
 
-	}
 }

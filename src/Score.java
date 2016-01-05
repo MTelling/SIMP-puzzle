@@ -38,6 +38,20 @@ public class Score {
 	}
 	
 	
+	//Returns time as a string with format: (##:##);
+	public String timeToString() {
+		int seconds = this.seconds;
+		int minutes = 0;
+		
+		if (seconds > 59) {
+			minutes = this.seconds / 60;
+			seconds = this.seconds % 60;
+		}
+		
+		return String.format("%02d:%02d", minutes, seconds);
+		
+	}
+	
 	
 	
 }
