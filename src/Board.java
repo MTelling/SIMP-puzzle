@@ -5,7 +5,6 @@ public class Board {
 	private int boardSize;
 	private int[][] tiles;
 	private int emptyX, emptyY;
-	private boolean inGame = true;
 	
 	public Board(int boardSize) {
 		if(boardSize >= 3 && boardSize <= 100) {
@@ -17,7 +16,7 @@ public class Board {
 	}
 	
 	public boolean isGameOver(){		
-		if( this.tiles[boardSize - 1][boardSize - 1] == Math.pow(boardSize, 2) ){ // TO-DO
+		if( this.tiles[boardSize - 1][boardSize - 1] == Math.pow(boardSize, 2) ){
 			int counter = 1;
 			for(int y = 0; y < boardSize; y++){
 				for(int x = 0; x < boardSize; x++){
