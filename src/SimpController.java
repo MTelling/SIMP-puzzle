@@ -6,9 +6,11 @@ import java.awt.event.MouseListener;
 public class SimpController implements KeyListener, MouseListener {
 
 	SimpPuzzleView puzzleView;
+	ControlView controlView;
 	
-	public SimpController(SimpPuzzleView puzzleView) {
+	public SimpController(SimpPuzzleView puzzleView, ControlView controlView) {
 		this.puzzleView = puzzleView;
+		this.controlView = controlView;
 	}
 	
 	@Override
@@ -31,6 +33,7 @@ public class SimpController implements KeyListener, MouseListener {
 		System.out.println("X: " + xPos);
 		System.out.println("Y: " + yPos);
 		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
+			controlView.update();
 			puzzleView.repaint();
 		}
 	}

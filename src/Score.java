@@ -13,8 +13,7 @@ public class Score {
 
 
 	public Score () {
-		moves = 0;
-		seconds = 0;
+		reset();
 	}
 	
 	public Score (int seconds, int moves)
