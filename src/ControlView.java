@@ -31,9 +31,6 @@ public class ControlView extends JPanel {
 		this.add(movesLabel);
 		this.add(timeLabel);
 
-		
-		//Start timer. 
-		this.startTiming();
 	
 	}
 	
@@ -51,7 +48,18 @@ public class ControlView extends JPanel {
 	public void startTiming () {
 		timer.start();
 	}
+	
+	public void stopTiming() {
+		timer.stop();
+	}
 
+	//Checks if it's first move and start timer if it is. 
+	public void startTimerIfFirstMove() {
+		if (this.score.getMoves() == 0) {
+			this.startTiming();
+		}
+	}
+	
 	//Updates the timeLabel
 	public void updateTimeLabel() {
 		this.score.addSeconds(1);

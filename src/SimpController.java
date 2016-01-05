@@ -65,10 +65,14 @@ public class SimpController implements KeyListener, MouseListener {
 	
 	//Helper method
 	private void makeMove() {
+		controlView.startTimerIfFirstMove();
+		
 		controlView.updateMovesLabel();
+		
 		puzzleView.repaint();
 		
 		if(puzzleView.getBoard().isGameOver()){
+			controlView.stopTiming();
 			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");
 		}
 	}
