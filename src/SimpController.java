@@ -24,17 +24,19 @@ public class SimpController implements KeyListener, MouseListener {
 	@Override
 	public void mouseExited(MouseEvent arg0) {}
 
+	
+	//TODO: It doesn't work when you click right now? The click is registered, but nothing happens. 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("Got here");
+		
 		int xPos = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
 		int yPos = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
 		System.out.println("X: " + xPos);
 		System.out.println("Y: " + yPos);
+		System.out.println(puzzleView.getBoard().moveTile(xPos, yPos));
 		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
-			controlView.updateMoves();
-			puzzleView.repaint();
+			makeMove();
 		}
 	}
 
@@ -47,11 +49,17 @@ public class SimpController implements KeyListener, MouseListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(puzzleView.getBoard().moveTile(e.getKeyCode())) {
-			puzzleView.repaint();
+			makeMove();
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {}	
 	
+	
+	//Helper method
+	private void makeMove() {
+		controlView.updateMoves();
+		puzzleView.repaint();
+	}
 }

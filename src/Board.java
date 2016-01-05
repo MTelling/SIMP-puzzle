@@ -34,6 +34,8 @@ public class Board {
 		this.tiles[emptyX][emptyY] = 0;
 	}
 	
+	
+	//TOOD: doesn't work anymore because we inverted the controls. 
 	public boolean moveTile(int x, int y) {
 		if(x == emptyX - 1 && y == emptyY)
 			return moveTile(KeyEvent.VK_LEFT);
