@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -23,7 +22,7 @@ public class SimpPuzzleView extends JPanel {
 		int[][] tiles = this.board.getTiles();
 		for(int y = 0; y < tiles.length; y++) {
 			for(int x = 0; x < tiles.length; x++) {
-				if(tiles[x][y] != 0) {
+				if(tiles[x][y] != Math.pow(board.getBoardSize(),2)) {
 					int xPos = (x * tileSize) + SimpWindow.GAME_BORDER;
 					int yPos = (y * tileSize) + SimpWindow.GAME_BORDER;
 					
