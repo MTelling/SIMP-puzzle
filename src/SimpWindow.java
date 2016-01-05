@@ -1,9 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -30,17 +26,20 @@ public class SimpWindow extends JFrame {
 	public SimpWindow(Board board) {
 		super("Simp-Puzzle");
 		
+		//Create controlView and pass it an instance of Score. 
 		this.score = new Score();
 		this.controlView = new ControlView(this.score);
 		
+		//Add controlView to window. 
 		this.getContentPane().add(controlView, BorderLayout.NORTH);
 		
+		//Create puzzleView and pass it an instance of Board. 
 		this.board = board;
 		this.puzzleView = new SimpPuzzleView(this.board);
 		
 		puzzleView.setFocusable(true);
 		
-		SimpController controller = new SimpController(puzzleView);
+		SimpController controller = new SimpController(puzzleView, controlView);
 		puzzleView.addKeyListener(controller);
 		puzzleView.addMouseListener(controller);
 		this.getContentPane().add(puzzleView, BorderLayout.CENTER);

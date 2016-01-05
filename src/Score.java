@@ -9,17 +9,6 @@ public class Score {
 	private int moves;
 	private int seconds;
 	
-	private Timer timer = new Timer(1000, new ActionListener(){
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			// Update the timer. +1 second
-			addSeconds(1);
-			
-		}
-		
-	});
-	
 
 
 
@@ -42,7 +31,7 @@ public class Score {
 		return moves;
 	}
 	
-	private void addSeconds (int howMuch) {
+	public void addSeconds (int howMuch) {
 		seconds += howMuch;
 	}
 	
@@ -50,13 +39,6 @@ public class Score {
 		moves += howMany;
 	}
 	
-	public void startTiming () {
-		timer.start();
-	}
-	
-	public void stopTiming () {
-		timer.stop();
-	}
 	
 	public void reset () {
 		moves = 0;
