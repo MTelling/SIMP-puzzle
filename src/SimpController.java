@@ -59,7 +59,7 @@ public class SimpController implements KeyListener, MouseListener {
 	
 	//Helper method
 	private void makeMove() {
-		controlView.updateMoves();
+		controlView.updateMovesLabel();
 		puzzleView.repaint();
 	}
 }

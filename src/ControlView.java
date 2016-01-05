@@ -43,7 +43,7 @@ public class ControlView extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
-			updateSeconds();
+			updateTimeLabel();
 		}
 		
 	});
@@ -52,14 +52,14 @@ public class ControlView extends JPanel {
 		timer.start();
 	}
 
-	
-	public void updateSeconds() {
+	//Updates the timeLabel
+	public void updateTimeLabel() {
 		this.score.addSeconds(1);
 		this.timeLabel.setText("Time Spent: " + score.timeToString());
 	}
 	
 	
-	public void updateMoves() {
+	public void updateMovesLabel() {
 		score.addMoves(1);
 		this.movesLabel.setText("Moves: " + score.getMoves());
 	}

@@ -38,7 +38,7 @@ public class Score {
 	}
 	
 	
-	//Returns time as a string with format: (##:##);
+	//Returns time as a string with format: (##:##). 
 	public String timeToString() {
 		int seconds = this.seconds;
 		int minutes = 0;
