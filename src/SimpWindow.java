@@ -20,6 +20,7 @@ public class SimpWindow extends JFrame {
 	JLabel timeLabel;
 	
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		SimpWindow game = new SimpWindow(new Board(4));
 		
 	}
