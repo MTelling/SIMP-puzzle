@@ -26,14 +26,11 @@ public class SimpWindow extends JFrame {
 	public SimpWindow(Board board) {
 		super("Simp-Puzzle");
 		
-		//Create controlView and pass it an instance of Score. 
 		this.score = new Score();
 		this.controlView = new ControlView(this.score);
 		
-		//Add controlView to window. 
 		this.getContentPane().add(controlView, BorderLayout.NORTH);
 		
-		//Create puzzleView and pass it an instance of Board. 
 		this.board = board;
 		this.puzzleView = new SimpPuzzleView(this.board);
 		

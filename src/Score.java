@@ -3,6 +3,7 @@ public class Score {
 	private int moves;
 	private int seconds;
 	
+
 	public Score () {
 		reset();
 	}
@@ -23,11 +24,13 @@ public class Score {
 	
 	public void addSeconds (int seconds) {
 		this.seconds += seconds;
+
 	}
 	
 	public void addMoves (int moves) {
 		this.moves += moves;
 	}
+
 	
 	public void reset () {
 		this.moves = 0;
