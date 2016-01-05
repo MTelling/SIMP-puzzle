@@ -21,6 +21,7 @@ public class SimpWindow extends JFrame {
 	
 	public static void main(String[] args) {
 		SimpWindow game = new SimpWindow(new Board(4));
+		
 	}
 	
 	public SimpWindow(Board board) {
