@@ -24,7 +24,7 @@ public class SimpPuzzleView extends JPanel {
 			for(int x = 0; x < tiles.length; x++) {
 				if(tiles[x][y] != Math.pow(board.getBoardSize(),2)) {
 					int xPos = (x * tileSize) + SimpWindow.GAME_BORDER;
-					int yPos = (y * tileSize) + SimpWindow.GAME_BORDER;
+					int yPos = (y * tileSize);
 					
 					g.setColor(Color.gray);
 					g.fillRect(xPos, yPos, tileSize, tileSize);

@@ -1,3 +1,5 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -5,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 
 public class ControlView extends JPanel {
 
@@ -17,6 +20,10 @@ public class ControlView extends JPanel {
 		
 		this.score = score;
 		
+		//Set layout for Jpanel container
+		this.setLayout(new BorderLayout(30, 0));
+		this.setBorder(new EmptyBorder(SimpWindow.GAME_BORDER, SimpWindow.GAME_BORDER, 0, SimpWindow.GAME_BORDER));
+		
 		//Create menuButton.
 		JButton menuButton = new JButton("Menu");
 		menuButton.setFocusable(false);
@@ -27,9 +34,9 @@ public class ControlView extends JPanel {
 		this.timeLabel = new JLabel("Time Spent: " + this.score.timeToString()); 
 		
 		//Add labels and buttons to view. 
-		this.add(menuButton);
-		this.add(movesLabel);
-		this.add(timeLabel);
+		this.add("East", menuButton);
+		this.add("West", movesLabel);
+		this.add("Center", timeLabel);
 
 	
 	}
