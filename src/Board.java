@@ -5,6 +5,7 @@ public class Board {
 	private int boardSize;
 	private int[][] tiles;
 	private int emptyX, emptyY;
+	private boolean inGame = true;
 	
 	public Board(int boardSize) {
 		if(boardSize >= 3 && boardSize <= 100) {
@@ -13,6 +14,22 @@ public class Board {
 		} else {
 			throw new IllegalArgumentException("Invalid board size");
 		}
+	}
+	
+	public boolean isGameOver(){		
+		if( this.tiles[boardSize - 1][boardSize - 1] == Math.pow(boardSize, 2) ){ // TO-DO
+			int counter = 1;
+			for(int y = 0; y < boardSize; y++){
+				for(int x = 0; x < boardSize; x++){
+					if( !(tiles[x][y] == counter) ){
+						return false;
+					}
+					counter++;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public void init() {
@@ -31,7 +48,6 @@ public class Board {
 		}
 		
 		emptyX = emptyY = this.boardSize - 1;
-		this.tiles[emptyX][emptyY] = 0;
 	}
 	
 	
@@ -54,7 +70,7 @@ public class Board {
 		case KeyEvent.VK_RIGHT:
 			if(emptyX > 0) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX - 1][emptyY];
-				this.tiles[emptyX - 1][emptyY] = 0;
+				this.tiles[emptyX - 1][emptyY] = (int) Math.pow(boardSize, 2);
 				emptyX--;
 				return true;
 			} else {
@@ -63,7 +79,7 @@ public class Board {
 		case KeyEvent.VK_LEFT:
 			if(emptyX < this.boardSize - 1) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX + 1][emptyY];
-				this.tiles[emptyX + 1][emptyY] = 0;
+				this.tiles[emptyX + 1][emptyY] = (int) Math.pow(boardSize, 2);
 				emptyX++;
 				return true;
 			} else {
@@ -72,7 +88,7 @@ public class Board {
 		case KeyEvent.VK_DOWN:
 			if(emptyY > 0) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY - 1];
-				this.tiles[emptyX][emptyY - 1] = 0;
+				this.tiles[emptyX][emptyY - 1] = (int) Math.pow(boardSize, 2);
 				emptyY--;
 				return true;
 			} else {
@@ -81,7 +97,7 @@ public class Board {
 		case KeyEvent.VK_UP:
 			if(emptyY < this.boardSize - 1) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY + 1];
-				this.tiles[emptyX][emptyY + 1] = 0;
+				this.tiles[emptyX][emptyY + 1] = (int) Math.pow(boardSize, 2);
 				emptyY++;
 				return true;
 			} else {

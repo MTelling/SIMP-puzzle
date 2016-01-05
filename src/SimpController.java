@@ -3,6 +3,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JOptionPane;
+
 public class SimpController implements KeyListener, MouseListener {
 
 	SimpPuzzleView puzzleView;
@@ -31,12 +33,14 @@ public class SimpController implements KeyListener, MouseListener {
 		
 		int xPos = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
 		int yPos = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
+		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
 		System.out.println("X: " + xPos);
 		System.out.println("Y: " + yPos);
 		System.out.println(puzzleView.getBoard().moveTile(xPos, yPos));
 		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
 			makeMove();
+
 		}
 	}
 
@@ -49,7 +53,9 @@ public class SimpController implements KeyListener, MouseListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(puzzleView.getBoard().moveTile(e.getKeyCode())) {
+
 			makeMove();
+
 		}
 	}
 
@@ -61,5 +67,9 @@ public class SimpController implements KeyListener, MouseListener {
 	private void makeMove() {
 		controlView.updateMovesLabel();
 		puzzleView.repaint();
+		
+		if(puzzleView.getBoard().isGameOver()){
+			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");
+		}
 	}
 }
