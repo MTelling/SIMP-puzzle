@@ -17,26 +17,32 @@ public class ControlView extends JPanel {
 		
 		this.score = score;
 		
+		//Create menuButton.
 		JButton menuButton = new JButton("Menu");
 		menuButton.setFocusable(false);
 		
+		//Create movesLabel and timeLabel. 
 		this.movesLabel = new JLabel("Moves: " + this.score.getMoves()); 
 		this.timeLabel = new JLabel("Time Spent: " + this.score.getSeconds()); 
 		
+		//Add labels and buttons to view. 
 		this.add(menuButton);
 		this.add(movesLabel);
 		this.add(timeLabel);
 		
+		
+		//Start timer. 
 		this.startTiming();
 		
 		
 	}
 	
+	//1000 is a 1000milliseconds so the timer will fire each second. 
 	private Timer timer = new Timer(1000, new ActionListener(){
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// Update the timer. +1 second
+			// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
 			updateSeconds();
 		}
 		
