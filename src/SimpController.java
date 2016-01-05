@@ -24,10 +24,13 @@ public class SimpController implements KeyListener, MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int xCoord = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
-		int yCoord = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
+		System.out.println("Got here");
+		int xPos = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
+		int yPos = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		if(puzzleView.getBoard().moveTile(xCoord, yCoord)) {
+		System.out.println("X: " + xPos);
+		System.out.println("Y: " + yPos);
+		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
 			puzzleView.repaint();
 		}
 	}
