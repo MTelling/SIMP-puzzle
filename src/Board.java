@@ -49,7 +49,7 @@ public class Board {
 	
 	public boolean moveTile(int keyCode) {
 		switch(keyCode) {
-		case KeyEvent.VK_LEFT:
+		case KeyEvent.VK_RIGHT:
 			if(emptyX > 0) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX - 1][emptyY];
 				this.tiles[emptyX - 1][emptyY] = 0;
@@ -58,7 +58,7 @@ public class Board {
 			} else {
 				return false;
 			}
-		case KeyEvent.VK_RIGHT:
+		case KeyEvent.VK_LEFT:
 			if(emptyX < this.boardSize - 1) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX + 1][emptyY];
 				this.tiles[emptyX + 1][emptyY] = 0;
@@ -67,7 +67,7 @@ public class Board {
 			} else {
 				return false;
 			}
-		case KeyEvent.VK_UP:
+		case KeyEvent.VK_DOWN:
 			if(emptyY > 0) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY - 1];
 				this.tiles[emptyX][emptyY - 1] = 0;
@@ -76,7 +76,7 @@ public class Board {
 			} else {
 				return false;
 			}
-		case KeyEvent.VK_DOWN:
+		case KeyEvent.VK_UP:
 			if(emptyY < this.boardSize - 1) {
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY + 1];
 				this.tiles[emptyX][emptyY + 1] = 0;

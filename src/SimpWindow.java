@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 public class SimpWindow extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
-	public static final int WINDOW_WIDTH = 448;
-	public static final int WINDOW_HEIGHT = 512;
+	public static final int WINDOW_WIDTH = 800;
+	public static final int WINDOW_HEIGHT = 864;
 	public static final int GAME_BORDER = 24;
 	
 	Board board;
@@ -21,11 +21,11 @@ public class SimpWindow extends JFrame {
 	JLabel timeLabel;
 	
 	public static void main(String[] args) {
-		SimpWindow game = new SimpWindow(new Board(7));
+		SimpWindow game = new SimpWindow(new Board(100));
 	}
 	
 	public SimpWindow(Board board) {
-		super("Simp-Puzzel");
+		super("Simp-Puzzle");
 		
 		this.controlView = new ControlView();
 		

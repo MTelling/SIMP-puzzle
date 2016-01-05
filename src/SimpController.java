@@ -13,9 +13,7 @@ public class SimpController implements KeyListener, MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(puzzleView.getBoard().moveTile((e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize(), (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize())) {
-			puzzleView.repaint();
-		}
+		
 	}
 
 	@Override
@@ -25,7 +23,14 @@ public class SimpController implements KeyListener, MouseListener {
 	public void mouseExited(MouseEvent arg0) {}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {}
+	public void mousePressed(MouseEvent e) {
+		int xCoord = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
+		int yCoord = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
+		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
+		if(puzzleView.getBoard().moveTile(xCoord, yCoord)) {
+			puzzleView.repaint();
+		}
+	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}

@@ -19,9 +19,7 @@ public class SimpPuzzleView extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		Graphics2D g2d = (Graphics2D)g;
-		
+				
 		int[][] tiles = this.board.getTiles();
 		for(int y = 0; y < tiles.length; y++) {
 			for(int x = 0; x < tiles.length; x++) {
