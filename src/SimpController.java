@@ -29,7 +29,7 @@ public class SimpController implements KeyListener, MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		int xPos = (e.getX() - Window.GAME_BORDER) / gameView.getBoard().getTileSize();
-		int yPos = (e.getY() - Window.GAME_BORDER) / gameView.getBoard().getTileSize();
+		int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gameView.getBoard().getTileSize();
 		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
 		if(gameView.getBoard().moveTile(xPos, yPos)) {
