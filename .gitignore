@@ -19,3 +19,5 @@ hs_err_pid*
 
 #Don't save .pxm files from pixelmator
 .pxm
+
+*.pxm
