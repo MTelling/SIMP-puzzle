@@ -35,8 +35,9 @@ public class GameState implements Serializable {
 	public int[][] goBack (int howLong) {
 		if(currPos - howLong >= 0)
 		{
+			int newPos = currPos;
 			currPos -= howLong;
-			return checkPoints.get(currPos - howLong);
+			return checkPoints.get(newPos - howLong);
 		}
 		else
 		{
@@ -47,8 +48,9 @@ public class GameState implements Serializable {
 	public int[][] goForward (int howLong) {
 		if(currPos + howLong < checkPoints.size())
 		{
-			currPos -= howLong;
-			return checkPoints.get(currPos + howLong);
+			int newPos = currPos;
+			currPos += howLong;
+			return checkPoints.get(newPos + howLong);
 		}
 		else
 		{
