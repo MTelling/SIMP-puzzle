@@ -51,6 +51,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 		this.add(button);
 	}
 
+	public void updateGameState(GameState gs) {
+		this.gameState = gs;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("New Game")) {
@@ -59,7 +63,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 				// LOAD THA GAME MUTHAFUCKAAA
 			Object obj = SaveLoad.loadFromFile("SavedGame");
 			if(obj instanceof GameState) {
-				gameState = (GameState) obj;
+				//gameState = (GameState) obj;
+				Window.loadGame( (GameState) obj);
 				Window.swapView("puzzle");
 			}
 		} else if(e.getActionCommand().equals("Exit Game")) {

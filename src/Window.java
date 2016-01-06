@@ -19,7 +19,7 @@ public class Window extends JFrame {
 	
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
-	private MainMenuPanel mainMenuPanel;
+	private static MainMenuPanel mainMenuPanel;
 	private static GamePanel gamePanel;
 	private static MenuPanel menuPanel;
 	
@@ -29,6 +29,8 @@ public class Window extends JFrame {
 		@SuppressWarnings("unused")
 		Window game = new Window();
 	}
+	
+
 	
 	public Window() {
 		super("N-Puzzle Game");
@@ -71,6 +73,15 @@ public class Window extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+	
+	public static void loadGame(GameState gs) {
+		
+		mainMenuPanel.updateGameState(gs);
+		menuPanel.updateGameState(gs);
+		gamePanel.updateGameState(gs);
+		cardLayout.show(cardPanel, "puzzle");
+		gamePanel.requestFocus();
 	}
 	
 	public static void swapView(String key) {

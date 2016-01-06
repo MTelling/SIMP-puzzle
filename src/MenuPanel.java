@@ -58,6 +58,10 @@ public class MenuPanel extends JPanel implements ActionListener {
 		g.fillRect(0, 0, 448 - Window.GAME_BORDER * 2, 512 - Window.GAME_BORDER * 2);
 	}
 
+	public void updateGameState(GameState gs) {
+		this.gameState = gs;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("Continue Game")) {
