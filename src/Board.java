@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 
 public class Board {
 	
-	public final int BOARD_BORDER_SIZE = 4;
+	
 	private int boardSize;
 	private int[][] tiles;
 	private int emptyX, emptyY;
@@ -12,8 +12,7 @@ public class Board {
 		if(boardSize >= 3 && boardSize <= 100) {
 			this.boardSize = boardSize;
 			this.tiles = new int[boardSize][boardSize];
-			this.tileSize = ((Window.WINDOW_WIDTH - (Window.GAME_BORDER * 2) - 2 * BOARD_BORDER_SIZE) / (boardSize));
-			System.out.println(tileSize);
+			this.tileSize = ((Window.WINDOW_WIDTH - (Window.GAME_BORDER * 2) - 2 * Window.BOARD_BORDER_SIZE) / (boardSize));
 		} else {
 			throw new IllegalArgumentException("Invalid board size");
 		}

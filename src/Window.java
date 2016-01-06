@@ -12,6 +12,8 @@ public class Window extends JFrame {
 	public static final int WINDOW_WIDTH = 448;
 	public static final int WINDOW_HEIGHT = 512;
 	public static final int GAME_BORDER = 24;
+	public static final int BOARD_SIZE = 400;
+	public static final int BOARD_BORDER_SIZE = 4;
 	
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
