@@ -13,7 +13,7 @@ public class GameState implements Serializable {
 	public GameState (Board board, Score score) {
 		this.checkPoints = new ArrayList<int[][]>();
 		this.currPos = 0;
-		this.checkPoints.add(board.getTiles());
+		this.checkPoints.add(copyOf2DArray(board.getTiles()));
 		this.score = score;
 		this.emptyTiles = new ArrayList<Point>();
 		this.emptyTiles.add(new Point(board.getEmptyTile().x, board.getEmptyTile().y));
@@ -27,15 +27,18 @@ public class GameState implements Serializable {
 		
 		this.emptyTiles.add(new Point(emptyTile.x, emptyTile.y));
 		this.currPos++;
-		
-		//Arrays are objects, so we can't just add it. We need to add a copy of it
-		int[][] newTile = new int[tiles.length][];
-		for (int i = 0; i < newTile.length; i++) {
-			newTile[i] = Arrays.copyOf(tiles[i], tiles[i].length);
-		}
-		this.checkPoints.add(newTile);
+		this.checkPoints.add(copyOf2DArray(tiles));
 
 		return true;
+	}
+	
+	//Method to make a copy of a 2d array without just getting reference to the original array. 
+	private int[][] copyOf2DArray(int[][] array) {
+		int[][] newArray = new int[array.length][];
+		for (int i = 0; i < newArray.length; i++) {
+			newArray[i] = Arrays.copyOf(array[i], array[i].length);
+		}
+		return newArray;
 	}
 	
 	public int[][] goBack (int howLong) {
