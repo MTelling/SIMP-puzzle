@@ -54,13 +54,13 @@ public class Board {
 	
 	//TOOD: doesn't work anymore because we inverted the controls. 
 	public boolean moveTile(int x, int y) {
-		if(x == emptyX - 1 && y == emptyY)
+		if(x == emptyX + 1 && y == emptyY)
 			return moveTile(KeyEvent.VK_LEFT);
-		else if(x == emptyX + 1 && y == emptyY)
+		else if(x == emptyX - 1 && y == emptyY)
 			return moveTile(KeyEvent.VK_RIGHT);
-		else if(x == emptyX && y == emptyY - 1)
-			return moveTile(KeyEvent.VK_UP);
 		else if(x == emptyX && y == emptyY + 1)
+			return moveTile(KeyEvent.VK_UP);
+		else if(x == emptyX && y == emptyY - 1)
 			return moveTile(KeyEvent.VK_DOWN);
 		else
 			return false;

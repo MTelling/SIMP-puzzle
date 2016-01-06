@@ -74,7 +74,12 @@ public class Window extends JFrame {
 	}
 	
 	public static void toggleMenu() {
-		menuPanel.setVisible(menuToggle);
 		menuToggle = !menuToggle;
+		menuPanel.setVisible(menuToggle);
+		if(menuToggle) {
+			gamePanel.stopTiming();
+		} else {
+			gamePanel.startTiming();
+		}
 	}
 }
