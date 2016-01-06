@@ -20,7 +20,7 @@ public class SaveLoad {
 			f_out 		= new FileOutputStream(file);
 			obj_out 	= new ObjectOutputStream (f_out);
 			
-			// if file doesn't exists, then create it
+			// if file doesn't exists; create it
 			if (!file.exists()) {
 				file.createNewFile();
 			}

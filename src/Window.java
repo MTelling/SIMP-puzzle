@@ -41,12 +41,16 @@ public class Window extends JFrame {
 		cardPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
 		//Initialize the different panels
+		Board board = new Board(4);
+		Score score = new Score();
+		GameState gs = new GameState(board, score);
+		
 		mainMenuPanel = new MainMenuPanel();
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
 		
 		JLayeredPane puzzlePane = new JLayeredPane();
-
-		gamePanel = new GamePanel(new Board(4), new Score());
+		
+		gamePanel = new GamePanel(board, score);
 		SimpController controller = new SimpController(gamePanel, gamePanel.getGameState());
 
 		gamePanel.addKeyListener(controller);
