@@ -80,9 +80,11 @@ public class Board {
 			}
 		case KeyEvent.VK_UP:
 			if(emptyY < this.boardSize - 1) {
+				
 				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY + 1];
 				this.tiles[emptyX][emptyY + 1] = 0;
 				emptyY++;
+				
 				return true;
 			} else {
 				return false;
@@ -92,11 +94,28 @@ public class Board {
 		}
 	}
 	
+	public boolean setTiles(int[][] tiles) {
+		this.tiles = tiles;
+		return true;
+	}
+	
 	public int[][] getTiles() {
 		return this.tiles;
 	}
 	
 	public int getBoardSize() {
 		return this.boardSize;
+	}
+	
+	public String toString() {
+		String str = "";
+		for (int i = 0; i < this.tiles.length; i++) {
+			for (int j = 0; j < this.tiles[i].length; j++) {
+				str += this.tiles[i][j] + " ";
+			}
+			str += "\n";
+		}
+		
+		return str;
 	}
 }

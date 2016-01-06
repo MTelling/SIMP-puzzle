@@ -18,6 +18,7 @@ public class SimpWindow extends JFrame {
 	ControlView controlView;
 	JLabel scoreLabel;
 	JLabel timeLabel;
+	GameState gameState;
 	
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
@@ -26,6 +27,7 @@ public class SimpWindow extends JFrame {
 	}
 	
 	public SimpWindow(Board board) {
+		//TODO: We need to add comments here.
 		super("Simp-Puzzle");
 		
 		this.score = new Score();
@@ -36,9 +38,11 @@ public class SimpWindow extends JFrame {
 		this.board = board;
 		this.puzzleView = new SimpPuzzleView(this.board);
 		
+		this.gameState = new GameState(this.board, this.score);
+		
 		puzzleView.setFocusable(true);
 		
-		SimpController controller = new SimpController(puzzleView, controlView);
+		SimpController controller = new SimpController(puzzleView, controlView, gameState);
 		puzzleView.addKeyListener(controller);
 		puzzleView.addMouseListener(controller);
 		this.getContentPane().add(puzzleView, BorderLayout.CENTER);

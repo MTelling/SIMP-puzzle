@@ -7,10 +7,12 @@ public class SimpController implements KeyListener, MouseListener {
 
 	SimpPuzzleView puzzleView;
 	ControlView controlView;
+	GameState gameState;
 	
-	public SimpController(SimpPuzzleView puzzleView, ControlView controlView) {
+	public SimpController(SimpPuzzleView puzzleView, ControlView controlView, GameState gameState) {
 		this.puzzleView = puzzleView;
 		this.controlView = controlView;
+		this.gameState = gameState;
 	}
 	
 	@Override
@@ -32,9 +34,7 @@ public class SimpController implements KeyListener, MouseListener {
 		int xPos = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
 		int yPos = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		System.out.println("X: " + xPos);
-		System.out.println("Y: " + yPos);
-		System.out.println(puzzleView.getBoard().moveTile(xPos, yPos));
+
 		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
 			makeMove();
 		}
@@ -48,6 +48,26 @@ public class SimpController implements KeyListener, MouseListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown()) {
+			// This is what happens if you press CTRL+Z. This should undo last move.
+			if(gameState.canGoBack()) {
+
+				puzzleView.getBoard().setTiles(gameState.goBack(1));
+
+				puzzleView.repaint();
+			}
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown()) {
+			// This is what happens if you press CTRL+Y. This should redo last move
+			if(gameState.canGoForward()) {
+				
+				puzzleView.getBoard().setTiles(gameState.goForward(1));
+				
+				puzzleView.repaint();
+			}
+		}
+		
 		if(puzzleView.getBoard().moveTile(e.getKeyCode())) {
 			makeMove();
 		}
@@ -59,6 +79,7 @@ public class SimpController implements KeyListener, MouseListener {
 	
 	//Helper method
 	private void makeMove() {
+		gameState.updateGameState(puzzleView.getBoard().getTiles());
 		controlView.updateMovesLabel();
 		puzzleView.repaint();
 	}
