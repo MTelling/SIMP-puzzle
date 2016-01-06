@@ -40,6 +40,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 		button.addActionListener(this);
 		button.setAlignmentX(CENTER_ALIGNMENT);
 		button.setPreferredSize(new Dimension(256, 48));
+		button.setFocusable(false);
 		
 		this.add(Box.createVerticalGlue());
 		this.add(button);

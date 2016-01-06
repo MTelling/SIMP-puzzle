@@ -53,7 +53,7 @@ public class SimpController implements KeyListener, MouseListener {
 
 		//TODO: comment? 
 
-		if(gameView.getBoard().moveTile(e.getKeyCode())) {
+		if(gameView.getBoard().moveTile(e.getKeyCode()) && !Window.menuToggle) {
 			makeMove();
 		}
 	}

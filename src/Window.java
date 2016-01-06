@@ -23,7 +23,7 @@ public class Window extends JFrame {
 	private static GamePanel gamePanel;
 	private static MenuPanel menuPanel;
 	
-	private static boolean menuToggle;
+	public static boolean menuToggle;
 	
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
