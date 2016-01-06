@@ -1,10 +1,11 @@
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 
 public class Board {
 	
 	private int boardSize;
 	private int[][] tiles;
-	private int emptyX, emptyY;
+	private Point emptyTile;
 	private int tileSize;
 	
 	public Board(int boardSize) {
@@ -48,19 +49,20 @@ public class Board {
 			}
 		}
 		
-		emptyX = emptyY = this.boardSize - 1;
+		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);
 	}
 	
 	
 	//TOOD: doesn't work anymore because we inverted the controls. 
 	public boolean moveTile(int x, int y) {
-		if(x == emptyX + 1 && y == emptyY)
+
+		if(x == emptyTile.x - 1 && y == emptyTile.y)
 			return moveTile(KeyEvent.VK_LEFT);
-		else if(x == emptyX - 1 && y == emptyY)
+		else if(x == emptyTile.x + 1 && y == emptyTile.y)
 			return moveTile(KeyEvent.VK_RIGHT);
-		else if(x == emptyX && y == emptyY + 1)
+		else if(x == emptyTile.x && y == emptyTile.y - 1)
 			return moveTile(KeyEvent.VK_UP);
-		else if(x == emptyX && y == emptyY - 1)
+		else if(x == emptyTile.x && y == emptyTile.y + 1)
 			return moveTile(KeyEvent.VK_DOWN);
 		else
 			return false;
@@ -71,37 +73,37 @@ public class Board {
 	public boolean moveTile(int keyCode) {
 		switch(keyCode) {
 		case KeyEvent.VK_RIGHT:
-			if(emptyX > 0) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX - 1][emptyY];
-				this.tiles[emptyX - 1][emptyY] = (int) Math.pow(boardSize, 2);
-				emptyX--;
+			if(emptyTile.x > 0) {
+				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x - 1][emptyTile.y];
+				this.tiles[emptyTile.x - 1][emptyTile.y] = (int) Math.pow(boardSize, 2);
+				emptyTile.x--;
 				return true;
 			} else {
 				return false;
 			}
 		case KeyEvent.VK_LEFT:
-			if(emptyX < this.boardSize - 1) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX + 1][emptyY];
-				this.tiles[emptyX + 1][emptyY] = (int) Math.pow(boardSize, 2);
-				emptyX++;
+			if(emptyTile.x < this.boardSize - 1) {
+				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + 1][emptyTile.y];
+				this.tiles[emptyTile.x + 1][emptyTile.y] = (int) Math.pow(boardSize, 2);
+				emptyTile.x++;
 				return true;
 			} else {
 				return false;
 			}
 		case KeyEvent.VK_DOWN:
-			if(emptyY > 0) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY - 1];
-				this.tiles[emptyX][emptyY - 1] = (int) Math.pow(boardSize, 2);
-				emptyY--;
+			if(emptyTile.y > 0) {
+				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x][emptyTile.y - 1];
+				this.tiles[emptyTile.x][emptyTile.y - 1] = (int) Math.pow(boardSize, 2);
+				emptyTile.y--;
 				return true;
 			} else {
 				return false;
 			}
 		case KeyEvent.VK_UP:
-			if(emptyY < this.boardSize - 1) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY + 1];
-				this.tiles[emptyX][emptyY + 1] = (int) Math.pow(boardSize, 2);
-				emptyY++;
+			if(emptyTile.y < this.boardSize - 1) {
+				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x][emptyTile.y + 1];
+				this.tiles[emptyTile.x][emptyTile.y + 1] = (int) Math.pow(boardSize, 2);
+				emptyTile.y++;
 				return true;
 			} else {
 				return false;
@@ -110,6 +112,19 @@ public class Board {
 			return false;
 
 		}
+	}
+	
+	public boolean setTiles(int[][] tiles) {
+		this.tiles = tiles;
+		return true;
+	}
+	
+	public Point getEmptyTile() {
+		return emptyTile;
+	}
+	
+	public void setEmptyTile(Point newEmptyTile) {
+		this.emptyTile = new Point(newEmptyTile.x, newEmptyTile.y);
 	}
 	
 
@@ -123,6 +138,18 @@ public class Board {
 
 	public int getTileSize() {
 		return this.tileSize;
+	}
+	
+	public String toString() {
+		String str = "";
+		for (int i = 0; i < this.tiles.length; i++) {
+			for (int j = 0; j < this.tiles[i].length; j++) {
+				str += this.tiles[i][j] + " ";
+			}
+			str += "\n";
+		}
+		
+		return str;
 	}
 	
 }

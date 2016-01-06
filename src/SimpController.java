@@ -7,10 +7,12 @@ import javax.swing.JOptionPane;
 
 public class SimpController implements KeyListener, MouseListener {
 
-	GamePanel gameView;
+	GamePanel gamePanel;
+	GameState gameState;
 	
-	public SimpController(GamePanel gameView) {
-		this.gameView = gameView;
+	public SimpController(GamePanel gamePanel, GameState gameState) {
+		this.gamePanel = gamePanel;
+		this.gameState = gameState;
 	}
 	
 	@Override
@@ -28,11 +30,12 @@ public class SimpController implements KeyListener, MouseListener {
 	//TODO: It doesn't work when you click right now? The click is registered, but nothing happens. 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int xPos = (e.getX() - Window.GAME_BORDER) / gameView.getBoard().getTileSize();
-		int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gameView.getBoard().getTileSize();
+
+		int xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
+		int yPos = (e.getY() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
 		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		if(gameView.getBoard().moveTile(xPos, yPos)) {
+		if(gamePanel.getBoard().moveTile(xPos, yPos)) {
 			makeMove();
 
 		}
@@ -46,6 +49,31 @@ public class SimpController implements KeyListener, MouseListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		
+		if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown()) {
+			// This is what happens if you press CTRL+Z. This should undo last move.
+			
+			if(gameState.canGoBack()) {
+				
+				gamePanel.getBoard().setEmptyTile(gameState.goBackEmpty(1));
+				gamePanel.getBoard().setTiles(gameState.goBack(1));
+				
+
+				gamePanel.repaint();
+			}
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown()) {
+			// This is what happens if you press CTRL+Y. This should redo last move
+			if(gameState.canGoForward()) {
+				
+				gamePanel.getBoard().setEmptyTile(gameState.goForwardEmpty(1));
+				gamePanel.getBoard().setTiles(gameState.goForward(1));
+				
+				
+				gamePanel.repaint();
+			}
+		}
 
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			Window.toggleMenu();
@@ -53,8 +81,9 @@ public class SimpController implements KeyListener, MouseListener {
 
 		//TODO: comment? 
 
-		if(gameView.getBoard().moveTile(e.getKeyCode()) && !Window.menuToggle) {
+		if(gamePanel.getBoard().moveTile(e.getKeyCode()) && !Window.menuToggle) {
 			makeMove();
+			gameState.updateGameState(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getEmptyTile());
 		}
 	}
 
@@ -65,15 +94,15 @@ public class SimpController implements KeyListener, MouseListener {
 	//Helper method
 	private void makeMove() {
 		//TODO: Comment? 
-		if (gameView.getScore().getMoves() == 0) {
-			gameView.startTiming();
+		if (gamePanel.getScore().getMoves() == 0) {
+			gamePanel.startTiming();
 		}
 		
-		gameView.getScore().addMoves(1);
-		gameView.repaint();
+		gamePanel.getScore().addMoves(1);
+		gamePanel.repaint();
 		
-		if(gameView.getBoard().isGameOver()){
-			gameView.stopTiming();
+		if(gamePanel.getBoard().isGameOver()){
+			gamePanel.stopTiming();
 			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");
 		}
 	}

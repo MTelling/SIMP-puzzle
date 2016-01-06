@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
 	private Board board;
 	private Score score;
+	private GameState gameState;
 	private Image boardImg;
 	private Image tileImg;
 	private Image cogwheelImg;
@@ -42,6 +43,10 @@ public class GamePanel extends JPanel {
 		
 	});
 	
+	public GameState getGameState() {
+		return gameState;
+	}
+	
 	public GamePanel(Board board, Score score) {
 		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		this.setOpaque(true);
@@ -50,6 +55,7 @@ public class GamePanel extends JPanel {
 		this.board = board;
 		this.board.init();
 		this.score = score;
+		this.gameState = new GameState(this.board, this.score);
 		this.firstPaint = true;
 		
 		this.loadImages();
