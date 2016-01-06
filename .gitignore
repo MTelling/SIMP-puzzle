@@ -16,8 +16,14 @@ hs_err_pid*
 .project
 .classpath
 .DS_store
+<<<<<<< HEAD
 
 #Don't save .pxm files from pixelmator
 .pxm
 
 *.pxm
+||||||| merged common ancestors
+=======
+
+*.pxm
+>>>>>>> 2.0

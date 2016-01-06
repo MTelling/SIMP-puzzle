@@ -1,15 +1,17 @@
 import java.awt.event.KeyEvent;
 
 public class Board {
-
+	
 	private int boardSize;
 	private int[][] tiles;
 	private int emptyX, emptyY;
+	private int tileSize;
 	
 	public Board(int boardSize) {
 		if(boardSize >= 3 && boardSize <= 100) {
 			this.boardSize = boardSize;
 			this.tiles = new int[boardSize][boardSize];
+			this.tileSize = ((Window.WINDOW_WIDTH - (Window.GAME_BORDER * 2) - 2 * Window.BOARD_BORDER_SIZE) / (boardSize));
 		} else {
 			throw new IllegalArgumentException("Invalid board size");
 		}
@@ -63,7 +65,9 @@ public class Board {
 		else
 			return false;
 	}
+
 	
+	//TODO: Tobias can this be done more simple? 
 	public boolean moveTile(int keyCode) {
 		switch(keyCode) {
 		case KeyEvent.VK_RIGHT:
@@ -104,9 +108,11 @@ public class Board {
 			}
 		default:
 			return false;
+
 		}
 	}
 	
+
 	public int[][] getTiles() {
 		return this.tiles;
 	}
@@ -114,4 +120,9 @@ public class Board {
 	public int getBoardSize() {
 		return this.boardSize;
 	}
+
+	public int getTileSize() {
+		return this.tileSize;
+	}
+	
 }

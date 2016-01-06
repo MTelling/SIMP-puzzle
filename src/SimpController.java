@@ -7,12 +7,10 @@ import javax.swing.JOptionPane;
 
 public class SimpController implements KeyListener, MouseListener {
 
-	SimpPuzzleView puzzleView;
-	ControlView controlView;
+	GamePanel gameView;
 	
-	public SimpController(SimpPuzzleView puzzleView, ControlView controlView) {
-		this.puzzleView = puzzleView;
-		this.controlView = controlView;
+	public SimpController(GamePanel gameView) {
+		this.gameView = gameView;
 	}
 	
 	@Override
@@ -30,15 +28,11 @@ public class SimpController implements KeyListener, MouseListener {
 	//TODO: It doesn't work when you click right now? The click is registered, but nothing happens. 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		
-		int xPos = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
-		int yPos = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
+		int xPos = (e.getX() - Window.GAME_BORDER) / gameView.getBoard().getTileSize();
+		int yPos = (e.getY() - Window.GAME_BORDER) / gameView.getBoard().getTileSize();
 		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		System.out.println("X: " + xPos);
-		System.out.println("Y: " + yPos);
-		System.out.println(puzzleView.getBoard().moveTile(xPos, yPos));
-		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
+		if(gameView.getBoard().moveTile(xPos, yPos)) {
 			makeMove();
 
 		}
@@ -52,10 +46,15 @@ public class SimpController implements KeyListener, MouseListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(puzzleView.getBoard().moveTile(e.getKeyCode())) {
 
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			Window.toggleMenu();
+		}
+
+		//TODO: comment? 
+
+		if(gameView.getBoard().moveTile(e.getKeyCode()) && !Window.menuToggle) {
 			makeMove();
-
 		}
 	}
 
@@ -65,14 +64,16 @@ public class SimpController implements KeyListener, MouseListener {
 	
 	//Helper method
 	private void makeMove() {
-		controlView.startTimerIfFirstMove();
+		//TODO: Comment? 
+		if (gameView.getScore().getMoves() == 0) {
+			gameView.startTiming();
+		}
 		
-		controlView.updateMovesLabel();
+		gameView.getScore().addMoves(1);
+		gameView.repaint();
 		
-		puzzleView.repaint();
-		
-		if(puzzleView.getBoard().isGameOver()){
-			controlView.stopTiming();
+		if(gameView.getBoard().isGameOver()){
+			gameView.stopTiming();
 			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");
 		}
 	}
