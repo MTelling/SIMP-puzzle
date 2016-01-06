@@ -46,6 +46,7 @@ public class GamePanel extends JPanel {
 		for(int y = 0; y < tiles.length; y++) {
 			for(int x = 0; x < tiles.length; x++) {
 				if(tiles[x][y] != Math.pow(this.board.getBoardSize(),2)) {
+					//TODO: Comment? 
 					int xPos = (x * this.board.getTileSize()) + Window.GAME_BORDER;
 					int yPos = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.getBoard().getBoardSize() - y) * this.getBoard().getTileSize());
 					
