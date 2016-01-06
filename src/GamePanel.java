@@ -11,7 +11,7 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel {
 
-	private static final String RESOURCE_PATH = "themes/default/";
+	private static final String RESOURCE_PATH = "resources/themes/default/";
 	private static final long serialVersionUID = 1L;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
