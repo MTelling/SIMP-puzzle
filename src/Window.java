@@ -9,11 +9,13 @@ import javax.swing.JPanel;
 public class Window extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
-	public static final int WINDOW_WIDTH = 448;
-	public static final int WINDOW_HEIGHT = 512;
 	public static final int GAME_BORDER = 24;
 	public static final int BOARD_SIZE = 400;
 	public static final int BOARD_BORDER_SIZE = 4;
+	public static final int TOP_CONTROLS_SIZE = 24;
+	public static final int LABEL_TEXT_SIZE = 16;
+	public static final int WINDOW_WIDTH = BOARD_SIZE + 2 * GAME_BORDER;
+	public static final int WINDOW_HEIGHT = BOARD_SIZE + 2 * GAME_BORDER + TOP_CONTROLS_SIZE;
 	
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
