@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 public class Board {
 	
@@ -115,7 +116,11 @@ public class Board {
 	}
 	
 	public boolean setTiles(int[][] tiles) {
-		this.tiles = tiles;
+		int[][] newArray = new int[tiles.length][];
+		for (int i = 0; i < newArray.length; i++) {
+			newArray[i] = Arrays.copyOf(tiles[i], tiles[i].length);
+		}
+		this.tiles = newArray;
 		return true;
 	}
 	

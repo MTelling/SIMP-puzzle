@@ -82,7 +82,7 @@ public class GameState implements Serializable {
 		if(currPos - howLong < checkPoints.size()){
 			return emptyTiles.get(currPos - howLong);
 		}else{
-			throw new IllegalArgumentException("Can't go future back than Big Bang!");
+			throw new IllegalArgumentException("Can't go further back than the Big Bang!");
 		}
 	}
 	
