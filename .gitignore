@@ -16,3 +16,6 @@ hs_err_pid*
 .project
 .classpath
 .DS_store
+
+#Don't save .pxm files from pixelmator
+.pxm
