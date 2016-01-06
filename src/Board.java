@@ -1,8 +1,9 @@
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Board {
+public class Board implements Serializable {
 	
 	private int boardSize;
 	private int[][] tiles;

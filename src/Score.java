@@ -1,4 +1,6 @@
-public class Score {
+import java.io.Serializable;
+
+public class Score implements Serializable{
 
 	private int moves;
 	private int seconds;

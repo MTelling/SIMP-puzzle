@@ -17,8 +17,6 @@ public class GamePanel extends JPanel {
 	private static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
-	private Board board;
-	private Score score;
 	private GameState gameState;
 	private Image boardImg;
 	private Image tileImg;
@@ -47,15 +45,12 @@ public class GamePanel extends JPanel {
 		return gameState;
 	}
 	
-	public GamePanel(Board board, Score score) {
+	public GamePanel(GameState gs) {
 		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		this.setOpaque(true);
 		
 		this.setBackground(BACKGROUND_COLOR);
-		this.board = board;
-		this.board.init();
-		this.score = score;
-		this.gameState = new GameState(this.board, this.score);
+		this.gameState = gs;
 		this.firstPaint = true;
 		
 		this.loadImages();
@@ -93,8 +88,8 @@ public class GamePanel extends JPanel {
 		}
 		
 		//Draw Time and Move labels.  
-		g.drawString("Time: " + score.timeToString(), this.timeLabelxPos, this.timeLabelyPos);
-		g.drawString("Moves: " + score.getMoves(), this.movesLabelxPos, this.movesLabelyPos);
+		g.drawString("Time: " + this.getScore().timeToString(), this.timeLabelxPos, this.timeLabelyPos);
+		g.drawString("Moves: " + this.getScore().getMoves(), this.movesLabelxPos, this.movesLabelyPos);
 	
 		//Draw cogwheel (settings) button
 		int cogWheelXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - COGWHEEL_SIZE;
@@ -115,12 +110,12 @@ public class GamePanel extends JPanel {
 		}
 		
 		//Draw Board
-		int[][] tiles = this.board.getTiles();
+		int[][] tiles = this.getBoard().getTiles();
 		for(int y = 0; y < tiles.length; y++) {
 			for(int x = 0; x < tiles.length; x++) {
-				if(tiles[x][y] != Math.pow(this.board.getBoardSize(),2)) {
+				if(tiles[x][y] != Math.pow(this.getBoard().getBoardSize(),2)) {
 					
-					int xPos = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (x*this.board.getTileSize());
+					int xPos = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (x * this.getBoard().getTileSize());
 					//Y position is gotten from the bottom and then up. This way it will always have exactly distance to bottom if the top is changed. 
 					int yPos = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.getBoard().getBoardSize() - y) * (this.getBoard().getTileSize())) - Window.BOARD_BORDER_SIZE;
 					
@@ -132,8 +127,8 @@ public class GamePanel extends JPanel {
 					
 					//Position labels on tiles. 
 					String TileNum = Integer.toString(tiles[x][y]);
-					int strXPos = xPos + (this.board.getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
-					int strYPos = yPos + (this.board.getTileSize() / 2) + g.getFontMetrics().getHeight()/4;
+					int strXPos = xPos + (this.getBoard().getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
+					int strYPos = yPos + (this.getBoard().getTileSize() / 2) + g.getFontMetrics().getHeight()/4;
 					
 					//Draw text for each tile
 					g.drawString(TileNum, strXPos, strYPos);
@@ -147,7 +142,7 @@ public class GamePanel extends JPanel {
 	private void calcLabelPositions(Graphics g) {
 		
 		//Calculate position so it will be in the middle. To do this we need to know the width of the label with current font. 
-		int movesLabelWidth = calcWidthOfString(g, "Move: " + this.score.getMoves());
+		int movesLabelWidth = calcWidthOfString(g, "Move: " + this.getScore().getMoves());
 		
 		this.movesLabelxPos = (Window.WINDOW_WIDTH-movesLabelWidth)/2;
 		this.movesLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
@@ -185,10 +180,10 @@ public class GamePanel extends JPanel {
 	}
 
 	public Board getBoard() {
-		return this.board;
+		return this.gameState.getBoard();
 	}
 	
 	public Score getScore() {
-		return this.score;
+		return this.gameState.getScore();
 	}
 }

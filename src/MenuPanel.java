@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 
 public class MenuPanel extends JPanel implements ActionListener {
 
+	GameState gameState;
+	
 	JButton btnContinueGame;
 	JButton btnNewGame;
 	JButton btnSaveGame;
@@ -17,7 +19,9 @@ public class MenuPanel extends JPanel implements ActionListener {
 	JButton btnSettings;
 	JButton btnQuitGame;
 	
-	public MenuPanel() {
+	public MenuPanel(GameState gs) {
+		this.gameState = gs;
+		
 		addButton(btnContinueGame, "Continue Game");
 		addButton(btnNewGame, "New Game");
 		addButton(btnSaveGame, "Save Game");
@@ -60,8 +64,10 @@ public class MenuPanel extends JPanel implements ActionListener {
 			Window.toggleMenu();
 		} else if (e.getActionCommand().equals("Save Game")) {
 			// SAVE THA GAME MUTHAFUCKAAA
+			SaveLoad.saveToFile(gameState, "SavedGame");
 		} else if(e.getActionCommand().equals("Exit to Main Menu")) {
 				Window.swapView("mainMenu");
+		}
 	}
 	
 }

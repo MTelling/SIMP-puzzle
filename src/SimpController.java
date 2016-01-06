@@ -98,6 +98,8 @@ public class SimpController implements KeyListener, MouseListener {
 			gamePanel.startTiming();
 		}
 		
+		gameState.updateCurrentPos();
+		
 		gamePanel.getScore().addMoves(1);
 		gamePanel.repaint();
 		

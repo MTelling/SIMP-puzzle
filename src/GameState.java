@@ -8,6 +8,7 @@ public class GameState implements Serializable {
 	private ArrayList<int[][]> checkPoints;
 	private ArrayList<Point> emptyTiles;
 	private int currPos;
+	private Board board;
 	private Score score;
 	
 	public GameState (Board board, Score score) {
@@ -15,8 +16,17 @@ public class GameState implements Serializable {
 		this.currPos = 0;
 		this.checkPoints.add(copyOf2DArray(board.getTiles()));
 		this.score = score;
+		this.board = board;
 		this.emptyTiles = new ArrayList<Point>();
-		this.emptyTiles.add(copyOfPoint(board.getEmptyTile()));
+		this.emptyTiles.add(copyOfPoint(this.board.getEmptyTile()));
+	}
+	
+	public Score getScore() {
+		return score;
+	}
+	
+	public Board getBoard() {
+		return board;
 	}
 	
 	public int[][] getCurrentBoard() {
@@ -50,11 +60,17 @@ public class GameState implements Serializable {
 		if(currPos - howLong >= 0){
 			int newPos = currPos;
 			currPos -= howLong;
+			checkPoints.add(copyOf2DArray(checkPoints.get(newPos)));
 			this.score.takeMoves(1);
+			System.out.println(currPos);
 			return checkPoints.get(newPos - howLong);
 		}else{
 			throw new IllegalArgumentException("Can't go further back than beginning");
 		}
+	}
+	
+	public void updateCurrentPos() {
+		this.currPos = checkPoints.size() - 1;
 	}
 	
 	public int[][] goForward (int howLong) {
@@ -70,7 +86,8 @@ public class GameState implements Serializable {
 	
 	// MUST BE USED BEFORE goForward(), as goForward is updating currPos!
 	public Point goForwardEmpty(int howLong) {
-		if(currPos + howLong < checkPoints.size()){
+		if(currPos + howLong < emptyTiles.size()){
+			emptyTiles.add(copyOfPoint(emptyTiles.get(currPos)));
 			return emptyTiles.get(currPos + howLong);
 		}else{
 			throw new IllegalArgumentException("Can't go into the future!");
@@ -79,7 +96,8 @@ public class GameState implements Serializable {
 	
 	// MUST BE USED BEFORE goBack(), as goForward is updating currPos!
 	public Point goBackEmpty(int howLong) {
-		if(currPos - howLong < checkPoints.size()){
+		if(currPos - howLong < emptyTiles.size()){
+			emptyTiles.add(copyOfPoint(emptyTiles.get(currPos)));
 			return emptyTiles.get(currPos - howLong);
 		}else{
 			throw new IllegalArgumentException("Can't go further back than the Big Bang!");
