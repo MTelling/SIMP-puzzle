@@ -16,7 +16,7 @@ public class GameState implements Serializable {
 		this.checkPoints.add(copyOf2DArray(board.getTiles()));
 		this.score = score;
 		this.emptyTiles = new ArrayList<Point>();
-		this.emptyTiles.add(new Point(board.getEmptyTile().x, board.getEmptyTile().y));
+		this.emptyTiles.add(copyOfPoint(board.getEmptyTile()));
 	}
 	
 	public int[][] getCurrentBoard() {
@@ -25,7 +25,7 @@ public class GameState implements Serializable {
 	
 	public boolean updateGameState(int[][] tiles, Point emptyTile) {
 		
-		this.emptyTiles.add(new Point(emptyTile.x, emptyTile.y));
+		this.emptyTiles.add(copyOfPoint(emptyTile));
 		this.currPos++;
 		this.checkPoints.add(copyOf2DArray(tiles));
 
@@ -39,6 +39,11 @@ public class GameState implements Serializable {
 			newArray[i] = Arrays.copyOf(array[i], array[i].length);
 		}
 		return newArray;
+	}
+	
+	//Method to make a copy of a point without just getting the reference. 
+	private Point copyOfPoint(Point point) {
+		return new Point(point.x, point.y);
 	}
 	
 	public int[][] goBack (int howLong) {
