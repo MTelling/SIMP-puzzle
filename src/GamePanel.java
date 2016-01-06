@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
 			getScore().addSeconds(1);
+			repaint();
 		}
 		
 	});
@@ -38,13 +39,14 @@ public class GamePanel extends JPanel {
 		
 		//Draw "Score" Values
 		g.drawString("Moves: " + score.getMoves(), Window.GAME_BORDER, g.getFontMetrics().getHeight());
-		g.drawString("Time: " + score.getSeconds(), (Window.WINDOW_WIDTH / 2) - 16, g.getFontMetrics().getHeight());
+		g.drawString("Time: " + score.timeToString(), (Window.WINDOW_WIDTH / 2) - 16, g.getFontMetrics().getHeight());
 		
 		//Draw Board
 		int[][] tiles = this.board.getTiles();
 		for(int y = 0; y < tiles.length; y++) {
 			for(int x = 0; x < tiles.length; x++) {
 				if(tiles[x][y] != Math.pow(this.board.getBoardSize(),2)) {
+					//TODO: Comment? 
 					int xPos = (x * this.board.getTileSize()) + Window.GAME_BORDER;
 					int yPos = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.getBoard().getBoardSize() - y) * this.getBoard().getTileSize());
 					

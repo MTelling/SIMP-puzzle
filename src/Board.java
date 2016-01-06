@@ -66,6 +66,8 @@ public class Board {
 			return false;
 	}
 	
+	
+	//TODO: Tobias can this be done more simple? 
 	public boolean moveTile(int keyCode) {
 		switch(keyCode) {
 		case KeyEvent.VK_RIGHT:
