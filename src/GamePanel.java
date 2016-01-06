@@ -26,6 +26,7 @@ public class GamePanel extends JPanel {
 	private int movesLabelyPos;
 	private int timeLabelxPos;
 	private int timeLabelyPos;
+	private int[] stringWidths;
 	private boolean firstPaint;
 	
 	
@@ -82,8 +83,7 @@ public class GamePanel extends JPanel {
 		//We do this so it doesn't have to calculate the positions every single time the view is repainted. 
 		//It only saves a bit cpu, but we think it's worth it. 
 		if (this.firstPaint) {
-			calculateLabelPositions(g);
-			this.firstPaint = false;
+			calcLabelPositions(g);
 		}
 		
 		//Draw Time and Move labels.  
@@ -100,6 +100,14 @@ public class GamePanel extends JPanel {
 		
 		//TODO: Somehow the tiles are positioned a bit off the y position at other boardsizes than 4. 
 		g.setFont(new Font("Sans Serif", Font.ITALIC, Window.LABEL_TEXT_SIZE));
+		
+		
+		//Calculate width of strings with 1 digit to 4 digits. 
+		if (this.firstPaint) {
+			this.stringWidths = calcStringWidths(g);
+			this.firstPaint = false;
+		}
+		
 		//Draw Board
 		int[][] tiles = this.board.getTiles();
 		for(int y = 0; y < tiles.length; y++) {
@@ -116,10 +124,9 @@ public class GamePanel extends JPanel {
 					//Draws text on image
 					g.setColor(TILE_TEXT_COLOR);
 					
-					//calculate position for labels on tiles
+					//Position labels on tiles. 
 					String TileNum = Integer.toString(tiles[x][y]);
-					int digitWidth = calcStringWidth(g, TileNum);
-					int strXPos = xPos + (this.board.getTileSize() / 2) - digitWidth / 2;
+					int strXPos = xPos + (this.board.getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
 					int strYPos = yPos + (this.board.getTileSize() / 2) + g.getFontMetrics().getHeight()/4;
 					
 					//Draw text for each tile
@@ -131,10 +138,10 @@ public class GamePanel extends JPanel {
 	}
 	
 	//Helper method to calculate label positions. 
-	private void calculateLabelPositions(Graphics g) {
+	private void calcLabelPositions(Graphics g) {
 		
 		//Calculate position so it will be in the middle. To do this we need to know the width of the label with current font. 
-		int movesLabelWidth = calcStringWidth(g, "Move: " + this.score.getMoves());
+		int movesLabelWidth = calcWidthOfString(g, "Move: " + this.score.getMoves());
 		
 		this.movesLabelxPos = (Window.WINDOW_WIDTH-movesLabelWidth)/2;
 		this.movesLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
@@ -143,8 +150,21 @@ public class GamePanel extends JPanel {
 		this.timeLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
 	}
 	
+	//Returns an array with the width of the labels according to how many digits there are. Goes from 0 to 4 digits. 
+	private int[] calcStringWidths(Graphics g) {
+		int[] stringWidths = new int[5];
+		int counter = 1;
+		stringWidths[0] = 0;
+		for (int i = 1; i < stringWidths.length; i++) {
+			stringWidths[i] = calcWidthOfString(g, Integer.toString(counter));
+			counter *= 10;
+		}
+		
+		return stringWidths;
+	}
+	
 	//Returns the width of a given string with it's current font
-	private int calcStringWidth(Graphics g, String str) {
+	private int calcWidthOfString(Graphics g, String str) {
 		FontMetrics fontMetrics = g.getFontMetrics(g.getFont());
 		int width = fontMetrics.stringWidth(str);
 		return width;
