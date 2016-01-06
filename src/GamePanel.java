@@ -14,6 +14,7 @@ public class GamePanel extends JPanel {
 	private static final String RESOURCE_PATH = "resources/";
 	private static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
 	private static final long serialVersionUID = 1L;
+	private static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE*2 - Window.TOP_CONTROLS_SIZE/2;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
 	private Board board;
@@ -69,6 +70,7 @@ public class GamePanel extends JPanel {
 		this.cogwheelImg = cogwheelIc.getImage();
 	}
 	
+	//TODO: Can we move a lot of code out of this that does not need to be calculated at each repaint? 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -88,14 +90,15 @@ public class GamePanel extends JPanel {
 		g.drawString("Time: " + score.timeToString(), this.timeLabelxPos, this.timeLabelyPos);
 		g.drawString("Moves: " + score.getMoves(), this.movesLabelxPos, this.movesLabelyPos);
 	
-		//TODO: Fix magic numbers. 
 		//Draw cogwheel (settings) button
-		g.drawImage(cogwheelImg, Window.WINDOW_WIDTH - Window.GAME_BORDER - 40, 12, 30, 30, null);
+		int cogWheelXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - COGWHEEL_SIZE;
+		int cogWheelYPos = (Window.TOP_CONTROLS_SIZE*2 - COGWHEEL_SIZE) / 2;
+		g.drawImage(cogwheelImg, cogWheelXPos, cogWheelYPos, COGWHEEL_SIZE, COGWHEEL_SIZE, null);
 		
 		//Draw board background. 
 		g.drawImage(boardImg, Window.GAME_BORDER, Window.WINDOW_HEIGHT - Window.GAME_BORDER - Window.BOARD_SIZE, Window.BOARD_SIZE, Window.BOARD_SIZE, null);
 		
-		
+		//TODO: Somehow the tiles are positioned a bit off the y position at other boardsizes than 4. 
 		g.setFont(new Font("Sans Serif", Font.ITALIC, Window.LABEL_TEXT_SIZE));
 		//Draw Board
 		int[][] tiles = this.board.getTiles();
