@@ -1,6 +1,7 @@
 import java.awt.CardLayout;
 import java.awt.Dimension;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -16,7 +17,9 @@ public class Window extends JFrame {
 	private static JPanel cardPanel;
 	private MainMenuPanel mainMenuPanel;
 	private static GamePanel gamePanel;
-	private MenuPanel menuPanel;
+	private static MenuPanel menuPanel;
+	
+	private static boolean menuToggle;
 	
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
@@ -35,6 +38,7 @@ public class Window extends JFrame {
 		
 		//Initialize the different panels
 		mainMenuPanel = new MainMenuPanel();
+		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
 		
 		JLayeredPane puzzlePane = new JLayeredPane();
 		gamePanel = new GamePanel(new Board(3), new Score());
@@ -42,8 +46,10 @@ public class Window extends JFrame {
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
 		menuPanel = new MenuPanel();
+		menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+		menuPanel.setVisible(false);
 		puzzlePane.add(gamePanel, new Integer(0), 0);
-		//puzzlePane.add(menuPanel, new Integer(1), 0);
+		puzzlePane.add(menuPanel, new Integer(1), 0);
 		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
@@ -61,5 +67,10 @@ public class Window extends JFrame {
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
 		}
+	}
+	
+	public static void toggleMenu() {
+		menuPanel.setVisible(menuToggle);
+		menuToggle = !menuToggle;
 	}
 }

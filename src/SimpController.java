@@ -50,6 +50,10 @@ public class SimpController implements KeyListener, MouseListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			Window.toggleMenu();
+		}
+		
 		if(gameView.getBoard().moveTile(e.getKeyCode())) {
 			makeMove();
 		}

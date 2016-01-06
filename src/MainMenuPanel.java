@@ -1,6 +1,8 @@
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -8,31 +10,41 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 	
 	JButton btnNewGame;
 	JButton btnLoadGame;
+	JButton btnHighscore;
 	JButton btnSettings;
 	JButton btnExit;
 	
 	public MainMenuPanel() {
 		//Create "New Game" Button
-		btnNewGame = new JButton("New Game");
-		btnNewGame.addActionListener(this);
+		addButton(btnNewGame, "New Game");
 		
 		//Create "Load Game" Button
-		btnLoadGame = new JButton("Load Game");
-		btnLoadGame.addActionListener(this);
-				
+		addButton(btnLoadGame, "Load Game");
+			
 		//Create "Settings" Button
-		btnSettings = new JButton("Settings");
-		btnSettings.addActionListener(this);
+		addButton(btnHighscore, "Highscores");
+		
+		//Create "Settings" Button
+		addButton(btnSettings, "Settings");
 		
 		//Create "Exit" Button
-		btnExit = new JButton("Exit");
-		btnExit.addActionListener(this);
+		addButton(btnExit, "Exit Game");
+		this.add(Box.createVerticalGlue());
+	}
+	
+	private void addButton(JButton button, String label) {
+		button = new JButton(label) {
+			{
+				setSize(256, 48);
+				setMaximumSize(getSize());
+			}
+		};
+		button.addActionListener(this);
+		button.setAlignmentX(CENTER_ALIGNMENT);
+		button.setPreferredSize(new Dimension(256, 48));
 		
-		//Add the buttons to the panel
-		this.add(btnNewGame);
-		this.add(btnLoadGame);
-		this.add(btnSettings);
-		this.add(btnExit);
+		this.add(Box.createVerticalGlue());
+		this.add(button);
 	}
 
 	@Override
