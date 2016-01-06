@@ -14,7 +14,7 @@ public class GamePanel extends JPanel {
 	private static final String RESOURCE_PATH = "resources/";
 	private static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
 	private static final long serialVersionUID = 1L;
-	private static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE*2 - Window.TOP_CONTROLS_SIZE/2;
+	private static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
 	private Board board;
@@ -92,7 +92,7 @@ public class GamePanel extends JPanel {
 	
 		//Draw cogwheel (settings) button
 		int cogWheelXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - COGWHEEL_SIZE;
-		int cogWheelYPos = (Window.TOP_CONTROLS_SIZE*2 - COGWHEEL_SIZE) / 2;
+		int cogWheelYPos = (Window.TOP_CONTROLS_SIZE - COGWHEEL_SIZE) / 2;
 		g.drawImage(cogwheelImg, cogWheelXPos, cogWheelYPos, COGWHEEL_SIZE, COGWHEEL_SIZE, null);
 		
 		//Draw board background. 
@@ -137,10 +137,10 @@ public class GamePanel extends JPanel {
 		int movesLabelWidth = calcStringWidth(g, "Move: " + this.score.getMoves());
 		
 		this.movesLabelxPos = (Window.WINDOW_WIDTH-movesLabelWidth)/2;
-		this.movesLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 2;
+		this.movesLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
 		
 		this.timeLabelxPos = Window.GAME_BORDER;
-		this.timeLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 2;
+		this.timeLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
 	}
 	
 	//Returns the width of a given string with it's current font

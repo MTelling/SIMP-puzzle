@@ -12,10 +12,10 @@ public class Window extends JFrame {
 	public static final int GAME_BORDER = 24;
 	public static final int BOARD_SIZE = 400;
 	public static final int BOARD_BORDER_SIZE = 4;
-	public static final int TOP_CONTROLS_SIZE = 24;
+	public static final int TOP_CONTROLS_SIZE = 48;
 	public static final int LABEL_TEXT_SIZE = 16;
 	public static final int WINDOW_WIDTH = BOARD_SIZE + 2 * GAME_BORDER;
-	public static final int WINDOW_HEIGHT = BOARD_SIZE + 2 * GAME_BORDER + TOP_CONTROLS_SIZE;
+	public static final int WINDOW_HEIGHT = GAME_BORDER + BOARD_SIZE + TOP_CONTROLS_SIZE;
 	
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
