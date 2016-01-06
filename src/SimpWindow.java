@@ -6,8 +6,8 @@ import javax.swing.JLabel;
 public class SimpWindow extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
-	public static final int WINDOW_WIDTH = 448;
-	public static final int WINDOW_HEIGHT = 512;
+	public static final int WINDOW_WIDTH = 400;
+	public static final int WINDOW_HEIGHT = 450;
 	public static final int GAME_BORDER = 24;
 	
 	
@@ -22,7 +22,7 @@ public class SimpWindow extends JFrame {
 	public static void main(String[] args) {
 
 		@SuppressWarnings("unused")
-		SimpWindow game = new SimpWindow(new Board(4));
+		SimpWindow game = new SimpWindow(new Board(Integer.parseInt(args[0])));
 
 	}
 	
