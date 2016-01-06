@@ -30,6 +30,10 @@ public class Score {
 	public void addMoves (int moves) {
 		this.moves += moves;
 	}
+	
+	public void takeMoves (int moves) {
+		this.moves -= moves;
+	}
 
 	
 	public void reset () {

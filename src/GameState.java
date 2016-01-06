@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,15 +7,21 @@ public class GameState implements Serializable {
 
 	private ArrayList<int[][]> checkPoints;
 	private int currPos;
+	private Score score;
 	
 	public GameState (Board board, Score score) {
 		this.checkPoints = new ArrayList<int[][]>();
 		this.currPos = 0;
 		this.checkPoints.add(board.getTiles());
+		this.score = score;
 	}
 	
 	public int[][] getCurrentBoard() {
 		return goBack(0);
+	}
+	
+	public void saveGameState() {
+		SaveLoad.saveToFile(this, "SavedGame");
 	}
 	
 	public boolean updateGameState(int[][] tiles) {
@@ -37,6 +44,7 @@ public class GameState implements Serializable {
 		{
 			int newPos = currPos;
 			currPos -= howLong;
+			this.score.takeMoves(1);
 			return checkPoints.get(newPos - howLong);
 		}
 		else
@@ -50,6 +58,7 @@ public class GameState implements Serializable {
 		{
 			int newPos = currPos;
 			currPos += howLong;
+			this.score.addMoves(1);
 			return checkPoints.get(newPos + howLong);
 		}
 		else

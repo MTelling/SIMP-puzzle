@@ -7,13 +7,13 @@ import java.io.ObjectOutputStream;
 
 public class SaveLoad {
 
-	private File file;
-	private FileOutputStream f_out;
-	private FileInputStream f_in;
-	private ObjectOutputStream obj_out;
-	private ObjectInputStream obj_in;
+	private static File file;
+	private static FileOutputStream f_out;
+	private static FileInputStream f_in;
+	private static ObjectOutputStream obj_out;
+	private static ObjectInputStream obj_in;
 	
-	public void saveToFile (Object object, String fileName) {
+	public static void saveToFile (Object object, String fileName) {
 		try {
 
 			file 		= new File(fileName + ".data");
@@ -35,7 +35,15 @@ public class SaveLoad {
 		}
 	}
 	
-	public Object loadFromFile(String fileName) {
+	public static boolean fileExists(String fileName) {
+		file = new File(fileName + ".data");
+		if (file.exists()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static Object loadFromFile(String fileName) {
 		try {
 
 			file 		= new File(fileName + ".data");
