@@ -32,9 +32,11 @@ public class SimpController implements KeyListener, MouseListener {
 		int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gameView.getBoard().getTileSize();
 		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		if(gameView.getBoard().moveTile(xPos, yPos)) {
-			makeMove();
-
+		if(!Window.menuToggle) {
+			if(gameView.getBoard().moveTile(xPos, yPos)) {
+				makeMove();
+	
+			}
 		}
 	}
 
@@ -53,8 +55,10 @@ public class SimpController implements KeyListener, MouseListener {
 
 		//TODO: comment? 
 
-		if(gameView.getBoard().moveTile(e.getKeyCode()) && !Window.menuToggle) {
-			makeMove();
+		if(!Window.menuToggle) {
+			if(gameView.getBoard().moveTile(e.getKeyCode())) {
+				makeMove();
+			}
 		}
 	}
 
