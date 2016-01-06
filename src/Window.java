@@ -46,7 +46,7 @@ public class Window extends JFrame {
 		
 		JLayeredPane puzzlePane = new JLayeredPane();
 		gamePanel = new GamePanel(new Board(4), new Score());
-		SimpController controller = new SimpController(gamePanel);
+		SimpController controller = new SimpController(gamePanel, gamePanel.getGameState());
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
 		menuPanel = new MenuPanel();

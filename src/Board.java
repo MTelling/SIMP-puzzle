@@ -49,7 +49,6 @@ public class Board {
 			}
 		}
 		
-		//emptyTile.x = emptyTile.y = this.boardSize - 1;
 		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);
 	}
 	
@@ -114,6 +113,19 @@ public class Board {
 		}
 	}
 	
+	public boolean setTiles(int[][] tiles) {
+		this.tiles = tiles;
+		return true;
+	}
+	
+	public Point getEmptyTile() {
+		return emptyTile;
+	}
+	
+	public void setEmptyTile(Point newEmptyTile) {
+		this.emptyTile = new Point(newEmptyTile.x, newEmptyTile.y);
+	}
+	
 
 	public int[][] getTiles() {
 		return this.tiles;
@@ -125,6 +137,18 @@ public class Board {
 
 	public int getTileSize() {
 		return this.tileSize;
+	}
+	
+	public String toString() {
+		String str = "";
+		for (int i = 0; i < this.tiles.length; i++) {
+			for (int j = 0; j < this.tiles[i].length; j++) {
+				str += this.tiles[i][j] + " ";
+			}
+			str += "\n";
+		}
+		
+		return str;
 	}
 	
 }
