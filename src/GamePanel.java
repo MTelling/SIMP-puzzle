@@ -11,7 +11,8 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel {
 
-	private static final String RESOURCE_PATH = "resources/themes/default/";
+	private static final String RESOURCE_PATH = "resources/";
+	private static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
 	private static final long serialVersionUID = 1L;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
@@ -19,6 +20,7 @@ public class GamePanel extends JPanel {
 	private Score score;
 	private Image boardImg;
 	private Image tileImg;
+	private Image cogwheelImg;
 	private int movesLabelxPos;
 	private int movesLabelyPos;
 	private int timeLabelxPos;
@@ -55,12 +57,16 @@ public class GamePanel extends JPanel {
 	
 	private void loadImages() {
 		//Load boardImage
-		ImageIcon boardIc = new ImageIcon(RESOURCE_PATH + "board.jpeg");
+		ImageIcon boardIc = new ImageIcon(THEME_PATH + "board.jpeg");
 		this.boardImg = boardIc.getImage();
 		
 		//Load tileImage
-		ImageIcon tileIc = new ImageIcon(RESOURCE_PATH + "tile.jpeg");
+		ImageIcon tileIc = new ImageIcon(THEME_PATH + "tile.jpeg");
 		this.tileImg = tileIc.getImage();
+		
+		//Load cogwheelImage
+		ImageIcon cogwheelIc = new ImageIcon(RESOURCE_PATH + "cogwheel.png");
+		this.cogwheelImg = cogwheelIc.getImage();
 	}
 	
 	@Override
@@ -72,6 +78,7 @@ public class GamePanel extends JPanel {
 		
 		//Only calculate labelpositions first time round. 
 		//We do this so it doesn't have to calculate the positions every single time the view is repainted. 
+		//It only saves a bit cpu, but we think it's worth it. 
 		if (this.firstPaint) {
 			calculateLabelPositions(g);
 			this.firstPaint = false;
@@ -81,10 +88,15 @@ public class GamePanel extends JPanel {
 		g.drawString("Time: " + score.timeToString(), this.timeLabelxPos, this.timeLabelyPos);
 		g.drawString("Moves: " + score.getMoves(), this.movesLabelxPos, this.movesLabelyPos);
 	
+		//TODO: Fix magic numbers. 
+		//Draw cogwheel (settings) button
+		g.drawImage(cogwheelImg, Window.WINDOW_WIDTH - Window.GAME_BORDER - 40, 12, 30, 30, null);
 		
 		//Draw board background. 
 		g.drawImage(boardImg, Window.GAME_BORDER, Window.WINDOW_HEIGHT - Window.GAME_BORDER - Window.BOARD_SIZE, Window.BOARD_SIZE, Window.BOARD_SIZE, null);
 		
+		
+		g.setFont(new Font("Sans Serif", Font.ITALIC, Window.LABEL_TEXT_SIZE));
 		//Draw Board
 		int[][] tiles = this.board.getTiles();
 		for(int y = 0; y < tiles.length; y++) {
@@ -100,7 +112,15 @@ public class GamePanel extends JPanel {
 					
 					//Draws text on image
 					g.setColor(TILE_TEXT_COLOR);
-					g.drawString(Integer.toString(tiles[x][y]), xPos + (this.board.getTileSize() / 2), yPos + (this.board.getTileSize() / 2));
+					
+					//calculate position for labels on tiles
+					String TileNum = Integer.toString(tiles[x][y]);
+					int digitWidth = calcStringWidth(g, TileNum);
+					int strXPos = xPos + (this.board.getTileSize() / 2) - digitWidth / 2;
+					int strYPos = yPos + (this.board.getTileSize() / 2) + g.getFontMetrics().getHeight()/4;
+					
+					//Draw text for each tile
+					g.drawString(TileNum, strXPos, strYPos);
 				}
 			}
 		}
@@ -111,14 +131,20 @@ public class GamePanel extends JPanel {
 	private void calculateLabelPositions(Graphics g) {
 		
 		//Calculate position so it will be in the middle. To do this we need to know the width of the label with current font. 
-		FontMetrics fontMetrics = g.getFontMetrics(g.getFont());
-		int movesLabelWidth = fontMetrics.stringWidth("Moves: " + score.getMoves());
+		int movesLabelWidth = calcStringWidth(g, "Move: " + this.score.getMoves());
 		
 		this.movesLabelxPos = (Window.WINDOW_WIDTH-movesLabelWidth)/2;
 		this.movesLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 2;
 		
 		this.timeLabelxPos = Window.GAME_BORDER;
 		this.timeLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 2;
+	}
+	
+	//Returns the width of a given string with it's current font
+	private int calcStringWidth(Graphics g, String str) {
+		FontMetrics fontMetrics = g.getFontMetrics(g.getFont());
+		int width = fontMetrics.stringWidth(str);
+		return width;
 	}
 	
 	public void startTiming () {
