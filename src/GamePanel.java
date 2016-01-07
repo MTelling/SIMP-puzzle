@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -27,6 +30,7 @@ public class GamePanel extends JPanel {
 	private int timeLabelyPos;
 	private int[] stringWidths;
 	private boolean firstPaint;
+	private BufferedImage[] picList;
 	
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -79,6 +83,14 @@ public class GamePanel extends JPanel {
 		//Load cogwheelImage
 		ImageIcon cogwheelIc = new ImageIcon(RESOURCE_PATH + "cogwheel.png");
 		this.cogwheelImg = cogwheelIc.getImage();
+		
+		//Create imagelist
+		try {
+			this.picList = ImageHandler.getTilePics(this.getBoard().getBoardSize(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//TODO: Can we move a lot of code out of this that does not need to be calculated at each repaint? 
@@ -129,7 +141,7 @@ public class GamePanel extends JPanel {
 					int yPos = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.getBoard().getBoardSize() - y) * (this.getBoard().getTileSize())) - Window.BOARD_BORDER_SIZE;
 					
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g.drawImage(tileImg, xPos, yPos, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
+					g.drawImage(picList[tiles[x][y]], xPos, yPos, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
 					
 					//Draws text on image
 					g.setColor(TILE_TEXT_COLOR);
