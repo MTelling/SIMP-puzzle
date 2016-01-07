@@ -15,7 +15,8 @@ public class GamePanel extends JPanel {
 	public static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
 	public static final String RESOURCE_PATH = "resources/";
 	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
-	private static final long serialVersionUID = 1L;
+	public static final int ANIMATION_SPEED = 15; //Lower is faster. 
+ 	private static final long serialVersionUID = 1L;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
 	private GameState gameState;
@@ -43,7 +44,7 @@ public class GamePanel extends JPanel {
 		
 	});
 	
-	private Timer animationTimer = new Timer(15, new ActionListener() {
+	private Timer animationTimer = new Timer(ANIMATION_SPEED, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(getAnimationState().calcMovingCoords()) {
@@ -76,6 +77,9 @@ public class GamePanel extends JPanel {
 		this.firstPaint = true;
 		
 		this.loadImages();
+		
+		//Set doublebuffering to true. It should be by default, but just in case. 
+		this.setDoubleBuffered(true);
 		
 	}
 	

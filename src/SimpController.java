@@ -83,13 +83,13 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
-					gamePanel.repaint();
+					gamePanel.startAnimation();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
-					gamePanel.repaint();
+					gamePanel.startAnimation();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				Window.toggleMenu(false);

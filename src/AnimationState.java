@@ -8,7 +8,7 @@ public class AnimationState {
 	private Point newEmptyTile;
 	private int tileSize;
 	private int boardSize;
-	private final int VELOCITY = 1;
+	private final int VELOCITY = 4;
 	
 	
 	public AnimationState(Point emptyTile, int[][] tiles, int tileSize, int boardSize) {
@@ -74,12 +74,16 @@ public class AnimationState {
 					}
 					this.tileCoords[x][y] = new Point(this.tileCoords[x][y].x + dx, this.tileCoords[x][y].y + dy);
 					
-					boolean atFinalPosition = false;
-					//Check if the tile is now at the final position. 
-					if (dx != 0 && this.tileCoords[x][y].x == Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (this.currEmptyTile.x * this.tileSize)){
-						atFinalPosition = true;
-					} else if (dy != 0 && this.tileCoords[x][y].y == Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.boardSize - this.currEmptyTile.y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE){
-						atFinalPosition = true;
+					boolean atFinalPosition = true;
+					//Check if the tile is now at the final position.
+					int finalX = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (this.currEmptyTile.x * this.tileSize);
+					int finalY = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.boardSize - this.currEmptyTile.y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
+					if (dx > 0 && this.tileCoords[x][y].x >= finalX ){
+					} else if (dx < 0 && this.tileCoords[x][y].x <= finalX) {
+					} else if (dy > 0 && this.tileCoords[x][y].y >= finalY) {
+					} else if (dy < 0 && this.tileCoords[x][y].y <= finalY) {
+					} else {
+						atFinalPosition = false;
 					}
 					
 					if (atFinalPosition) {
