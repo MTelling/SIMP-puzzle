@@ -25,7 +25,7 @@ public class GameState implements Serializable {
 		
 		//TODO: Some redundancy could be removed by making helper function "addMoveToState". As this is the same in updateGameState. 
 		//Remember the first position. 
-		this.updateMoveStacks(this.board.getTiles(), this.board.getEmptyTile());
+		this.saveCurrentState();
 				
 	}
 	
@@ -34,17 +34,15 @@ public class GameState implements Serializable {
 	}
 	
 	//
-	private boolean updateMoveStacks(int[][] tiles, Point emptyTile) {
-		System.out.println("Updating game state");
-		this.undoMoveStack.add(copyOf2DArray(tiles));
-		this.undoEmptyTileStack.add(copyOfPoint(emptyTile));
+	private void saveCurrentState() {
+		this.undoMoveStack.add(copyOf2DArray(this.board.getTiles()));
+		this.undoEmptyTileStack.add(copyOfPoint(this.board.getEmptyTile()));
 		
 		//TODO: Is it correct to clear redo stack here? 
 		this.redoEmptyTileStack.clear();
 		this.redoMoveStack.clear();
-		
-		return true;
 	}
+	
 	//TODO: comment in this.
 	public void undoMove () {
 		
@@ -93,7 +91,7 @@ public class GameState implements Serializable {
 		//Before making a move, check if a move should be made. 
 		//If it should be made saveGameState to the current board and then make the move.  
 		if (this.board.shouldMove(keyCode)) {
-			this.updateMoveStacks(board.getTiles(), board.getEmptyTile());
+			this.saveCurrentState();
 			this.board.moveTile(keyCode);
 			return true;
 		} else {
