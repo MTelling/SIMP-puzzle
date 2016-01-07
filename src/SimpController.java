@@ -83,6 +83,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
+					gamePanel.startTiming();
 					gamePanel.startAnimation();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
@@ -149,7 +150,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 
+		if (!Window.menuToggle && e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 
 				&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 + GamePanel.COGWHEEL_SIZE) {
 			if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.COGWHEEL_SIZE 
 					&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
