@@ -14,9 +14,7 @@ public class SimpController implements KeyListener, MouseListener {
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {}
@@ -25,32 +23,34 @@ public class SimpController implements KeyListener, MouseListener {
 	public void mouseExited(MouseEvent arg0) {}
 
 	
-	//TODO: It doesn't work when you click right now? The click is registered, but nothing happens. 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
-		int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
-		
-		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		int dx, dy;
-		dx = dy = 0;
-		int emptyX = this.gamePanel.getBoard().getEmptyTile().x;
-		int emptyY = this.gamePanel.getBoard().getEmptyTile().y;
-		
-		if(xPos == emptyX - 1 && yPos == emptyY) {
-			dx = -1;
-		} else if(xPos == emptyX + 1 && yPos == emptyY) {
-			dx = 1;
-		} else if(xPos == emptyX && yPos == emptyY - 1) {
-			dy = -1;
-		} else if(xPos == emptyX && yPos == emptyY + 1) {
-			dy = 1;
-		}
-		
-		//Before making a move, check if a move should be made. 
-		//If it should be made saveGameState to the current board and then make the move.  
-		if (gamePanel.getBoard().isMoveValid(dx, dy)) {
-			makeMove(dx, dy);
+		if (!Window.menuToggle) {
+			int xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
+			int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
+			
+			//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
+			int dx, dy;
+			dx = dy = 0;
+			int emptyX = this.gamePanel.getBoard().getEmptyTile().x;
+			int emptyY = this.gamePanel.getBoard().getEmptyTile().y;
+			
+			//Determine where the clicked tile should go
+			if(xPos == emptyX - 1 && yPos == emptyY) {
+				dx = -1;
+			} else if(xPos == emptyX + 1 && yPos == emptyY) {
+				dx = 1;
+			} else if(xPos == emptyX && yPos == emptyY - 1) {
+				dy = -1;
+			} else if(xPos == emptyX && yPos == emptyY + 1) {
+				dy = 1;
+			}
+			
+			//Before making a move, check if a move should be made. 
+			//If it should be made saveGameState to the current board and then make the move.  
+			if (gamePanel.getBoard().isMoveValid(dx, dy)) {
+				makeMove(dx, dy);
+			}
 		}
 	}
 
@@ -89,31 +89,34 @@ public class SimpController implements KeyListener, MouseListener {
 				default: break;
 			}
 			
-			//Before making a move, check if a move should be made. 
-			//If it should be made saveGameState to the current board and then make the move.  
+			//Before making a move, check if a move should be made at all. 
 			if (gamePanel.getBoard().isMoveValid(dx, dy)) {
 				makeMove(dx, dy);
 			} 
-
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {}	
 	
-	
-	//Helper method
+
 	private void makeMove(int dx, int dy) {
-		//TODO: Comment? 
+		//Start time if it's the first move in the game, or if it's the first new move after load game. 
 		if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 			gamePanel.startTiming();
 		}
-				
+		
+		//Before making the move, save current game stat to gameState. 
 		gamePanel.getGameState().saveCurrentState();
+		
+		//Move tile
 		gamePanel.getBoard().moveTile(dx, dy);
+		
+		//Add a move to scoreModel.
 		gamePanel.getScore().addMoves(1);
 		gamePanel.repaint();
 		
+		//Check if game is won.
 		if(gamePanel.getBoard().isGameOver()){
 			gamePanel.stopTiming();
 			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");

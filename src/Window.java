@@ -21,7 +21,7 @@ public class Window extends JFrame {
 	private static JPanel cardPanel;
 	private static MainMenuPanel mainMenuPanel;
 	private static GamePanel gamePanel;
-	private static MenuPanel menuPanel;
+	private static InGameMenuPanel inGameMenuPanel;
 	
 	public static boolean menuToggle;
 	
@@ -60,11 +60,11 @@ public class Window extends JFrame {
 
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
-		menuPanel = new MenuPanel(gs);
-		menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-		menuPanel.setVisible(false);
+		inGameMenuPanel = new InGameMenuPanel(gs);
+		inGameMenuPanel.setLayout(new BoxLayout(inGameMenuPanel, BoxLayout.Y_AXIS));
+		inGameMenuPanel.setVisible(false);
 		puzzlePane.add(gamePanel, new Integer(0), 0);
-		puzzlePane.add(menuPanel, new Integer(1), 0);
+		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
 		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
@@ -80,22 +80,26 @@ public class Window extends JFrame {
 	public static void loadGame(GameState gs) {
 		
 		mainMenuPanel.updateGameState(gs);
-		menuPanel.updateGameState(gs);
+		inGameMenuPanel.updateGameState(gs);
 		gamePanel.updateGameState(gs);
 		cardLayout.show(cardPanel, "puzzle");
 		gamePanel.requestFocus();
 	}
 	
 	public static void swapView(String key) {
+		
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
+		} else if(key.equals("mainMenu")) {
+			toggleMenu();
+			gamePanel.stopTiming();
 		}
 	}
 	
 	public static void toggleMenu() {
 		menuToggle = !menuToggle;
-		menuPanel.setVisible(menuToggle);
+		inGameMenuPanel.setVisible(menuToggle);
 		if(menuToggle) {
 			gamePanel.stopTiming();
 		} else {

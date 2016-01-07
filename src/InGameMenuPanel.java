@@ -8,7 +8,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class MenuPanel extends JPanel implements ActionListener {
+public class InGameMenuPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 	JButton btnSettings;
 	JButton btnQuitGame;
 	
-	public MenuPanel(GameState gs) {
+	public InGameMenuPanel(GameState gs) {
 		this.gameState = gs;
 		
 		addButton(btnContinueGame, "Continue Game");
