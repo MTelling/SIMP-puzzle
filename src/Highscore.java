@@ -3,17 +3,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Highscore implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long 	serialVersionUID = 1L;
 	
-	private static final int HIGHSCORE_SIZE = 5;
+	private static final int 	HIGHSCORE_SIZE = 5;
 	
 	private static final String FILE_NAME = "resources/Highscores";
 	
 	private static final String STD_NAME = "Robert";
 		
-	private int currentBoardSize;
-	private String[] highScoreNames;
-	private int[] scores;
+	private int 		currentBoardSize;
+	private String[] 	highScoreNames;
+	private int[] 		scores;
 	
 	private Map<Integer, HashMap<String, Integer>> highScores = new HashMap<Integer, HashMap<String, Integer>>();
 	
@@ -22,8 +22,8 @@ public class Highscore implements Serializable {
 		
 		Object obj = SaveLoad.loadFromFile(FILE_NAME);
 		
-	    scores = new int[HIGHSCORE_SIZE];
-	    highScoreNames = new String[HIGHSCORE_SIZE];
+	    scores 			= new int[HIGHSCORE_SIZE];
+	    highScoreNames 	= new String[HIGHSCORE_SIZE];
 	    
 	    
 		if(obj instanceof Highscore) {
@@ -37,7 +37,8 @@ public class Highscore implements Serializable {
 			    
 			    int tempCounter = 0; //TODO: I know this is fugly. Can anyone make it prettier?
 			    for (Map.Entry<String, Integer> entry : tempScores.entrySet()) {
-			    	scores[tempCounter] = entry.getValue();
+			    	
+			    	scores[tempCounter] 		= entry.getValue();
 			    	highScoreNames[tempCounter] = entry.getKey();
 			    	tempCounter++;
 			    	
@@ -102,6 +103,7 @@ public class Highscore implements Serializable {
 	
 	public void addHighScore (String name, int score) {
 		int scoreSpot = HIGHSCORE_SIZE - 1;
+		
 		for(int i = scoreSpot; i >= 0 ; i++) {
 			if(score > scores[i]) {
 				scoreSpot = i;
