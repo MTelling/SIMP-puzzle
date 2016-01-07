@@ -8,6 +8,9 @@ import javax.swing.JPanel;
 
 public class MainMenuPanel extends JPanel implements ActionListener {
 	
+
+	private static final long serialVersionUID = 1L;
+
 	GameState gameState;
 	
 	JButton btnNewGame;
@@ -38,6 +41,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 	
 	private void addButton(JButton button, String label) {
 		button = new JButton(label) {
+
+			private static final long serialVersionUID = 1L;
+
 			{
 				setSize(256, 48);
 				setMaximumSize(getSize());
@@ -60,7 +66,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 		if(e.getActionCommand().equals("New Game")) {
 				Window.swapView("puzzle");
 		} else if (e.getActionCommand().equals("Load Game")) {
-				// LOAD THA GAME MUTHAFUCKAAA
+			//Load the game from file
 			Object obj = SaveLoad.loadFromFile("SavedGame");
 			if(obj instanceof GameState) {
 				//gameState = (GameState) obj;
@@ -71,4 +77,5 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 			System.exit(0);
 		}
 	}
+
 }

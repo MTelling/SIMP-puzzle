@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 public class Board implements Serializable {
 	
+
+	private static final long serialVersionUID = 1L;
 	private int boardSize;
 	private int[][] tiles;
 	private Point emptyTile;

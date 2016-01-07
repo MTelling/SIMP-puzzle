@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 
 public class MenuPanel extends JPanel implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
+
 	GameState gameState;
 	
 	JButton btnContinueGame;
@@ -36,6 +38,9 @@ public class MenuPanel extends JPanel implements ActionListener {
 	
 	private void addButton(JButton button, String label) {
 		button = new JButton(label) {
+
+			private static final long serialVersionUID = 1L;
+
 			{
 				setSize(256, 48);
 				setMaximumSize(getSize());
