@@ -43,9 +43,12 @@ public class GamePanel extends JPanel {
 		
 	});
 	
-	private Timer animationTimer = new Timer(20, new ActionListener() {
+	private Timer animationTimer = new Timer(15, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			if(getAnimationState().calcMovingCoords()) {
+				stopAnimation();
+			}
 			repaint();
 		}
 	});
@@ -135,9 +138,6 @@ public class GamePanel extends JPanel {
 			for(int x = 0; x < this.getBoard().getBoardSize(); x++) {
 				if(this.getAnimationState().getCurrTiles()[x][y] != Math.pow(this.getBoard().getBoardSize(),2)) {
 					
-					if(this.getAnimationState().calcMovingCoords()) {
-						stopAnimation();
-					}
 					
 					int xPos = tileCoords[x][y].x;
 					int yPos = tileCoords[x][y].y;
