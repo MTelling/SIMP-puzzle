@@ -4,6 +4,7 @@ public class Score implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private int moves;
+	private int newMoves;
 	private int seconds;
 	
 
@@ -15,6 +16,7 @@ public class Score implements Serializable{
 	{
 		this.seconds = seconds;
 		this.moves = moves;
+		this.newMoves = moves;
 	}
 	
 	public int getSeconds () {
@@ -25,6 +27,14 @@ public class Score implements Serializable{
 		return this.moves;
 	}
 	
+	public int getNewMoves() {
+		return this.newMoves;
+	}
+	
+	public void setNewMoves(int newMoves) {
+		this.newMoves = newMoves;
+	}
+	
 	public void addSeconds (int seconds) {
 		this.seconds += seconds;
 
@@ -32,15 +42,18 @@ public class Score implements Serializable{
 	
 	public void addMoves (int moves) {
 		this.moves += moves;
+		this.newMoves += moves;
 	}
 	
 	public void takeMoves (int moves) {
 		this.moves -= moves;
+		this.newMoves -= moves;
 	}
 
 	
 	public void reset () {
 		this.moves = 0;
+		this.newMoves = 0;
 		this.seconds = 0;
 	}
 	

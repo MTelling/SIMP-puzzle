@@ -77,7 +77,7 @@ public class SimpController implements KeyListener, MouseListener {
 	//Helper method
 	private void makeMove() {
 		//TODO: Comment? 
-		if (gamePanel.getScore().getMoves() == 0) {
+		if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 			gamePanel.startTiming();
 		}
 				

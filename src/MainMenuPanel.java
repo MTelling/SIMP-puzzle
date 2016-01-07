@@ -71,6 +71,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 			if(obj instanceof GameState) {
 				//gameState = (GameState) obj;
 				Window.loadGame( (GameState) obj);
+				gameState.getScore().setNewMoves(0);
 				Window.swapView("puzzle");
 			}
 		} else if(e.getActionCommand().equals("Exit Game")) {
