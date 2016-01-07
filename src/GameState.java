@@ -13,9 +13,10 @@ public class GameState implements Serializable {
 
 	private Score score;
 	private Board board;
+	private AnimationState animationState;
 	
 	//TODO: Bugs if you go all the way to start two times. 
-	public GameState (Board board, Score score) {
+	public GameState (Board board, Score score, AnimationState animationState) {
 		this.undoMoveStack = new Stack<int[][]>();
 		this.undoEmptyTileStack = new Stack<Point>();
 		this.redoMoveStack = new Stack<int[][]>();
@@ -23,6 +24,7 @@ public class GameState implements Serializable {
 		
 		this.score = score;
 		this.board = board;
+		this.animationState = animationState;
 
 	}
 	
@@ -32,6 +34,10 @@ public class GameState implements Serializable {
 	
 	public Board getBoard() {
 		return board;
+	}
+	
+	public AnimationState getAnimationState() {
+		return this.animationState;
 	}
 	
 	public int[][] getCurrentBoard() {
@@ -46,6 +52,8 @@ public class GameState implements Serializable {
 		//TODO: Is it correct to clear redo stack here? 
 		this.redoEmptyTileStack.clear();
 		this.redoMoveStack.clear();
+		
+		//TODO: should this just get copies instead? 
 	}
 	
 	//TODO: comment in this.

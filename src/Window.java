@@ -46,7 +46,8 @@ public class Window extends JFrame {
 		Board board = new Board(4);
 		board.init();
 		Score score = new Score();
-		GameState gs = new GameState(board, score);
+		AnimationState animationState = new AnimationState(board.getEmptyTile(), board.getTiles(), board.getTileSize(), board.getBoardSize());
+		GameState gs = new GameState(board, score, animationState);
 		
 		mainMenuPanel = new MainMenuPanel(gs);
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
