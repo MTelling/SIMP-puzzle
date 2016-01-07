@@ -82,13 +82,7 @@ public class Board implements Serializable {
 	public void init() {
 
 		makeSolvedBoard();
-		long startTime = System.currentTimeMillis();
 		makeRandomValidMoves(this.boardSize * 100);
-		long endTime = System.currentTimeMillis();
-		System.out.println(endTime - startTime);
-		
-		
-		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);
 	}
 
 	
