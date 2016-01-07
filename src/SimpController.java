@@ -35,7 +35,9 @@ public class SimpController implements KeyListener, MouseListener {
 		int yPos = (e.getY() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
 		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		if(gamePanel.getBoard().moveTile(xPos, yPos)) {
+		//TODO: Because i changed the movefunctions in Board, this has to be fixed. 
+		if(true) {
+			gamePanel.getBoard().moveTile(xPos, yPos);
 			makeMove();
 
 		}
@@ -50,40 +52,23 @@ public class SimpController implements KeyListener, MouseListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		
+		
 		if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown()) {
 			// This is what happens if you press CTRL+Z. This should undo last move.
-			
-			if(gameState.canGoBack()) {
-				
-				gamePanel.getBoard().setEmptyTile(gameState.goBackEmpty(1));
-				gamePanel.getBoard().setTiles(gameState.goBack(1));
-				
-
+			if(gameState.canUndo()) {
+				gameState.undoMove();
 				gamePanel.repaint();
 			}
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown()) {
-			// This is what happens if you press CTRL+Y. This should redo last move
-			if(gameState.canGoForward()) {
-				
-				gamePanel.getBoard().setEmptyTile(gameState.goForwardEmpty(1));
-				gamePanel.getBoard().setTiles(gameState.goForward(1));
-				
-				
+		} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown()) {
+			// This is what happens if you press CTRL+Y. This should redo last undo
+			if(gameState.canRedo()) {
+				gameState.redoMove();
 				gamePanel.repaint();
 			}
-		}
-
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			Window.toggleMenu();
-		}
-
-		//TODO: comment? 
-
-		if(gamePanel.getBoard().moveTile(e.getKeyCode()) && !Window.menuToggle) {
+		} else if(gameState.moveMade(e.getKeyCode()) && !Window.menuToggle) {
 			makeMove();
-			gameState.updateGameState(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getEmptyTile());
 		}
 	}
 

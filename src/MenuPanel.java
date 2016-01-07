@@ -62,6 +62,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 			// SAVE THA GAME MUTHAFUCKAAA
 		} else if(e.getActionCommand().equals("Exit to Main Menu")) {
 				Window.swapView("mainMenu");
+		}
 	}
 	
 }
