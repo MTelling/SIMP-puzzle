@@ -11,10 +11,10 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel {
 
-	private static final String RESOURCE_PATH = "resources/";
-	private static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
+	public static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
+	public static final String RESOURCE_PATH = "resources/";
+	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
 	private static final long serialVersionUID = 1L;
-	private static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
 	private GameState gameState;

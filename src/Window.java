@@ -60,6 +60,7 @@ public class Window extends JFrame {
 
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
+		gamePanel.addMouseMotionListener(controller);
 		inGameMenuPanel = new InGameMenuPanel(gs);
 		inGameMenuPanel.setLayout(new BoxLayout(inGameMenuPanel, BoxLayout.Y_AXIS));
 		inGameMenuPanel.setVisible(false);
