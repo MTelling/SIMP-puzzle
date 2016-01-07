@@ -32,12 +32,25 @@ public class SimpController implements KeyListener, MouseListener {
 		int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
 		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-
-		//TODO: Because i changed the movefunctions in Board, this has to be fixed. 
-		if(false) {
-			gamePanel.getBoard().moveTile(xPos, yPos);
-			//makeMove();
-
+		int dx, dy;
+		dx = dy = 0;
+		int emptyX = this.gamePanel.getBoard().getEmptyTile().x;
+		int emptyY = this.gamePanel.getBoard().getEmptyTile().y;
+		
+		if(xPos == emptyX - 1 && yPos == emptyY) {
+			dx = -1;
+		} else if(xPos == emptyX + 1 && yPos == emptyY) {
+			dx = 1;
+		} else if(xPos == emptyX && yPos == emptyY - 1) {
+			dy = -1;
+		} else if(xPos == emptyX && yPos == emptyY + 1) {
+			dy = 1;
+		}
+		
+		//Before making a move, check if a move should be made. 
+		//If it should be made saveGameState to the current board and then make the move.  
+		if (gamePanel.getBoard().isMoveValid(dx, dy)) {
+			makeMove(dx, dy);
 		}
 	}
 
