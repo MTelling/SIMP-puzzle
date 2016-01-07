@@ -56,73 +56,74 @@ public class Board implements Serializable {
 	
 	
 	//TOOD: doesn't work anymore because we inverted the controls. 
-	public boolean moveTile(int x, int y) {
-
+	public void moveTile(int x, int y) {
 		if(x == emptyTile.x - 1 && y == emptyTile.y)
-			return moveTile(KeyEvent.VK_LEFT);
+			moveTile(KeyEvent.VK_LEFT);
 		else if(x == emptyTile.x + 1 && y == emptyTile.y)
-			return moveTile(KeyEvent.VK_RIGHT);
+			moveTile(KeyEvent.VK_RIGHT);
 		else if(x == emptyTile.x && y == emptyTile.y - 1)
-			return moveTile(KeyEvent.VK_UP);
+			moveTile(KeyEvent.VK_UP);
 		else if(x == emptyTile.x && y == emptyTile.y + 1)
-			return moveTile(KeyEvent.VK_DOWN);
-		else
-			return false;
+			moveTile(KeyEvent.VK_DOWN);
 	}
 
 	
-	//TODO: Tobias can this be done more simple? 
-	public boolean moveTile(int keyCode) {
+	//TODO: Tobias can this be done more simple? Maybe we should just set dx dy in the switch case and then after, do the entire code? 
+	//Should be pretty easy doable. Probably could eliminate some redundancy? 
+	public void moveTile(int keyCode) {
+		int dx, dy;
+		dx = dy = 0;
+		
 		switch(keyCode) {
-		case KeyEvent.VK_RIGHT:
-			if(emptyTile.x > 0) {
-				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x - 1][emptyTile.y];
-				this.tiles[emptyTile.x - 1][emptyTile.y] = (int) Math.pow(boardSize, 2);
-				emptyTile.x--;
-				return true;
-			} else {
-				return false;
-			}
-		case KeyEvent.VK_LEFT:
-			if(emptyTile.x < this.boardSize - 1) {
-				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + 1][emptyTile.y];
-				this.tiles[emptyTile.x + 1][emptyTile.y] = (int) Math.pow(boardSize, 2);
-				emptyTile.x++;
-				return true;
-			} else {
-				return false;
-			}
-		case KeyEvent.VK_DOWN:
-			if(emptyTile.y > 0) {
-				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x][emptyTile.y - 1];
-				this.tiles[emptyTile.x][emptyTile.y - 1] = (int) Math.pow(boardSize, 2);
-				emptyTile.y--;
-				return true;
-			} else {
-				return false;
-			}
-		case KeyEvent.VK_UP:
-			if(emptyTile.y < this.boardSize - 1) {
-				this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x][emptyTile.y + 1];
-				this.tiles[emptyTile.x][emptyTile.y + 1] = (int) Math.pow(boardSize, 2);
-				emptyTile.y++;
-				return true;
-			} else {
-				return false;
-			}
-		default:
-			return false;
-
+			case KeyEvent.VK_RIGHT:
+				if(emptyTile.x > 0) dx = -1; 
+				break;
+			case KeyEvent.VK_LEFT:
+				if(emptyTile.x < this.boardSize - 1) dx = 1;
+				break;
+			case KeyEvent.VK_DOWN:
+				if(emptyTile.y > 0) dy = -1;
+				break;
+			case KeyEvent.VK_UP:
+				if(emptyTile.y < this.boardSize - 1) dy = 1;
+				break;
+			default: break;
 		}
+		
+		this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + dx][emptyTile.y + dy];
+		this.tiles[emptyTile.x + dx][emptyTile.y + dy] = (int) Math.pow(boardSize, 2);
+		emptyTile.x += dx;
+		emptyTile.y += dy;
 	}
 	
-	public boolean setTiles(int[][] tiles) {
+	//Method to determine if a move should be made. 
+	public boolean shouldMove(int keyCode) {
+		boolean shouldMove = false;
+		switch(keyCode) {
+			case KeyEvent.VK_RIGHT:
+				shouldMove = (emptyTile.x > 0)? true:false;
+				break;
+			case KeyEvent.VK_LEFT:
+				shouldMove = (emptyTile.x < this.boardSize - 1)? true:false;
+				break;
+			case KeyEvent.VK_DOWN:
+				shouldMove = (emptyTile.y > 0)? true:false;
+				break;
+			case KeyEvent.VK_UP:
+				shouldMove = (emptyTile.y < this.boardSize - 1)? true:false;
+				break;
+			default: break;
+		}
+		return shouldMove;
+	}
+	
+	
+	public void setTiles(int[][] tiles) {
 		int[][] newArray = new int[tiles.length][];
 		for (int i = 0; i < newArray.length; i++) {
 			newArray[i] = Arrays.copyOf(tiles[i], tiles[i].length);
 		}
 		this.tiles = newArray;
-		return true;
 	}
 	
 	public Point getEmptyTile() {

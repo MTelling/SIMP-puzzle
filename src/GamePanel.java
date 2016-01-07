@@ -45,16 +45,21 @@ public class GamePanel extends JPanel {
 		return gameState;
 	}
 	
+
 	public void updateGameState(GameState gs) {
 		this.gameState = gs;
 	}
 	
 	public GamePanel(GameState gs) {
+
 		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		this.setOpaque(true);
 		
+		//TODO: Shouldn't this just get board and score from gamestate?
 		this.setBackground(BACKGROUND_COLOR);
+
 		this.gameState = gs;
+
 		this.firstPaint = true;
 		
 		this.loadImages();

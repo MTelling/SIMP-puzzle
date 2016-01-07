@@ -53,8 +53,10 @@ public class Window extends JFrame {
 		
 		JLayeredPane puzzlePane = new JLayeredPane();
 		
+
 		gamePanel = new GamePanel(gs);
-		SimpController controller = new SimpController(gamePanel, gamePanel.getGameState());
+		SimpController controller = new SimpController(gamePanel);
+
 
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
