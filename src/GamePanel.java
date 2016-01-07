@@ -188,10 +188,12 @@ public class GamePanel extends JPanel {
 		timer.stop();
 	}
 
+	//Helper method to retrieve board from gameState. 
 	public Board getBoard() {
 		return this.gameState.getBoard();
 	}
 	
+	//Helper method to retrieve score from gameState
 	public Score getScore() {
 		return this.gameState.getScore();
 	}
