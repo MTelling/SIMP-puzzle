@@ -163,15 +163,15 @@ public class GamePanel extends JPanel {
 					//Draws text on image
 					g2d.setColor(TILE_TEXT_COLOR);
 					
-					/* Temporarily removing labels
+					
 					//Position labels on tiles. 
 					String TileNum = Integer.toString(this.getAnimationState().getCurrTiles()[x][y]);
 					int strXPos = xPos + (this.getBoard().getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
 					int strYPos = yPos + (this.getBoard().getTileSize() / 2) + g.getFontMetrics().getHeight()/4;
 					
 					//Draw text for each tile
-					g.drawString(TileNum, strXPos, strYPos);
-					*/
+					g2d.drawString(TileNum, strXPos, strYPos);
+					
 				}
 			}
 		}

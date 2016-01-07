@@ -15,15 +15,10 @@ public class AnimationState implements Serializable{
 	
 	
 	public AnimationState(Point emptyTile, int[][] tiles, int tileSize, int boardSize) {
-		
-		this.resetState(emptyTile, tiles);
-		
 		this.tileSize = tileSize;
 		this.boardSize = boardSize;
+		this.init(emptyTile, tiles);
 		
-		this.tileCoords = new Point[boardSize][boardSize];
-		
-		this.calcCoords();
 	}
 	
 	//Calculates tiles X and Y coordinates and puts them into the tilePositionCoords array. This updates according to this.tiles. 
@@ -43,6 +38,14 @@ public class AnimationState implements Serializable{
 			}
 		}
 		
+	}
+	
+	public void init(Point emptyTile, int[][] tiles) {
+		this.resetState(emptyTile, tiles);
+		
+		this.tileCoords = new Point[boardSize][boardSize];
+		
+		this.calcCoords();
 	}
 	
 	public void resetState(Point emptyTile, int[][] tiles) {

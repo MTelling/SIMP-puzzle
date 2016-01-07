@@ -99,5 +99,11 @@ public class GameState implements Serializable {
 	private Point copyOfPoint(Point point) {
 		return new Point(point.x, point.y);
 	}
+	
+	public void restartGame() {
+		this.board.init();
+		this.score.reset();
+		this.animationState.init(this.board.getEmptyTile(), this.board.getTiles());
+	}
 
 }

@@ -72,8 +72,7 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 		if(e.getActionCommand().equals("Continue Game")) {
 			Window.toggleMenu(true);
 		} else if (e.getActionCommand().equals("New Game")) {
-			gameState.getBoard().init();
-			gameState.getScore().reset();
+			gameState.restartGame();
 			Window.toggleMenu(false);
 		}else if (e.getActionCommand().equals("Save Game")) {
 			// SAVE THA GAME MUTHAFUCKAAA
