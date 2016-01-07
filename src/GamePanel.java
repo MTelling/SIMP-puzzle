@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel {
 	private int timeLabelyPos;
 	private int[] stringWidths;
 	private boolean firstPaint;
+	private boolean animationInProgress;
 	
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -41,6 +43,13 @@ public class GamePanel extends JPanel {
 		
 	});
 	
+	private Timer animationTimer = new Timer(20, new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			repaint();
+		}
+	});
+	
 	public GameState getGameState() {
 		return gameState;
 	}
@@ -51,7 +60,8 @@ public class GamePanel extends JPanel {
 	}
 	
 	public GamePanel(GameState gs) {
-
+		
+		this.animationInProgress = false;
 		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		this.setOpaque(true);
 		
@@ -59,7 +69,7 @@ public class GamePanel extends JPanel {
 		this.setBackground(BACKGROUND_COLOR);
 
 		this.gameState = gs;
-
+				
 		this.firstPaint = true;
 		
 		this.loadImages();
@@ -111,23 +121,27 @@ public class GamePanel extends JPanel {
 		//TODO: Somehow the tiles are positioned a bit off the y position at other boardsizes than 4. 
 		g.setFont(new Font("Sans Serif", Font.ITALIC, Window.LABEL_TEXT_SIZE));
 		
-		
+
 		//Calculate width of strings with 1 digit to 4 digits. 
 		if (this.firstPaint) {
 			this.stringWidths = calcStringWidths(g);
 			this.firstPaint = false;
 		}
 		
+		
 		//Draw Board
-		int[][] tiles = this.getBoard().getTiles();
-		for(int y = 0; y < tiles.length; y++) {
-			for(int x = 0; x < tiles.length; x++) {
-				if(tiles[x][y] != Math.pow(this.getBoard().getBoardSize(),2)) {
+		Point[][] tileCoords = this.getAnimationState().getTileCoords();
+		for(int y = 0; y < this.getBoard().getBoardSize(); y++) {
+			for(int x = 0; x < this.getBoard().getBoardSize(); x++) {
+				if(this.getAnimationState().getCurrTiles()[x][y] != Math.pow(this.getBoard().getBoardSize(),2)) {
 					
-					int xPos = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (x * this.getBoard().getTileSize());
-					//Y position is gotten from the bottom and then up. This way it will always have exactly distance to bottom if the top is changed. 
-					int yPos = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.getBoard().getBoardSize() - y) * (this.getBoard().getTileSize())) - Window.BOARD_BORDER_SIZE;
+					if(this.getAnimationState().calcMovingCoords()) {
+						stopAnimation();
+					}
 					
+					int xPos = tileCoords[x][y].x;
+					int yPos = tileCoords[x][y].y;
+										
 					//Draws tile at x and y pos with image gotten from ressources. 
 					g.drawImage(tileImg, xPos, yPos, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
 					
@@ -135,7 +149,7 @@ public class GamePanel extends JPanel {
 					g.setColor(TILE_TEXT_COLOR);
 					
 					//Position labels on tiles. 
-					String TileNum = Integer.toString(tiles[x][y]);
+					String TileNum = Integer.toString(this.getAnimationState().getCurrTiles()[x][y]);
 					int strXPos = xPos + (this.getBoard().getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
 					int strYPos = yPos + (this.getBoard().getTileSize() / 2) + g.getFontMetrics().getHeight()/4;
 					
@@ -187,6 +201,21 @@ public class GamePanel extends JPanel {
 	public void stopTiming() {
 		timer.stop();
 	}
+	
+	public void startAnimation() {
+
+		this.getAnimationState().setNew(this.getBoard().getEmptyTile(), this.getBoard().getTiles());
+		animationInProgress = true;
+		animationTimer.start();
+	}
+	public void stopAnimation() {
+		animationInProgress = false;
+		animationTimer.stop();
+	}
+	
+	public boolean isAnimating() {
+		return this.animationInProgress;
+	}
 
 	//Helper method to retrieve board from gameState. 
 	public Board getBoard() {
@@ -196,5 +225,9 @@ public class GamePanel extends JPanel {
 	//Helper method to retrieve score from gameState
 	public Score getScore() {
 		return this.gameState.getScore();
+	}
+	
+	public AnimationState getAnimationState() {
+		return this.gameState.getAnimationState();
 	}
 }

@@ -28,40 +28,42 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (!Window.menuToggle) {
-			
-			if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 
-					&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 + GamePanel.COGWHEEL_SIZE) {
-				if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.COGWHEEL_SIZE 
-						&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
-					Window.toggleMenu(false);
-				}
-			} else {
-			
-				int xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
-				int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
+		if (!gamePanel.isAnimating()) {
+			if (!Window.menuToggle) {
 				
-				//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-				int dx, dy;
-				dx = dy = 0;
-				int emptyX = this.gamePanel.getBoard().getEmptyTile().x;
-				int emptyY = this.gamePanel.getBoard().getEmptyTile().y;
+				if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 
+						&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 + GamePanel.COGWHEEL_SIZE) {
+					if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.COGWHEEL_SIZE 
+							&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
+						Window.toggleMenu(false);
+					}
+				} else {
 				
-				//Determine where the clicked tile should go
-				if(xPos == emptyX - 1 && yPos == emptyY) {
-					dx = -1;
-				} else if(xPos == emptyX + 1 && yPos == emptyY) {
-					dx = 1;
-				} else if(xPos == emptyX && yPos == emptyY - 1) {
-					dy = -1;
-				} else if(xPos == emptyX && yPos == emptyY + 1) {
-					dy = 1;
-				}
-				
-				//Before making a move, check if a move should be made. 
-				//If it should be made saveGameState to the current board and then make the move.  
-				if (gamePanel.getBoard().isMoveValid(dx, dy)) {
-					makeMove(dx, dy);
+					int xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
+					int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
+					
+					//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
+					int dx, dy;
+					dx = dy = 0;
+					int emptyX = this.gamePanel.getBoard().getEmptyTile().x;
+					int emptyY = this.gamePanel.getBoard().getEmptyTile().y;
+					
+					//Determine where the clicked tile should go
+					if(xPos == emptyX - 1 && yPos == emptyY) {
+						dx = -1;
+					} else if(xPos == emptyX + 1 && yPos == emptyY) {
+						dx = 1;
+					} else if(xPos == emptyX && yPos == emptyY - 1) {
+						dy = -1;
+					} else if(xPos == emptyX && yPos == emptyY + 1) {
+						dy = 1;
+					}
+					
+					//Before making a move, check if a move should be made. 
+					//If it should be made saveGameState to the current board and then make the move.  
+					if (gamePanel.getBoard().isMoveValid(dx, dy)) {
+						makeMove(dx, dy);
+					}
 				}
 			}
 		}
@@ -75,37 +77,38 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
-		//Redo undo if ctrl+z and ctrl+y
-		if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
-			// This is what happens if you press CTRL+Z. This should undo last move.
-			if(gamePanel.getGameState().canUndo()) {
-				gamePanel.getGameState().undoMove();
-				gamePanel.repaint();
+		if (!gamePanel.isAnimating()) {
+			//Redo undo if ctrl+z and ctrl+y
+			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
+				// This is what happens if you press CTRL+Z. This should undo last move.
+				if(gamePanel.getGameState().canUndo()) {
+					gamePanel.getGameState().undoMove();
+					gamePanel.repaint();
+				}
+			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
+				// This is what happens if you press CTRL+Y. This should redo last undo
+				if(gamePanel.getGameState().canRedo()) {
+					gamePanel.getGameState().redoMove();
+					gamePanel.repaint();
+				}
+			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				Window.toggleMenu(false);
+			} else if(!Window.menuToggle) {
+				int dx, dy;
+				dx = dy = 0;
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_RIGHT:	dx = -1; break;
+					case KeyEvent.VK_LEFT: dx = 1; break;
+					case KeyEvent.VK_DOWN: dy = -1; break;
+					case KeyEvent.VK_UP: dy = 1; break;
+					default: break;
+				}
+				
+				//Before making a move, check if a move should be made at all. 
+				if (gamePanel.getBoard().isMoveValid(dx, dy)) {
+					makeMove(dx, dy);
+				} 
 			}
-		} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
-			// This is what happens if you press CTRL+Y. This should redo last undo
-			if(gamePanel.getGameState().canRedo()) {
-				gamePanel.getGameState().redoMove();
-				gamePanel.repaint();
-			}
-		} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			Window.toggleMenu(false);
-		} else if(!Window.menuToggle) {
-			int dx, dy;
-			dx = dy = 0;
-			switch (e.getKeyCode()) {
-				case KeyEvent.VK_RIGHT:	dx = -1; break;
-				case KeyEvent.VK_LEFT: dx = 1; break;
-				case KeyEvent.VK_DOWN: dy = -1; break;
-				case KeyEvent.VK_UP: dy = 1; break;
-				default: break;
-			}
-			
-			//Before making a move, check if a move should be made at all. 
-			if (gamePanel.getBoard().isMoveValid(dx, dy)) {
-				makeMove(dx, dy);
-			} 
 		}
 	}
 
@@ -119,6 +122,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			gamePanel.startTiming();
 		}
 		
+		
 		//Before making the move, save current game stat to gameState. 
 		gamePanel.getGameState().saveCurrentState();
 		
@@ -127,13 +131,14 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 		
 		//Add a move to scoreModel.
 		gamePanel.getScore().addMoves(1);
-		gamePanel.repaint();
+		gamePanel.startAnimation();
 		
 		//Check if game is won.
 		if(gamePanel.getBoard().isGameOver()){
 			gamePanel.stopTiming();
 			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");
 		}
+		
 	}
 
 	@Override
