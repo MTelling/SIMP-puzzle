@@ -67,39 +67,32 @@ public class Board {
 	}
 
 	
-	//TODO: Tobias can this be done more simple? 
+	//TODO: Tobias can this be done more simple? Maybe we should just set dx dy in the switch case and then after, do the entire code? 
+	//Should be pretty easy doable. Probably could eliminate some redundancy? 
 	public void moveTile(int keyCode) {
+		int dx, dy;
+		dx = dy = 0;
+		
 		switch(keyCode) {
 			case KeyEvent.VK_RIGHT:
-				if(emptyTile.x > 0) {
-					this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x - 1][emptyTile.y];
-					this.tiles[emptyTile.x - 1][emptyTile.y] = (int) Math.pow(boardSize, 2);
-					emptyTile.x--;
-				} 
+				if(emptyTile.x > 0) dx = -1; 
 				break;
 			case KeyEvent.VK_LEFT:
-				if(emptyTile.x < this.boardSize - 1) {
-					this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + 1][emptyTile.y];
-					this.tiles[emptyTile.x + 1][emptyTile.y] = (int) Math.pow(boardSize, 2);
-					emptyTile.x++;
-				}
+				if(emptyTile.x < this.boardSize - 1) dx = 1;
 				break;
 			case KeyEvent.VK_DOWN:
-				if(emptyTile.y > 0) {
-					this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x][emptyTile.y - 1];
-					this.tiles[emptyTile.x][emptyTile.y - 1] = (int) Math.pow(boardSize, 2);
-					emptyTile.y--;
-				}
+				if(emptyTile.y > 0) dy = -1;
 				break;
 			case KeyEvent.VK_UP:
-				if(emptyTile.y < this.boardSize - 1) {
-					this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x][emptyTile.y + 1];
-					this.tiles[emptyTile.x][emptyTile.y + 1] = (int) Math.pow(boardSize, 2);
-					emptyTile.y++;
-				} 
+				if(emptyTile.y < this.boardSize - 1) dy = 1;
 				break;
 			default: break;
 		}
+		
+		this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + dx][emptyTile.y + dy];
+		this.tiles[emptyTile.x + dx][emptyTile.y + dy] = (int) Math.pow(boardSize, 2);
+		emptyTile.x += dx;
+		emptyTile.y += dy;
 	}
 	
 	//Method to determine if a move should be made. 
