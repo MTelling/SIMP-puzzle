@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,7 @@ public class GamePanel extends JPanel {
 	public static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
 	public static final String RESOURCE_PATH = "resources/";
 	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
-	public static final int ANIMATION_SPEED = 15; //Lower is faster. 
+	public static final int ANIMATION_SPEED = 17; //Lower is faster. 17 is approx. 60fps
  	private static final long serialVersionUID = 1L;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
@@ -112,36 +113,36 @@ public class GamePanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+		Graphics2D g2d = (Graphics2D) g.create();
 		//Set font. Has to be done on each repaint, because it defaults it otherwise. 
-		g.setFont(new Font("Sans Serif", Font.PLAIN, Window.LABEL_TEXT_SIZE));
+		g2d.setFont(new Font("Sans Serif", Font.PLAIN, Window.LABEL_TEXT_SIZE));
 		
 		//Only calculate labelpositions first time round. 
 		//We do this so it doesn't have to calculate the positions every single time the view is repainted. 
 		//It only saves a bit cpu, but we think it's worth it. 
 		if (this.firstPaint) {
-			calcLabelPositions(g);
+			calcLabelPositions(g2d);
 		}
 		
 		//Draw Time and Move labels.  
-		g.drawString("Time: " + this.getScore().timeToString(), this.timeLabelxPos, this.timeLabelyPos);
-		g.drawString("Moves: " + this.getScore().getMoves(), this.movesLabelxPos, this.movesLabelyPos);
+		g2d.drawString("Time: " + this.getScore().timeToString(), this.timeLabelxPos, this.timeLabelyPos);
+		g2d.drawString("Moves: " + this.getScore().getMoves(), this.movesLabelxPos, this.movesLabelyPos);
 	
 		//Draw cogwheel (settings) button
 		int cogWheelXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - COGWHEEL_SIZE;
 		int cogWheelYPos = (Window.TOP_CONTROLS_SIZE - COGWHEEL_SIZE) / 2;
-		g.drawImage(cogwheelImg, cogWheelXPos, cogWheelYPos, COGWHEEL_SIZE, COGWHEEL_SIZE, null);
+		g2d.drawImage(cogwheelImg, cogWheelXPos, cogWheelYPos, COGWHEEL_SIZE, COGWHEEL_SIZE, null);
 		
 		//Draw board background. 
-		g.drawImage(boardImg, Window.GAME_BORDER, Window.WINDOW_HEIGHT - Window.GAME_BORDER - Window.BOARD_SIZE, Window.BOARD_SIZE, Window.BOARD_SIZE, null);
+		g2d.drawImage(boardImg, Window.GAME_BORDER, Window.WINDOW_HEIGHT - Window.GAME_BORDER - Window.BOARD_SIZE, Window.BOARD_SIZE, Window.BOARD_SIZE, null);
 		
 		//TODO: Somehow the tiles are positioned a bit off the y position at other boardsizes than 4. 
-		g.setFont(new Font("Sans Serif", Font.ITALIC, Window.LABEL_TEXT_SIZE));
+		g2d.setFont(new Font("Sans Serif", Font.ITALIC, Window.LABEL_TEXT_SIZE));
 		
 
 		//Calculate width of strings with 1 digit to 4 digits. 
 		if (this.firstPaint) {
-			this.stringWidths = calcStringWidths(g);
+			this.stringWidths = calcStringWidths(g2d);
 			this.firstPaint = false;
 		}
 		
@@ -157,10 +158,10 @@ public class GamePanel extends JPanel {
 					int yPos = tileCoords[x][y].y;
 										
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g.drawImage(picList[this.getAnimationState().getCurrTiles()[x][y]], xPos, yPos, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
+					g2d.drawImage(picList[this.getAnimationState().getCurrTiles()[x][y]], xPos, yPos, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
 					
 					//Draws text on image
-					g.setColor(TILE_TEXT_COLOR);
+					g2d.setColor(TILE_TEXT_COLOR);
 					
 					/* Temporarily removing labels
 					//Position labels on tiles. 
@@ -178,25 +179,25 @@ public class GamePanel extends JPanel {
 	}
 	
 	//Helper method to calculate label positions. 
-	private void calcLabelPositions(Graphics g) {
+	private void calcLabelPositions(Graphics2D g2d) {
 		
 		//Calculate position so it will be in the middle. To do this we need to know the width of the label with current font. 
-		int movesLabelWidth = calcWidthOfString(g, "Move: " + this.getScore().getMoves());
+		int movesLabelWidth = calcWidthOfString(g2d, "Move: " + this.getScore().getMoves());
 		
 		this.movesLabelxPos = (Window.WINDOW_WIDTH-movesLabelWidth)/2;
-		this.movesLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
+		this.movesLabelyPos = g2d.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
 		
 		this.timeLabelxPos = Window.GAME_BORDER;
-		this.timeLabelyPos = g.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
+		this.timeLabelyPos = g2d.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
 	}
 	
 	//Returns an array with the width of the labels according to how many digits there are. Goes from 0 to 4 digits. 
-	private int[] calcStringWidths(Graphics g) {
+	private int[] calcStringWidths(Graphics2D g2d) {
 		int[] stringWidths = new int[5];
 		int counter = 1;
 		stringWidths[0] = 0;
 		for (int i = 1; i < stringWidths.length; i++) {
-			stringWidths[i] = calcWidthOfString(g, Integer.toString(counter));
+			stringWidths[i] = calcWidthOfString(g2d, Integer.toString(counter));
 			counter *= 10;
 		}
 		
