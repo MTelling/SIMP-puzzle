@@ -60,49 +60,44 @@ public class AnimationState implements Serializable{
 	//Returns true if arrived at final coord. 
 	public boolean calcMovingCoords(){
 		boolean arrivedAtFinal = false;
-		for(int y = 0; y < this.newTiles.length; y++) {
-			for(int x = 0; x < this.newTiles.length; x++) {
-				if(this.currTiles[x][y] != Math.pow(this.boardSize,2) && !this.currEmptyTile.equals(this.newEmptyTile) && this.newTiles[x][y] != this.currTiles[x][y]) {
-					int dx = 0, dy = 0;
-					
-					//Find out if the tile has moved up or down.
-					if (this.currEmptyTile.x - 1 == this.newEmptyTile.x) { //Tile has moved to the right
-						dx = VELOCITY;
-					} else if (this.currEmptyTile.x + 1 == this.newEmptyTile.x) { //Tile has moved to the left
-						dx = -VELOCITY;
-					} else if (this.currEmptyTile.y - 1 == this.newEmptyTile.y) { //Tile has moved down
-						dy = VELOCITY;
-					} else if (this.currEmptyTile.y + 1 == this.newEmptyTile.y) { //Tile has moved up
-						dy = -VELOCITY;
-					}
-					this.tileCoords[x][y] = new Point(this.tileCoords[x][y].x + dx, this.tileCoords[x][y].y + dy);
-					
-					boolean atFinalPosition = true;
-					//Check if the tile is now at the final position.
-					int finalX = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (this.currEmptyTile.x * this.tileSize);
-					int finalY = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.boardSize - this.currEmptyTile.y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
-					if (dx > 0 && this.tileCoords[x][y].x >= finalX ){
-					} else if (dx < 0 && this.tileCoords[x][y].x <= finalX) {
-					} else if (dy > 0 && this.tileCoords[x][y].y >= finalY) {
-					} else if (dy < 0 && this.tileCoords[x][y].y <= finalY) {
-					} else {
-						atFinalPosition = false;
-					}
-					
-					if (atFinalPosition) {
-						this.currEmptyTile = new Point(this.newEmptyTile.x, this.newEmptyTile.y);
-						
-						this.resetState(newEmptyTile, newTiles);
-						this.calcCoords();
-						arrivedAtFinal = true;
-					}
-					
-				}
-			}
+		int x = this.newEmptyTile.x;
+		int y = this.newEmptyTile.y;
+		int dx = 0, dy = 0;
+		
+		//Find out if the tile has moved up or down.
+		if (this.currEmptyTile.x - 1 == this.newEmptyTile.x) { //Tile has moved to the right
+			dx = VELOCITY;
+		} else if (this.currEmptyTile.x + 1 == this.newEmptyTile.x) { //Tile has moved to the left
+			dx = -VELOCITY;
+		} else if (this.currEmptyTile.y - 1 == this.newEmptyTile.y) { //Tile has moved down
+			dy = VELOCITY;
+		} else if (this.currEmptyTile.y + 1 == this.newEmptyTile.y) { //Tile has moved up
+			dy = -VELOCITY;
+		}
+		this.tileCoords[x][y] = new Point(this.tileCoords[x][y].x + dx, this.tileCoords[x][y].y + dy);
+		
+		boolean atFinalPosition = true;
+		//Check if the tile is now at the final position.
+		int finalX = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (this.currEmptyTile.x * this.tileSize);
+		int finalY = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.boardSize - this.currEmptyTile.y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
+		if (dx > 0 && this.tileCoords[x][y].x >= finalX ){
+		} else if (dx < 0 && this.tileCoords[x][y].x <= finalX) {
+		} else if (dy > 0 && this.tileCoords[x][y].y >= finalY) {
+		} else if (dy < 0 && this.tileCoords[x][y].y <= finalY) {
+		} else {
+			atFinalPosition = false;
 		}
 		
+		if (atFinalPosition) {
+			this.currEmptyTile = new Point(this.newEmptyTile.x, this.newEmptyTile.y);
+			
+			this.resetState(newEmptyTile, newTiles);
+			this.calcCoords();
+			arrivedAtFinal = true;
+		}
 		return arrivedAtFinal;
 	}
+
 	
 	 
 	public Point[][] getTileCoords() {
