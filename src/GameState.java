@@ -94,6 +94,7 @@ public class GameState implements Serializable {
 		//If it should be made saveGameState to the current board and then make the move.  
 		if (this.board.shouldMove(keyCode)) {
 			this.updateMoveStacks(board.getTiles(), board.getEmptyTile());
+			this.board.moveTile(keyCode);
 			return true;
 		} else {
 			return false;

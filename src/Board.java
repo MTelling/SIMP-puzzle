@@ -69,6 +69,7 @@ public class Board {
 	
 	//TODO: Tobias can this be done more simple? 
 	public void moveTile(int keyCode) {
+		System.out.println("Got here");
 		switch(keyCode) {
 			case KeyEvent.VK_RIGHT:
 				if(emptyTile.x > 0) {
