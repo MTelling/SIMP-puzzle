@@ -52,7 +52,8 @@ public class GamePanel extends JPanel {
 	private Timer animationTimer = new Timer(ANIMATION_SPEED, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(getAnimationState().calcMovingCoords()) {
+			boolean arrivedAtFinalPosition = getAnimationState().calcMovingCoords();
+			if(arrivedAtFinalPosition) {
 				stopAnimation();
 			}
 			repaint();
@@ -218,7 +219,6 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void startAnimation() {
-
 		this.getAnimationState().setNew(this.getBoard().getEmptyTile(), this.getBoard().getTiles());
 		animationInProgress = true;
 		animationTimer.start();

@@ -27,7 +27,7 @@ public class AnimationState implements Serializable{
 	}
 	
 	//Calculates tiles X and Y coordinates and puts them into the tilePositionCoords array. This updates according to this.tiles. 
-	public void calcCoords() {
+	private void calcCoords() {
 		for(int y = 0; y < this.newTiles.length; y++) {
 			for(int x = 0; x < this.newTiles.length; x++) {
 				if(this.newTiles[x][y] != Math.pow(this.boardSize,2)) {
@@ -89,10 +89,12 @@ public class AnimationState implements Serializable{
 		}
 		
 		if (atFinalPosition) {
-			this.currEmptyTile = new Point(this.newEmptyTile.x, this.newEmptyTile.y);
+			//Secure that the new tile is placed exactly at the right spot.
+			this.tileCoords[this.currEmptyTile.x][this.currEmptyTile.y] = new Point(finalX, finalY);
 			
+			//Reset animationState so curr is equal to new. 
 			this.resetState(newEmptyTile, newTiles);
-			this.calcCoords();
+
 			arrivedAtFinal = true;
 		}
 		return arrivedAtFinal;
