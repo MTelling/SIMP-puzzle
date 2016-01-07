@@ -93,15 +93,15 @@ public class Window extends JFrame {
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
 		} else if(key.equals("mainMenu")) {
-			toggleMenu();
+			toggleMenu(false);
 			gamePanel.stopTiming();
 		}
 	}
 	
-	public static void toggleMenu() {
+	public static void toggleMenu(boolean shouldStartTimer) {
 		menuToggle = !menuToggle;
 		inGameMenuPanel.setVisible(menuToggle);
-		if(menuToggle) {
+		if(menuToggle || !(shouldStartTimer)) {
 			gamePanel.stopTiming();
 		} else {
 			gamePanel.startTiming();

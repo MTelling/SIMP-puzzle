@@ -64,7 +64,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("New Game")) {
-				Window.swapView("puzzle");
+			Window.swapView("puzzle");
 		} else if (e.getActionCommand().equals("Load Game")) {
 			//Load the game from file
 			Object obj = SaveLoad.loadFromFile("SavedGame");

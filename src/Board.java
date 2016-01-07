@@ -83,6 +83,7 @@ public class Board implements Serializable {
 
 		makeSolvedBoard();
 		makeRandomValidMoves(this.boardSize * 100);
+		
 	}
 
 	

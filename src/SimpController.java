@@ -34,7 +34,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 					&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 + GamePanel.COGWHEEL_SIZE) {
 				if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.COGWHEEL_SIZE 
 						&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
-					Window.toggleMenu();
+					Window.toggleMenu(false);
 				}
 			} else {
 			
@@ -90,7 +90,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 				gamePanel.repaint();
 			}
 		} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			Window.toggleMenu();
+			Window.toggleMenu(false);
 		} else if(!Window.menuToggle) {
 			int dx, dy;
 			dx = dy = 0;
