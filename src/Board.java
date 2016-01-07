@@ -1,7 +1,7 @@
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Board implements Serializable {
 	
@@ -38,40 +38,60 @@ public class Board implements Serializable {
 		return false;
 	}
 	
-	public void init() {
-		this.tiles[0][0] = 2;
-		this.tiles[1][0] = 3;
-		this.tiles[2][0] = 1;
-		
-		int tileCount = 4;
+	public void  makeSolvedBoard() {
+		int tileCount = 1;
 		for(int y = 0; y < this.boardSize; y++) {
 			for(int x = 0; x < this.boardSize; x++) {
-				if((y == 0 && x > 2) || y > 0) {
 					this.tiles[x][y] = tileCount;
 					tileCount++;
-				}
 			}
 		}
 		
-		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);
+		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);	
 	}
 	
+	public void makeRandomValidMoves(int howMany) {
+		
+		 Random rand = new Random();
+		 
+		 boolean justMovedX = false;
+		 for(int i = 0; i < howMany; i++) {
+
+			int[] validNums = { -1 , 1 };
+			
+			
+			boolean hasNotMoved = true;
+			while(hasNotMoved) {
+				
+				int randomNumber = validNums[rand.nextInt(2)];
+				
+				if(isMoveValid(randomNumber , 0)  && !justMovedX ) {
+					moveTile(randomNumber , 0);
+					justMovedX = true;
+					hasNotMoved = false;
+				} else if (isMoveValid(0 , randomNumber) && justMovedX ) {
+					moveTile(0 , randomNumber);
+					justMovedX = false;
+					hasNotMoved = false;
+				}
+
+			}
+		 }
+	}
 	
-	//TOOD: doesn't work anymore because we inverted the controls. 
-	/*public void moveTile(int x, int y) {
-		if(x == emptyTile.x - 1 && y == emptyTile.y)
-			moveTile(KeyEvent.VK_LEFT);
-		else if(x == emptyTile.x + 1 && y == emptyTile.y)
-			moveTile(KeyEvent.VK_RIGHT);
-		else if(x == emptyTile.x && y == emptyTile.y - 1)
-			moveTile(KeyEvent.VK_UP);
-		else if(x == emptyTile.x && y == emptyTile.y + 1)
-			moveTile(KeyEvent.VK_DOWN);
-	}*/
+	public void init() {
+
+		makeSolvedBoard();
+		long startTime = System.currentTimeMillis();
+		makeRandomValidMoves(this.boardSize * 100);
+		long endTime = System.currentTimeMillis();
+		System.out.println(endTime - startTime);
+		
+		
+		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);
+	}
 
 	
-	//TODO: Tobias can this be done more simple? Maybe we should just set dx dy in the switch case and then after, do the entire code? 
-	//Should be pretty easy doable. Probably could eliminate some redundancy? 
 	public void moveTile(int dx, int dy) {
 		this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + dx][emptyTile.y + dy];
 		this.tiles[emptyTile.x + dx][emptyTile.y + dy] = (int) Math.pow(boardSize, 2);

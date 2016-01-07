@@ -74,6 +74,7 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 		} else if (e.getActionCommand().equals("Save Game")) {
 			// SAVE THA GAME MUTHAFUCKAAA
 			SaveLoad.saveToFile(gameState, "SavedGame");
+			
 		} else if(e.getActionCommand().equals("Exit to Main Menu")) {
 				Window.swapView("mainMenu");
 		}
