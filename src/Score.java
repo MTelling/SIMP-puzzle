@@ -1,6 +1,10 @@
-public class Score {
+import java.io.Serializable;
 
+public class Score implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int moves;
+	private int newMoves;
 	private int seconds;
 	
 
@@ -12,6 +16,7 @@ public class Score {
 	{
 		this.seconds = seconds;
 		this.moves = moves;
+		this.newMoves = moves;
 	}
 	
 	public int getSeconds () {
@@ -22,6 +27,14 @@ public class Score {
 		return this.moves;
 	}
 	
+	public int getNewMoves() {
+		return this.newMoves;
+	}
+	
+	public void setNewMoves(int newMoves) {
+		this.newMoves = newMoves;
+	}
+	
 	public void addSeconds (int seconds) {
 		this.seconds += seconds;
 
@@ -29,11 +42,18 @@ public class Score {
 	
 	public void addMoves (int moves) {
 		this.moves += moves;
+		this.newMoves += moves;
+	}
+	
+	public void takeMoves (int moves) {
+		this.moves -= moves;
+		this.newMoves -= moves;
 	}
 
 	
 	public void reset () {
 		this.moves = 0;
+		this.newMoves = 0;
 		this.seconds = 0;
 	}
 	

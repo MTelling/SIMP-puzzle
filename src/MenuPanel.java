@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 
 public class MenuPanel extends JPanel implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
+
+	GameState gameState;
+	
 	JButton btnContinueGame;
 	JButton btnNewGame;
 	JButton btnSaveGame;
@@ -17,7 +21,9 @@ public class MenuPanel extends JPanel implements ActionListener {
 	JButton btnSettings;
 	JButton btnQuitGame;
 	
-	public MenuPanel() {
+	public MenuPanel(GameState gs) {
+		this.gameState = gs;
+		
 		addButton(btnContinueGame, "Continue Game");
 		addButton(btnNewGame, "New Game");
 		addButton(btnSaveGame, "Save Game");
@@ -32,6 +38,9 @@ public class MenuPanel extends JPanel implements ActionListener {
 	
 	private void addButton(JButton button, String label) {
 		button = new JButton(label) {
+
+			private static final long serialVersionUID = 1L;
+
 			{
 				setSize(256, 48);
 				setMaximumSize(getSize());
@@ -54,10 +63,17 @@ public class MenuPanel extends JPanel implements ActionListener {
 		g.fillRect(0, 0, 448 - Window.GAME_BORDER * 2, 512 - Window.GAME_BORDER * 2);
 	}
 
+	public void updateGameState(GameState gs) {
+		this.gameState = gs;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("Continue Game")) {
 			Window.toggleMenu();
+		} else if (e.getActionCommand().equals("Save Game")) {
+			// SAVE THA GAME MUTHAFUCKAAA
+			SaveLoad.saveToFile(gameState, "SavedGame");
 		} else if(e.getActionCommand().equals("Exit to Main Menu")) {
 				Window.swapView("mainMenu");
 		}

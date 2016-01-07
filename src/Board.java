@@ -1,10 +1,15 @@
+import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.Arrays;
 
-public class Board {
+public class Board implements Serializable {
 	
+
+	private static final long serialVersionUID = 1L;
 	private int boardSize;
 	private int[][] tiles;
-	private int emptyX, emptyY;
+	private Point emptyTile;
 	private int tileSize;
 	
 	public Board(int boardSize) {
@@ -48,68 +53,62 @@ public class Board {
 			}
 		}
 		
-		emptyX = emptyY = this.boardSize - 1;
+		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);
 	}
 	
 	
 	//TOOD: doesn't work anymore because we inverted the controls. 
-	public boolean moveTile(int x, int y) {
-		if(x == emptyX + 1 && y == emptyY)
-			return moveTile(KeyEvent.VK_LEFT);
-		else if(x == emptyX - 1 && y == emptyY)
-			return moveTile(KeyEvent.VK_RIGHT);
-		else if(x == emptyX && y == emptyY + 1)
-			return moveTile(KeyEvent.VK_UP);
-		else if(x == emptyX && y == emptyY - 1)
-			return moveTile(KeyEvent.VK_DOWN);
-		else
-			return false;
-	}
+	/*public void moveTile(int x, int y) {
+		if(x == emptyTile.x - 1 && y == emptyTile.y)
+			moveTile(KeyEvent.VK_LEFT);
+		else if(x == emptyTile.x + 1 && y == emptyTile.y)
+			moveTile(KeyEvent.VK_RIGHT);
+		else if(x == emptyTile.x && y == emptyTile.y - 1)
+			moveTile(KeyEvent.VK_UP);
+		else if(x == emptyTile.x && y == emptyTile.y + 1)
+			moveTile(KeyEvent.VK_DOWN);
+	}*/
 
 	
-	//TODO: Tobias can this be done more simple? 
-	public boolean moveTile(int keyCode) {
-		switch(keyCode) {
-		case KeyEvent.VK_RIGHT:
-			if(emptyX > 0) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX - 1][emptyY];
-				this.tiles[emptyX - 1][emptyY] = (int) Math.pow(boardSize, 2);
-				emptyX--;
-				return true;
-			} else {
-				return false;
-			}
-		case KeyEvent.VK_LEFT:
-			if(emptyX < this.boardSize - 1) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX + 1][emptyY];
-				this.tiles[emptyX + 1][emptyY] = (int) Math.pow(boardSize, 2);
-				emptyX++;
-				return true;
-			} else {
-				return false;
-			}
-		case KeyEvent.VK_DOWN:
-			if(emptyY > 0) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY - 1];
-				this.tiles[emptyX][emptyY - 1] = (int) Math.pow(boardSize, 2);
-				emptyY--;
-				return true;
-			} else {
-				return false;
-			}
-		case KeyEvent.VK_UP:
-			if(emptyY < this.boardSize - 1) {
-				this.tiles[emptyX][emptyY] = this.tiles[emptyX][emptyY + 1];
-				this.tiles[emptyX][emptyY + 1] = (int) Math.pow(boardSize, 2);
-				emptyY++;
-				return true;
-			} else {
-				return false;
-			}
-		default:
-			return false;
-
+	//TODO: Tobias can this be done more simple? Maybe we should just set dx dy in the switch case and then after, do the entire code? 
+	//Should be pretty easy doable. Probably could eliminate some redundancy? 
+	public void moveTile(int dx, int dy) {
+		this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + dx][emptyTile.y + dy];
+		this.tiles[emptyTile.x + dx][emptyTile.y + dy] = (int) Math.pow(boardSize, 2);
+		emptyTile.x += dx;
+		emptyTile.y += dy;
+	}
+	
+	//Method to determine if a move should be made. 
+	public boolean isMoveValid(int dx, int dy) {
+		boolean shouldMove = false;
+		if (dx == -1) { //Right arrow
+			shouldMove = (emptyTile.x > 0)? true:false;
+		} else if (dx == 1) { //Left arrow
+			shouldMove = (emptyTile.x < this.boardSize - 1)? true:false;
+		} else if (dy == -1) { //Down arrow
+			shouldMove = (emptyTile.y > 0)? true:false;
+		} else if (dy == 1) { //Up arrow
+			shouldMove = (emptyTile.y < this.boardSize - 1)? true:false;
 		}
+		return shouldMove;
+	}
+	
+	
+	public void setTiles(int[][] tiles) {
+		int[][] newArray = new int[tiles.length][];
+		for (int i = 0; i < newArray.length; i++) {
+			newArray[i] = Arrays.copyOf(tiles[i], tiles[i].length);
+		}
+		this.tiles = newArray;
+	}
+	
+	public Point getEmptyTile() {
+		return emptyTile;
+	}
+	
+	public void setEmptyTile(Point newEmptyTile) {
+		this.emptyTile = new Point(newEmptyTile.x, newEmptyTile.y);
 	}
 	
 
@@ -123,6 +122,18 @@ public class Board {
 
 	public int getTileSize() {
 		return this.tileSize;
+	}
+	
+	public String toString() {
+		String str = "";
+		for (int i = 0; i < this.tiles.length; i++) {
+			for (int j = 0; j < this.tiles[i].length; j++) {
+				str += this.tiles[i][j] + " ";
+			}
+			str += "\n";
+		}
+		
+		return str;
 	}
 	
 }

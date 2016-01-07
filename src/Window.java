@@ -19,7 +19,7 @@ public class Window extends JFrame {
 	
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
-	private MainMenuPanel mainMenuPanel;
+	private static MainMenuPanel mainMenuPanel;
 	private static GamePanel gamePanel;
 	private static MenuPanel menuPanel;
 	
@@ -29,6 +29,8 @@ public class Window extends JFrame {
 		@SuppressWarnings("unused")
 		Window game = new Window();
 	}
+	
+
 	
 	public Window() {
 		super("N-Puzzle Game");
@@ -41,15 +43,24 @@ public class Window extends JFrame {
 		cardPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
 		//Initialize the different panels
-		mainMenuPanel = new MainMenuPanel();
+		Board board = new Board(4);
+		board.init();
+		Score score = new Score();
+		GameState gs = new GameState(board, score);
+		
+		mainMenuPanel = new MainMenuPanel(gs);
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
 		
 		JLayeredPane puzzlePane = new JLayeredPane();
-		gamePanel = new GamePanel(new Board(10), new Score());
+		
+
+		gamePanel = new GamePanel(gs);
 		SimpController controller = new SimpController(gamePanel);
+
+
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
-		menuPanel = new MenuPanel();
+		menuPanel = new MenuPanel(gs);
 		menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 		menuPanel.setVisible(false);
 		puzzlePane.add(gamePanel, new Integer(0), 0);
@@ -64,6 +75,15 @@ public class Window extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+	
+	public static void loadGame(GameState gs) {
+		
+		mainMenuPanel.updateGameState(gs);
+		menuPanel.updateGameState(gs);
+		gamePanel.updateGameState(gs);
+		cardLayout.show(cardPanel, "puzzle");
+		gamePanel.requestFocus();
 	}
 	
 	public static void swapView(String key) {
