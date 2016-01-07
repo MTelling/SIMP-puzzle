@@ -34,9 +34,9 @@ public class SimpController implements KeyListener, MouseListener {
 		
 		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
 		//TODO: Because i changed the movefunctions in Board, this has to be fixed. 
-		if(true) {
+		if(false) {
 			gamePanel.getBoard().moveTile(xPos, yPos);
-			makeMove();
+			//makeMove();
 
 		}
 	}
@@ -50,14 +50,14 @@ public class SimpController implements KeyListener, MouseListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		
-		
-		if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown()) {
+		//Redo undo if ctrl+z and ctrl+y
+		if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
 			// This is what happens if you press CTRL+Z. This should undo last move.
 			if(gamePanel.getGameState().canUndo()) {
 				gamePanel.getGameState().undoMove();
 				gamePanel.repaint();
 			}
-		} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown()) {
+		} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
 			// This is what happens if you press CTRL+Y. This should redo last undo
 			if(gamePanel.getGameState().canRedo()) {
 				gamePanel.getGameState().redoMove();
@@ -65,8 +65,23 @@ public class SimpController implements KeyListener, MouseListener {
 			}
 		} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			Window.toggleMenu();
-		} else if(gamePanel.getGameState().moveMade(e.getKeyCode()) && !Window.menuToggle) {
-			makeMove();
+			//otherwise a move could have been made. Check if one has been made and make it if it has. 
+		} else if(!Window.menuToggle) {
+			int dx, dy;
+			dx = dy = 0;
+			switch (e.getKeyCode()) {
+				case KeyEvent.VK_RIGHT:	dx = -1; break;
+				case KeyEvent.VK_LEFT: dx = 1; break;
+				case KeyEvent.VK_DOWN: dy = -1; break;
+				case KeyEvent.VK_UP: dy = 1; break;
+				default: break;
+			}
+			
+			//Before making a move, check if a move should be made. 
+			//If it should be made saveGameState to the current board and then make the move.  
+			if (gamePanel.getBoard().isMoveValid(dx, dy)) {
+				makeMove(dx, dy);
+			} 
 		}
 	}
 
@@ -75,12 +90,14 @@ public class SimpController implements KeyListener, MouseListener {
 	
 	
 	//Helper method
-	private void makeMove() {
+	private void makeMove(int dx, int dy) {
 		//TODO: Comment? 
 		if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 			gamePanel.startTiming();
 		}
 				
+		gamePanel.getGameState().saveCurrentState();
+		gamePanel.getBoard().moveTile(dx, dy);
 		gamePanel.getScore().addMoves(1);
 		gamePanel.repaint();
 		

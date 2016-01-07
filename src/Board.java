@@ -58,7 +58,7 @@ public class Board implements Serializable {
 	
 	
 	//TOOD: doesn't work anymore because we inverted the controls. 
-	public void moveTile(int x, int y) {
+	/*public void moveTile(int x, int y) {
 		if(x == emptyTile.x - 1 && y == emptyTile.y)
 			moveTile(KeyEvent.VK_LEFT);
 		else if(x == emptyTile.x + 1 && y == emptyTile.y)
@@ -67,31 +67,12 @@ public class Board implements Serializable {
 			moveTile(KeyEvent.VK_UP);
 		else if(x == emptyTile.x && y == emptyTile.y + 1)
 			moveTile(KeyEvent.VK_DOWN);
-	}
+	}*/
 
 	
 	//TODO: Tobias can this be done more simple? Maybe we should just set dx dy in the switch case and then after, do the entire code? 
 	//Should be pretty easy doable. Probably could eliminate some redundancy? 
-	public void moveTile(int keyCode) {
-		int dx, dy;
-		dx = dy = 0;
-		
-		switch(keyCode) {
-			case KeyEvent.VK_RIGHT:
-				if(emptyTile.x > 0) dx = -1; 
-				break;
-			case KeyEvent.VK_LEFT:
-				if(emptyTile.x < this.boardSize - 1) dx = 1;
-				break;
-			case KeyEvent.VK_DOWN:
-				if(emptyTile.y > 0) dy = -1;
-				break;
-			case KeyEvent.VK_UP:
-				if(emptyTile.y < this.boardSize - 1) dy = 1;
-				break;
-			default: break;
-		}
-		
+	public void moveTile(int dx, int dy) {
 		this.tiles[emptyTile.x][emptyTile.y] = this.tiles[emptyTile.x + dx][emptyTile.y + dy];
 		this.tiles[emptyTile.x + dx][emptyTile.y + dy] = (int) Math.pow(boardSize, 2);
 		emptyTile.x += dx;
@@ -99,22 +80,16 @@ public class Board implements Serializable {
 	}
 	
 	//Method to determine if a move should be made. 
-	public boolean shouldMove(int keyCode) {
+	public boolean isMoveValid(int dx, int dy) {
 		boolean shouldMove = false;
-		switch(keyCode) {
-			case KeyEvent.VK_RIGHT:
-				shouldMove = (emptyTile.x > 0)? true:false;
-				break;
-			case KeyEvent.VK_LEFT:
-				shouldMove = (emptyTile.x < this.boardSize - 1)? true:false;
-				break;
-			case KeyEvent.VK_DOWN:
-				shouldMove = (emptyTile.y > 0)? true:false;
-				break;
-			case KeyEvent.VK_UP:
-				shouldMove = (emptyTile.y < this.boardSize - 1)? true:false;
-				break;
-			default: break;
+		if (dx == -1) { //Right arrow
+			shouldMove = (emptyTile.x > 0)? true:false;
+		} else if (dx == 1) { //Left arrow
+			shouldMove = (emptyTile.x < this.boardSize - 1)? true:false;
+		} else if (dy == -1) { //Down arrow
+			shouldMove = (emptyTile.y > 0)? true:false;
+		} else if (dy == 1) { //Up arrow
+			shouldMove = (emptyTile.y < this.boardSize - 1)? true:false;
 		}
 		return shouldMove;
 	}

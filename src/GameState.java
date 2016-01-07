@@ -39,7 +39,7 @@ public class GameState implements Serializable {
 	}
 	
 	//
-	private void saveCurrentState() {
+	public void saveCurrentState() {
 		this.undoMoveStack.add(copyOf2DArray(this.board.getTiles()));
 		this.undoEmptyTileStack.add(copyOfPoint(this.board.getEmptyTile()));
 		
@@ -90,18 +90,6 @@ public class GameState implements Serializable {
 	//Method to make a copy of a point without just getting the reference. 
 	private Point copyOfPoint(Point point) {
 		return new Point(point.x, point.y);
-	}
-
-	public boolean moveMade(int keyCode) {
-		//Before making a move, check if a move should be made. 
-		//If it should be made saveGameState to the current board and then make the move.  
-		if (this.board.shouldMove(keyCode)) {
-			this.saveCurrentState();
-			this.board.moveTile(keyCode);
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 }
