@@ -29,7 +29,6 @@ public class Window extends JFrame {
 		@SuppressWarnings("unused")
 		Window game = new Window();
 	}
-	
 
 	
 	public Window() {
@@ -111,5 +110,7 @@ public class Window extends JFrame {
 		} else {
 			gamePanel.startTiming();
 		}
+		//Fixes issue of gamePanel being painted wrong when new game is started. 
+		gamePanel.repaint();
 	}
 }

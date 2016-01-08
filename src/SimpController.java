@@ -13,21 +13,26 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 		this.gamePanel = gamePanel;
 	}
 	
+	
 	private void makeMove(int dx, int dy) {
-		//Start time if it's the first move in the game, or if it's the first new move after load game. 
-		if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
-			gamePanel.startTiming();
+		//Before making a move, check if a move should be made. 
+		//If it should be made saveGameState to the current board and then make the move. 
+		if (gamePanel.getBoard().isMoveValid(dx, dy)) {
+			//Start time if it's the first move in the game, or if it's the first new move after load game. 
+			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
+				gamePanel.startTiming();
+			}
+			
+			//Before making the move, save current game stat to gameState. 
+			gamePanel.getGameState().saveCurrentMove(dx, dy);
+			
+			//Move tile
+			gamePanel.getBoard().setToAnimationState(dx, dy);
+			
+			//Add a move to scoreModel.
+			gamePanel.getScore().addMoves(1);
+			gamePanel.startAnimation();	
 		}
-		
-		//Before making the move, save current game stat to gameState. 
-		gamePanel.getGameState().saveCurrentMove(dx, dy);
-		
-		//Move tile
-		gamePanel.getBoard().setToAnimationState(dx, dy);
-		
-		//Add a move to scoreModel.
-		gamePanel.getScore().addMoves(1);
-		gamePanel.startAnimation();	
 	}
 
 	@Override
@@ -42,9 +47,8 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 						Window.toggleMenu(false);
 					}
 				} else {
-				
-					double xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
-					double yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
+					int xPos = (e.getX() - Window.GAME_BORDER) / (int)gamePanel.getBoard().getTileSize();
+					int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / (int)gamePanel.getBoard().getTileSize();
 					
 					//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
 					int dx = 0, dy = 0;
@@ -62,11 +66,8 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 						dy = 1;
 					}
 					
-					//Before making a move, check if a move should be made. 
-					//If it should be made saveGameState to the current board and then make the move.  
-					if (gamePanel.getBoard().isMoveValid(dx, dy)) {
-						makeMove(dx, dy);
-					}
+					//Try to make the move
+					makeMove(dx, dy);
 				}
 			}
 		}
@@ -102,10 +103,8 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 					default: break;
 				}
 				
-				//Before making a move, check if a move should be made at all. 
-				if (gamePanel.getBoard().isMoveValid(dx, dy)) {
-					makeMove(dx, dy);
-				} 
+				//Try to make the move. 
+				makeMove(dx, dy);
 			}
 		}
 	}

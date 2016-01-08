@@ -89,6 +89,7 @@ public class GamePanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
 					stopTiming();
 				}
+				
 			} else {
 				repaint();
 			}
