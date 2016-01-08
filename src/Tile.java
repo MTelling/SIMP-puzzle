@@ -23,18 +23,10 @@ public class Tile implements Serializable, Cloneable {
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 	}
-	
-
-	
-	@Override
-	public Tile clone() {
-		return new Tile(this.number, this.xCoord, this.yCoord);
-	}
 
 	public void setNumber(int number) {
 		this.number = number;
 	}
-	
 	
 	//////GETTERS FROM HERE////
 	

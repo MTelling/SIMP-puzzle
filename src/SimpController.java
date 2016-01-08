@@ -5,27 +5,31 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.JOptionPane;
-
 public class SimpController implements KeyListener, MouseListener, MouseMotionListener {
 
-	GamePanel gamePanel;
+	private GamePanel gamePanel;
 	
 	public SimpController(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 	}
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {}
+	private void makeMove(int dx, int dy) {
+		//Start time if it's the first move in the game, or if it's the first new move after load game. 
+		if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
+			gamePanel.startTiming();
+		}
+		
+		//Before making the move, save current game stat to gameState. 
+		gamePanel.getGameState().saveCurrentMove(dx, dy);
+		
+		//Move tile
+		gamePanel.getBoard().setToAnimationState(dx, dy);
+		
+		//Add a move to scoreModel.
+		gamePanel.getScore().addMoves(1);
+		gamePanel.startAnimation();	
+	}
 
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-	
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {}
-
-	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (!gamePanel.isAnimating()) {
@@ -69,12 +73,6 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {}
-
-	@Override
-	public void keyPressed(KeyEvent e) {}
-
-	@Override
 	public void keyReleased(KeyEvent e) {
 		if (!gamePanel.isAnimating()) {
 			//Redo undo if ctrl+z and ctrl+y
@@ -111,49 +109,41 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			}
 		}
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {}	
 	
-
-	private void makeMove(int dx, int dy) {
-		//Start time if it's the first move in the game, or if it's the first new move after load game. 
-		if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
-			gamePanel.startTiming();
-		}
-		
-		
-		//Before making the move, save current game stat to gameState. 
-		gamePanel.getGameState().saveCurrentMove(dx, dy);
-		
-		//Move tile
-		gamePanel.getBoard().setToAnimationState(dx, dy);
-		
-		//Add a move to scoreModel.
-		gamePanel.getScore().addMoves(1);
-		gamePanel.startAnimation();
-		
-
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		//Check if the mouse is over the cogwheel.
 		if (!Window.menuToggle && e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 
 				&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 + GamePanel.COGWHEEL_SIZE) {
 			if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.COGWHEEL_SIZE 
 					&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
+				//If the mouse is over the cogwheel make it a hand. 
 				gamePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
-		} else {
+		} else { //Mouse must be outside the cogwheel and should be normal
 			gamePanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
-		
 	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+	
+	@Override
+	public void mouseExited(MouseEvent arg0) {}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {}
+
+	@Override
+	public void keyPressed(KeyEvent e) {}
+	
+	@Override
+	public void keyTyped(KeyEvent e) {}	
+
 }

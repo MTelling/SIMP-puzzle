@@ -11,13 +11,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	GameState gameState;
+	private GameState gameState;
 	
-	JButton btnNewGame;
-	JButton btnLoadGame;
-	JButton btnHighscore;
-	JButton btnSettings;
-	JButton btnExit;
+	private JButton btnNewGame;
+	private JButton btnLoadGame;
+	private JButton btnHighscore;
+	private JButton btnSettings;
+	private JButton btnExit;
 	
 	public MainMenuPanel(GameState gs) {
 		this.gameState = gs;
