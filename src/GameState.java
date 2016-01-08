@@ -5,25 +5,27 @@ import java.util.Stack;
 
 public class GameState implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private Stack<int[][]> undoMoveStack;
-	private Stack<Point> undoEmptyTileStack;
-	private Stack<int[][]> redoMoveStack;
-	private Stack<Point> redoEmptyTileStack;
+	private static final long 	serialVersionUID = 1L;
+	private Stack<int[][]> 		undoMoveStack;
+	private Stack<Point> 		undoEmptyTileStack;
+	private Stack<int[][]> 		redoMoveStack;
+	private Stack<Point> 		redoEmptyTileStack;
 
 	private Score score;
 	private Board board;
+	
 	private AnimationState animationState;
 	
-	//TODO: Bugs if you go all the way to start two times. 
+	
 	public GameState (Board board, Score score, AnimationState animationState) {
-		this.undoMoveStack = new Stack<int[][]>();
+		this.undoMoveStack 		= new Stack<int[][]>();
 		this.undoEmptyTileStack = new Stack<Point>();
-		this.redoMoveStack = new Stack<int[][]>();
+		this.redoMoveStack 		= new Stack<int[][]>();
 		this.redoEmptyTileStack = new Stack<Point>();
 		
 		this.score = score;
 		this.board = board;
+		
 		this.animationState = animationState;
 
 	}
@@ -56,25 +58,30 @@ public class GameState implements Serializable {
 		//TODO: should this just get copies instead? 
 	}
 	
-	//TODO: comment in this.
 	public void undoMove () {
 		
+		//Add current tilepositions to redo stack, if you want to redo your undoing :)
 		this.redoMoveStack.add(copyOf2DArray(this.board.getTiles()));
 		this.redoEmptyTileStack.add(copyOfPoint(this.board.getEmptyTile()));
 		
+		//Update current tiles to last added move in undoStack.
 		board.setTiles(undoMoveStack.pop());
 		board.setEmptyTile(undoEmptyTileStack.pop());
 		
+		//You have undone a move. Let score know last move didn't happen
 		score.addMoves(-1);
-		}
+	}
 	
 	public void redoMove () {
+		//Add current move to undo stack, if you wanna redo stack, if you wanna undo your redo.
 		this.undoEmptyTileStack.add(copyOfPoint(this.board.getEmptyTile()));
 		this.undoMoveStack.add(copyOf2DArray(this.board.getTiles()));
 		
+		//Update current tiles to last added move in redoStack.
 		board.setTiles(redoMoveStack.pop());
 		board.setEmptyTile(redoEmptyTileStack.pop());
 		
+		//You have redone a move. Let score know last move did happen after all.
 		score.addMoves(1);
 	}
 	
