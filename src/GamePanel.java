@@ -167,7 +167,7 @@ public class GamePanel extends JPanel {
 					//Position labels on tiles. 
 					String TileNum = Integer.toString(this.getAnimationState().getCurrTiles()[x][y]);
 					int strXPos = xPos + (this.getBoard().getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
-					int strYPos = yPos + (this.getBoard().getTileSize() / 2) + g.getFontMetrics().getHeight()/4;
+					int strYPos = yPos + (this.getBoard().getTileSize() / 2) + g2d.getFontMetrics().getHeight()/4;
 					
 					//Draw text for each tile
 					g2d.drawString(TileNum, strXPos, strYPos);

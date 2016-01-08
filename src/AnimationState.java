@@ -25,16 +25,13 @@ public class AnimationState implements Serializable{
 	private void calcCoords() {
 		for(int y = 0; y < this.newTiles.length; y++) {
 			for(int x = 0; x < this.newTiles.length; x++) {
-				if(this.newTiles[x][y] != Math.pow(this.boardSize,2)) {
+				
 					int xPos = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (x * this.tileSize);
 					//Y position is gotten from the bottom and then up. This way it will always have exactly distance to bottom if the top is changed. 
 					int yPos = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.boardSize - y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
 					
 					this.tileCoords[x][y] = new Point(xPos, yPos);
-				} else {
-					this.tileCoords[x][y] = new Point(0, 0);
 
-				}
 			}
 		}
 		
@@ -62,7 +59,6 @@ public class AnimationState implements Serializable{
 	
 	//Returns true if arrived at final coord. 
 	public boolean calcMovingCoords(){
-		boolean arrivedAtFinal = false;
 		int x = this.newEmptyTile.x;
 		int y = this.newEmptyTile.y;
 		int dx = 0, dy = 0;
@@ -79,28 +75,31 @@ public class AnimationState implements Serializable{
 		}
 		this.tileCoords[x][y] = new Point(this.tileCoords[x][y].x + dx, this.tileCoords[x][y].y + dy);
 		
-		boolean atFinalPosition = true;
+		boolean isAtFinalPosition = true;
 		//Check if the tile is now at the final position.
-		int finalX = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (this.currEmptyTile.x * this.tileSize);
-		int finalY = Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.boardSize - this.currEmptyTile.y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
+		int finalX = this.tileCoords[this.currEmptyTile.x][this.currEmptyTile.y].x;
+		int finalY = this.tileCoords[this.currEmptyTile.x][this.currEmptyTile.y].y;
+		
 		if (dx > 0 && this.tileCoords[x][y].x >= finalX ){
 		} else if (dx < 0 && this.tileCoords[x][y].x <= finalX) {
 		} else if (dy > 0 && this.tileCoords[x][y].y >= finalY) {
 		} else if (dy < 0 && this.tileCoords[x][y].y <= finalY) {
-		} else {
-			atFinalPosition = false;
+		} else { //Tile is not at final position. 
+			isAtFinalPosition = false;
 		}
 		
-		if (atFinalPosition) {
+		if (isAtFinalPosition) {
 			//Secure that the new tile is placed exactly at the right spot.
 			this.tileCoords[this.currEmptyTile.x][this.currEmptyTile.y] = new Point(finalX, finalY);
+			//Place the new empty tile at new empty tile position. 
+			this.tileCoords[this.newEmptyTile.x][this.newEmptyTile.y] = new Point(finalX-(tileSize*(dx/VELOCITY)), finalY-(tileSize*(dy/VELOCITY)));
 			
 			//Reset animationState so curr is equal to new. 
 			this.resetState(newEmptyTile, newTiles);
 
-			arrivedAtFinal = true;
 		}
-		return arrivedAtFinal;
+		
+		return isAtFinalPosition;
 	}
 
 	
