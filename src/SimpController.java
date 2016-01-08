@@ -124,7 +124,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 		
 		
 		//Before making the move, save current game stat to gameState. 
-		gamePanel.getGameState().saveCurrentState();
+		gamePanel.getGameState().saveCurrentMove(dx, dy);
 		
 		//Move tile
 		gamePanel.getBoard().setToAnimationState(dx, dy);

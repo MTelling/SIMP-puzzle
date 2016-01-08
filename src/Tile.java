@@ -1,5 +1,9 @@
-public class Tile implements Cloneable{
+import java.io.Serializable;
 
+public class Tile implements Serializable, Cloneable {
+
+	private static final long serialVersionUID = 1L;
+	
 	private int number;
 	private double xCoord;
 	private double yCoord;
