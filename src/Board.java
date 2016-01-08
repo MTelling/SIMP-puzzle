@@ -6,24 +6,38 @@ import java.util.Random;
 public class Board implements Serializable {
 	
 
-	private static final long serialVersionUID = 1L;
-	private int boardSize;
-	private int[][] tiles;
-	private Point emptyTile;
-	private int tileSize;
+	private static final long 	serialVersionUID 	= 1L;
+	private static final int 	MIN_BOARDSIZE 		= 3;
+	private static final int 	MAX_BOARDSIZE 		= 100;
+	
+	
+	private int 				boardSize;
+	private int[][] 			tiles;
+	private Point 				emptyTile;
+	private int 				tileSize;
+	
 	
 	public Board(int boardSize) {
-		if(boardSize >= 3 && boardSize <= 100) {
-			this.boardSize = boardSize;
-			this.tiles = new int[boardSize][boardSize];
-			this.tileSize = ((Window.WINDOW_WIDTH - (Window.GAME_BORDER * 2) - 2 * Window.BOARD_BORDER_SIZE) / (boardSize));
+		
+		//Check if boardsize is within allowed range
+		if(boardSize >= MIN_BOARDSIZE && boardSize <= MAX_BOARDSIZE) {
+			this.boardSize 	= boardSize;
+			this.tiles 		= new int[boardSize][boardSize];
+			this.tileSize 	= (
+					(Window.WINDOW_WIDTH - (Window.GAME_BORDER * 2) - 2 * Window.BOARD_BORDER_SIZE) / (boardSize)
+					);
 		} else {
 			throw new IllegalArgumentException("Invalid board size");
 		}
 	}
 	
+	//Check if the game is won.
+	//TODO: Should we allow a gamemode with a set time to win the game?
 	public boolean isGameOver(){		
+		//Only do the loops if the empty tile is in the bottom right cornor
 		if( this.tiles[boardSize - 1][boardSize - 1] == Math.pow(boardSize, 2) ){
+			
+			//Check if the tiles are aligned from 1 to boardsize^2
 			int counter = 1;
 			for(int y = 0; y < boardSize; y++){
 				for(int x = 0; x < boardSize; x++){
@@ -38,6 +52,8 @@ public class Board implements Serializable {
 		return false;
 	}
 	
+	//Helper method to init a solvable board
+	//Aligns the tiles, to make a solved board.
 	public void  makeSolvedBoard() {
 		int tileCount = 1;
 		for(int y = 0; y < this.boardSize; y++) {
@@ -47,18 +63,22 @@ public class Board implements Serializable {
 			}
 		}
 		
+		//On a solved board, the emptytile is always in the bottom right cornor.
 		emptyTile = new Point(this.boardSize - 1 , this.boardSize - 1);	
 	}
 	
+	//Helper method to init a solvable board.
 	public void makeRandomValidMoves(int howMany) {
 		
 		 Random rand = new Random();
 		 
+		 //Move x, then y, then x et cetera. Was x moved last?
 		 boolean justMovedX = false;
+		 
 		 for(int i = 0; i < howMany; i++) {
 
+			//Valid dx and dy.
 			int[] validNums = { -1 , 1 };
-			
 			
 			boolean hasNotMoved = true;
 			while(hasNotMoved) {
@@ -79,6 +99,7 @@ public class Board implements Serializable {
 		 }
 	}
 	
+	// Make a new, solvable board.
 	public void init() {
 
 		makeSolvedBoard();
@@ -94,7 +115,7 @@ public class Board implements Serializable {
 		emptyTile.y += dy;
 	}
 	
-	//Method to determine if a move should be made. 
+	//Method to determine if a move can be made. 
 	public boolean isMoveValid(int dx, int dy) {
 		boolean shouldMove = false;
 		if (dx == -1) { //Right arrow
@@ -109,7 +130,7 @@ public class Board implements Serializable {
 		return shouldMove;
 	}
 	
-	
+	//Discard current tile positions and update to new ones.
 	public void setTiles(int[][] tiles) {
 		int[][] newArray = new int[tiles.length][];
 		for (int i = 0; i < newArray.length; i++) {
