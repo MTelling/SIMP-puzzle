@@ -43,11 +43,10 @@ public class Window extends JFrame {
 		cardPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
 		//Initialize the different panels
-		Board board = new Board(4);
+		Board board = new Board(2);
 		board.init();
 		Score score = new Score();
-		AnimationState animationState = new AnimationState(board.getEmptyTile(), board.getTiles(), board.getTileSize(), board.getBoardSize());
-		GameState gs = new GameState(board, score, animationState);
+		GameState gs = new GameState(board, score);
 		
 		mainMenuPanel = new MainMenuPanel(gs);
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));

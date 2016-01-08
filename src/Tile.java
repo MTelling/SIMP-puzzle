@@ -1,25 +1,48 @@
-import java.awt.Point;
-
-public class Tile {
+public class Tile implements Cloneable{
 
 	private int number;
-	private Point coords;
+	private double xCoord;
+	private double yCoord;
 	
-	public Tile (int tileNum, Point tilePos) {
+	public Tile (int tileNum, double xCoord, double yCoord) {
 		this.number = tileNum;
-		this.coords = tilePos;
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
 	}
 	
-	public void translate (int dx, int dy) {
-		this.coords.translate(dx, dy);
+	public void translate (double dx, double dy) {
+		this.xCoord += dx;
+		this.yCoord += dy;
 	}
 	
-	public Point getCoords() {
-		return this.coords;
+	public void setCoords (double xCoord, double yCoord) {
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
+	}
+	
+
+	
+	@Override
+	public Tile clone() {
+		return new Tile(this.number, this.xCoord, this.yCoord);
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+	
+	
+	//////GETTERS FROM HERE////
+	
+	public double getX() {
+		return this.xCoord;
+	}
+	
+	public double getY() {
+		return this.yCoord;
 	}
 	
 	public int getNumber() {
 		return this.number;
 	}
-	
 }

@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -53,11 +54,19 @@ public class GamePanel extends JPanel {
 	private Timer animationTimer = new Timer(ANIMATION_SPEED, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			boolean arrivedAtFinalPosition = getAnimationState().calcMovingCoords();
+			boolean arrivedAtFinalPosition = getBoard().moveWithAnimation();
 			if(arrivedAtFinalPosition) {
+				repaint();
 				stopAnimation();
+				
+				if (getBoard().isGameOver()) {
+					JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
+					stopTiming();
+				}
+			} else {
+				repaint();
 			}
-			repaint();
+			
 		}
 	});
 	
@@ -102,7 +111,7 @@ public class GamePanel extends JPanel {
 		
 		//Create list of tileImages
 		try {
-			this.picList = ImageHandler.getTilePics(this.getBoard().getBoardSize(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
+			this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), (int)this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -148,26 +157,25 @@ public class GamePanel extends JPanel {
 		
 		
 		//Draw Board
-		Point[][] tileCoords = this.getAnimationState().getTileCoords();
-		for(int y = 0; y < this.getBoard().getBoardSize(); y++) {
-			for(int x = 0; x < this.getBoard().getBoardSize(); x++) {
-				if(this.getAnimationState().getCurrTiles()[x][y] != Math.pow(this.getBoard().getBoardSize(),2)) {
+		for(int y = 0; y < this.getBoard().getTilesPerRow(); y++) {
+			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
+				if(this.getBoard().getTiles()[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2)) {
 					
 					
-					int xPos = tileCoords[x][y].x;
-					int yPos = tileCoords[x][y].y;
+					int xPos = (int)this.getBoard().getTiles()[x][y].getX();
+					int yPos = (int)this.getBoard().getTiles()[x][y].getY();
 										
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g2d.drawImage(picList[this.getAnimationState().getCurrTiles()[x][y]], xPos, yPos, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
+					g2d.drawImage(picList[this.getBoard().getTiles()[x][y].getNumber() -1], xPos, yPos, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize(), null);
 					
 					//Draws text on image
 					g2d.setColor(TILE_TEXT_COLOR);
 					
 					
 					//Position labels on tiles. 
-					String TileNum = Integer.toString(this.getAnimationState().getCurrTiles()[x][y]);
-					int strXPos = xPos + (this.getBoard().getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
-					int strYPos = yPos + (this.getBoard().getTileSize() / 2) + g2d.getFontMetrics().getHeight()/4;
+					String TileNum = Integer.toString(this.getBoard().getTiles()[x][y].getNumber());
+					int strXPos = xPos + ((int)this.getBoard().getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
+					int strYPos = yPos + ((int)this.getBoard().getTileSize() / 2) + g2d.getFontMetrics().getHeight()/4;
 					
 					//Draw text for each tile
 					g2d.drawString(TileNum, strXPos, strYPos);
@@ -220,7 +228,6 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void startAnimation() {
-		this.getAnimationState().setNew(this.getBoard().getEmptyTile(), this.getBoard().getTiles());
 		animationInProgress = true;
 		animationTimer.start();
 	}
@@ -243,7 +250,4 @@ public class GamePanel extends JPanel {
 		return this.gameState.getScore();
 	}
 	
-	public AnimationState getAnimationState() {
-		return this.gameState.getAnimationState();
-	}
 }

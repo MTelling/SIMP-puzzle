@@ -39,14 +39,13 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 					}
 				} else {
 				
-					int xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
-					int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
+					double xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
+					double yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
 					
 					//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-					int dx, dy;
-					dx = dy = 0;
-					int emptyX = this.gamePanel.getBoard().getEmptyTile().x;
-					int emptyY = this.gamePanel.getBoard().getEmptyTile().y;
+					int dx = 0, dy = 0;
+					int emptyX = this.gamePanel.getBoard().getCurrEmptyTile().x;
+					int emptyY = this.gamePanel.getBoard().getCurrEmptyTile().y;
 					
 					//Determine where the clicked tile should go
 					if(xPos == emptyX - 1 && yPos == emptyY) {
@@ -128,17 +127,13 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 		gamePanel.getGameState().saveCurrentState();
 		
 		//Move tile
-		gamePanel.getBoard().moveTile(dx, dy);
+		gamePanel.getBoard().setToAnimationState(dx, dy);
 		
 		//Add a move to scoreModel.
 		gamePanel.getScore().addMoves(1);
 		gamePanel.startAnimation();
 		
-		//Check if game is won.
-		if(gamePanel.getBoard().isGameOver()){
-			gamePanel.stopTiming();
-			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");
-		}
+
 		
 	}
 
