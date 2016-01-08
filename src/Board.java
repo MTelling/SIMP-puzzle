@@ -5,7 +5,7 @@ import java.util.Random;
 public class Board implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final int MIN_BOARDSIZE = 2;
+	private static final int MIN_BOARDSIZE = 3;
 	private static final int MAX_BOARDSIZE = 100;
 	private static final int DIFFICULTY = 100;
 	
