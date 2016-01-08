@@ -4,11 +4,11 @@ import java.util.Map;
 
 public class Highscore implements Serializable {
 	
-	private static final long 	serialVersionUID 	= 1L;
-	private static final int 	HIGHSCORE_SIZE 		= 5;
-	private static final String FILE_NAME 			= "Highscores";
-	private static final String STD_NAME 			= "Robert";
-	private static final int 	STD_SCORE 			= 0;
+	private static final long 		serialVersionUID 	= 1L;
+	private static final int 		HIGHSCORE_SIZE 		= 5;
+	private static final String 	FILE_NAME 			= "Highscores";
+	private static final String 	STD_NAME 			= "Robert";
+	private static final int 		STD_SCORE 			= 0;
 		
 	private int 		currentBoardSize;
 	private String[] 	highScoreNames;
@@ -116,8 +116,8 @@ public class Highscore implements Serializable {
 			}
 		}
 		
-		scores[scoreSpot] = score;
-		this.highScoreNames[scoreSpot] = name;
+		this.scores[scoreSpot] 			= score;
+		this.highScoreNames[scoreSpot] 	= name;
 		
 	}
 	
