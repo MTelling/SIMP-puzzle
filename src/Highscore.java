@@ -3,13 +3,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Highscore implements Serializable {
-	private static final long 	serialVersionUID = 1L;
 	
-	private static final int 	HIGHSCORE_SIZE = 5;
-	
-	private static final String FILE_NAME = "resources/Highscores";
-	
-	private static final String STD_NAME = "Robert";
+	private static final long 	serialVersionUID 	= 1L;
+	private static final int 	HIGHSCORE_SIZE 		= 5;
+	private static final String FILE_NAME 			= "Highscores";
+	private static final String STD_NAME 			= "Robert";
+	private static final int 	STD_SCORE 			= 0;
 		
 	private int 		currentBoardSize;
 	private String[] 	highScoreNames;
@@ -20,22 +19,24 @@ public class Highscore implements Serializable {
 	
 	public Highscore(int currentBoardSize) {
 		
+		//Try to load old Highscorefile
 		Object obj = SaveLoad.loadFromFile(FILE_NAME);
 		
 	    scores 			= new int[HIGHSCORE_SIZE];
 	    highScoreNames 	= new String[HIGHSCORE_SIZE];
 	    
-	    
+	    //If obj is not an instance of Highscore, it means the file doesn't exist (obj is null).
 		if(obj instanceof Highscore) {
-			// Get the previous Highscores if it exists
+			
 			Highscore temp = (Highscore) obj;
 			this.highScores = temp.getHighscoreMap();
 			
+			//Check if old Highscorefile contains highscores for the current board size
 			if (this.highScores.get(currentBoardSize) != null) {
+				// Get the previous Highscores if it exists
 			    HashMap<String, Integer> tempScores = this.highScores.get(currentBoardSize);
 			    
-			    
-			    int tempCounter = 0; //TODO: I know this is fugly. Can anyone make it prettier?
+			    int tempCounter = 0; 
 			    for (Map.Entry<String, Integer> entry : tempScores.entrySet()) {
 			    	
 			    	scores[tempCounter] 		= entry.getValue();
@@ -53,7 +54,7 @@ public class Highscore implements Serializable {
 			    
 			} else {
 			    // No such key; highscores for this board is nonexistent.
-				
+				// Add placeholder highscores.
 			    addMissingScores(0);
 				
 			}
@@ -70,27 +71,30 @@ public class Highscore implements Serializable {
 			}
 			
 		}
-		
+		//Let the object know what current board size is. This is used to get the correct highscores.
 		this.currentBoardSize = currentBoardSize;
 	}
 	
+	//Helper method to add placeholder scores.
 	public void addMissingScores(int fromWhere) {
 		for(int i = fromWhere; i < HIGHSCORE_SIZE; i++) {
-			this.scores[i] = 0;
+			this.scores[i] = STD_SCORE;
 			this.highScoreNames[i] = STD_NAME;
 		}
 	}
 	
+	//Get hashmap with highscores for current boardsize.
 	public HashMap<String, Integer> getHighscores() {
 		return highScores.get(currentBoardSize);
 	}
 	
+	//Get entire hashmap of all highscores for all boardsizes.
 	public Map<Integer, HashMap<String, Integer>> getHighscoreMap() {
 		return highScores;
 	}
 	
+	//Check if a score is higher than a current highscore within current board.
 	public boolean isHighscore(int score) {
-		
 		
 		for(int i = 0; i < HIGHSCORE_SIZE; i++) {
 			if (score > scores[i]) {
@@ -101,6 +105,8 @@ public class Highscore implements Serializable {
 		return false;
 	}
 	
+	//Add highscore. 
+	//Must be used after isHighScore, as it always adds any score to last place, if it can't put it higher.
 	public void addHighScore (String name, int score) {
 		int scoreSpot = HIGHSCORE_SIZE - 1;
 		
@@ -115,14 +121,16 @@ public class Highscore implements Serializable {
 		
 	}
 	
+	//Transfer current scores to the hashmap of all scores and save the file.
 	public void updateHighScores () {
 		HashMap<String, Integer> temp = new HashMap<String, Integer>();
 		for(int i = 0; i < HIGHSCORE_SIZE; i++) {
 			temp.put(highScoreNames[i], scores[i]);
 		}
 		highScores.put(currentBoardSize , temp);
+		
+		SaveLoad.saveToFile(this, FILE_NAME);
+		
 	}
-	
-
 	
 }
