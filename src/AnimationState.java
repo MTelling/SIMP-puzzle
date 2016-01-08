@@ -95,6 +95,7 @@ public class AnimationState implements Serializable{
 			this.tileCoords[this.newEmptyTile.x][this.newEmptyTile.y] = new Point(finalX-(tileSize*(dx/VELOCITY)), finalY-(tileSize*(dy/VELOCITY)));
 			
 			//Reset animationState so curr is equal to new. 
+			//TODO: should just swap tiles really.
 			this.resetState(newEmptyTile, newTiles);
 
 		}

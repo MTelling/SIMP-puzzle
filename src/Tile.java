@@ -22,5 +22,4 @@ public class Tile {
 		return this.number;
 	}
 	
-	
 }
