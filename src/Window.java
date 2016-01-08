@@ -20,6 +20,7 @@ public class Window extends JFrame {
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
 	private static MainMenuPanel mainMenuPanel;
+	private static SettingsPanel settingsPanel;
 	private static GamePanel gamePanel;
 	private static InGameMenuPanel inGameMenuPanel;
 	
@@ -51,12 +52,12 @@ public class Window extends JFrame {
 		mainMenuPanel = new MainMenuPanel(gs);
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
 		
-		JLayeredPane puzzlePane = new JLayeredPane();
+		settingsPanel = new SettingsPanel();
 		
+		JLayeredPane puzzlePane = new JLayeredPane();
 
 		gamePanel = new GamePanel(gs);
 		SimpController controller = new SimpController(gamePanel);
-
 
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
@@ -67,8 +68,10 @@ public class Window extends JFrame {
 		puzzlePane.add(gamePanel, new Integer(0), 0);
 		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
 		
+		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
+		cardPanel.add(settingsPanel, "settings");
 		cardPanel.add(puzzlePane, "puzzle");
 		
 		this.setResizable(false);
@@ -88,7 +91,6 @@ public class Window extends JFrame {
 	}
 	
 	public static void swapView(String key) {
-		
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
