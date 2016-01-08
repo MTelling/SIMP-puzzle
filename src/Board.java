@@ -139,7 +139,6 @@ public class Board implements Serializable {
 		}
 
 		if (isAtFinalPosition) {
-			System.out.println("arrived at final");
 			//Secure that the new tile is placed exactly at the right spot.
 			this.tiles[this.currEmptyTile.x][this.currEmptyTile.y].setCoords(finalX, finalY);
 			//Place the next empty tile at new empty tile position. 
@@ -164,18 +163,14 @@ public class Board implements Serializable {
 		this.tiles[nextEmptyTile.x][nextEmptyTile.y].setNumber(tmpTileNum);
 		
 		currEmptyTile = ObjectCopy.point(nextEmptyTile);
-		
-		System.out.println(this.toString());
 	}
 	
 	
 	//Check if the game is won.
 	//TODO: Should we allow a gamemode with a set time to win the game?
 	public boolean isGameOver(){	
-		System.out.println("called");
 		//Only do the loops if the empty tile is in the bottom right corner
 		if (this.tiles[tilesPerRow - 1][tilesPerRow - 1].getNumber() == Math.pow(tilesPerRow, 2) ) {
-			System.out.println("got here");
 			//Check if the tiles are aligned from 1 to tilesPerRow^2
 			int counter = 1;
 			for (int y = 0; y < tilesPerRow; y++){

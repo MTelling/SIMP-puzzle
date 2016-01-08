@@ -4,17 +4,17 @@ import java.util.Map;
 
 public class Highscore implements Serializable {
 	
-	private static final long 		serialVersionUID 	= 1L;
-	private static final int 		HIGHSCORE_SIZE 		= 5;
-	private static final String 	FILE_NAME 			= "Highscores";
-	private static final String 	STD_NAME 			= "Robert";
-	private static final int 		STD_SCORE 			= 0;
+	private static final long serialVersionUID = 1L;
+	private static final int HIGHSCORE_SIZE = 5;
+	private static final String FILE_NAME = "Highscores";
+	private static final String STD_NAME = "Robert";
+	private static final int STD_SCORE = 0;
 		
-	private int 		currentBoardSize;
-	private String[] 	highScoreNames;
-	private int[] 		scores;
+	private int currentBoardSize;
+	private String[] highscoreNames;
+	private int[] scores;
 	
-	private Map<Integer, HashMap<String, Integer>> highScores = new HashMap<Integer, HashMap<String, Integer>>();
+	private Map<Integer, HashMap<String, Integer>> highscores = new HashMap<Integer, HashMap<String, Integer>>();
 	
 	
 	public Highscore(int currentBoardSize) {
@@ -22,52 +22,50 @@ public class Highscore implements Serializable {
 		//Try to load old Highscorefile
 		Object obj = SaveLoad.loadFromFile(FILE_NAME);
 		
-	    scores 			= new int[HIGHSCORE_SIZE];
-	    highScoreNames 	= new String[HIGHSCORE_SIZE];
+	    scores = new int[HIGHSCORE_SIZE];
+	    highscoreNames = new String[HIGHSCORE_SIZE];
 	    
 	    //If obj is not an instance of Highscore, it means the file doesn't exist (obj is null).
 		if(obj instanceof Highscore) {
 			
 			Highscore temp = (Highscore) obj;
-			this.highScores = temp.getHighscoreMap();
+			this.highscores = temp.getAllHighscores();
 			
 			//Check if old Highscorefile contains highscores for the current board size
-			if (this.highScores.get(currentBoardSize) != null) {
+			if (this.highscores.get(currentBoardSize) != null) {
 				// Get the previous Highscores if it exists
-			    HashMap<String, Integer> tempScores = this.highScores.get(currentBoardSize);
+			    HashMap<String, Integer> tempScores = this.highscores.get(currentBoardSize);
 			    
 			    int tempCounter = 0; 
 			    for (Map.Entry<String, Integer> entry : tempScores.entrySet()) {
 			    	
-			    	scores[tempCounter] 		= entry.getValue();
-			    	highScoreNames[tempCounter] = entry.getKey();
+			    	scores[tempCounter] = entry.getValue();
+			    	highscoreNames[tempCounter] = entry.getKey();
 			    	tempCounter++;
 			    	
 			    	 // Just a security measure in case you load in an old Highscorefile, with too many entries
-			    	if(tempCounter == HIGHSCORE_SIZE) { break; }
+			    	if(tempCounter == HIGHSCORE_SIZE)
+			    		break;
 			    }
 			    
 			    // Add possible missing scores.
 			    if(tempCounter < HIGHSCORE_SIZE) {
 			    	addMissingScores(tempCounter);
 			    }
-			    
 			} else {
 			    // No such key; highscores for this board is nonexistent.
 				// Add placeholder highscores.
 			    addMissingScores(0);
 				
 			}
-			
 		} else {
 			// No previous Highscores found; Create new list.
-			
 			addMissingScores(0);
 			
 			for(int i = 0; i < HIGHSCORE_SIZE; i++) {
 				HashMap<String, Integer> temp = new HashMap<String, Integer>();
-				temp.put(highScoreNames[i], scores[i]);
-				highScores.put(currentBoardSize , temp);
+				temp.put(highscoreNames[i], scores[i]);
+				highscores.put(currentBoardSize , temp);
 			}
 			
 		}
@@ -79,23 +77,22 @@ public class Highscore implements Serializable {
 	public void addMissingScores(int fromWhere) {
 		for(int i = fromWhere; i < HIGHSCORE_SIZE; i++) {
 			this.scores[i] = STD_SCORE;
-			this.highScoreNames[i] = STD_NAME;
+			this.highscoreNames[i] = STD_NAME;
 		}
 	}
 	
 	//Get hashmap with highscores for current boardsize.
 	public HashMap<String, Integer> getHighscores() {
-		return highScores.get(currentBoardSize);
+		return highscores.get(currentBoardSize);
 	}
 	
 	//Get entire hashmap of all highscores for all boardsizes.
-	public Map<Integer, HashMap<String, Integer>> getHighscoreMap() {
-		return highScores;
+	public Map<Integer, HashMap<String, Integer>> getAllHighscores() {
+		return highscores;
 	}
 	
 	//Check if a score is higher than a current highscore within current board.
 	public boolean isHighscore(int score) {
-		
 		for(int i = 0; i < HIGHSCORE_SIZE; i++) {
 			if (score > scores[i]) {
 				return true;
@@ -117,20 +114,17 @@ public class Highscore implements Serializable {
 		}
 		
 		this.scores[scoreSpot] 			= score;
-		this.highScoreNames[scoreSpot] 	= name;
-		
+		this.highscoreNames[scoreSpot] 	= name;
 	}
 	
 	//Transfer current scores to the hashmap of all scores and save the file.
 	public void updateHighScores () {
 		HashMap<String, Integer> temp = new HashMap<String, Integer>();
 		for(int i = 0; i < HIGHSCORE_SIZE; i++) {
-			temp.put(highScoreNames[i], scores[i]);
+			temp.put(highscoreNames[i], scores[i]);
 		}
-		highScores.put(currentBoardSize , temp);
+		highscores.put(currentBoardSize , temp);
 		
 		SaveLoad.saveToFile(this, FILE_NAME);
-		
 	}
-	
 }
