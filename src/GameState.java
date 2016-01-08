@@ -12,8 +12,8 @@ public class GameState implements Serializable {
 	private Board board;	
 	
 	public GameState (Board board, Score score) {
-		this.undoMoveStack 		= new Stack<Point>();
-		this.redoMoveStack 		= new Stack<Point>();
+		this.undoMoveStack = new Stack<Point>();
+		this.redoMoveStack = new Stack<Point>();
 		
 		this.score = score;
 		this.board = board;
@@ -31,10 +31,10 @@ public class GameState implements Serializable {
 		this.redoMoveStack.push(undoMove);
 		
 		//Update current tiles to last added move in undoStack.
-		board.setToAnimationState(-undoMove.x, -undoMove.y);
+		this.board.setToAnimationState(-undoMove.x, -undoMove.y);
 		
 		//You have undone a move. Let score know last move didn't happen
-		score.addMoves(-1);
+		this.score.addMoves(-1);
 	}
 	
 	public void redoMove () {
@@ -43,10 +43,10 @@ public class GameState implements Serializable {
 		this.undoMoveStack.push(redoMove);
 		
 		//Update current tiles to last added move in undoStack.
-		board.setToAnimationState(redoMove.x, redoMove.y);
+		this.board.setToAnimationState(redoMove.x, redoMove.y);
 		
 		//You have undone a move. Let score know last move didn't happen
-		score.addMoves(1);
+		this.score.addMoves(1);
 	}
 	
 	public boolean canUndo(){
