@@ -38,7 +38,8 @@ public class Window extends JFrame {
 		Board board = new Board(4);
 		board.init();
 		Score score = new Score();
-		GameState gs = new GameState(board, score);
+		Settings settings = new Settings();
+		GameState gs = new GameState(board, score, settings);
 				
 		//Create CardLayout
 		cardPanel = new JPanel();

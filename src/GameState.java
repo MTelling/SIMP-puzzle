@@ -10,13 +10,15 @@ public class GameState implements Serializable {
 
 	private Score score;
 	private Board board;	
+	private Settings settings;
 	
-	public GameState (Board board, Score score) {
+	public GameState (Board board, Score score, Settings settings) {
 		this.undoMoveStack = new Stack<Point>();
 		this.redoMoveStack = new Stack<Point>();
 		
 		this.score = score;
 		this.board = board;
+		this.settings = settings;
 	}
 	
 	public void saveCurrentMove(int dx, int dy) {
@@ -72,6 +74,10 @@ public class GameState implements Serializable {
 	
 	public Board getBoard() {
 		return this.board;
+	}
+	
+	public Settings getSettings() {
+		return this.settings;
 	}
 	
 }

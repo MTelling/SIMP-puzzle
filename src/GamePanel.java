@@ -25,6 +25,7 @@ public class GamePanel extends JPanel {
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
 	private GameState gameState;
+	
 	private Image boardImg;
 	private Image cogwheelImg;
 	private int movesLabelxPos;
@@ -259,9 +260,14 @@ public class GamePanel extends JPanel {
 		return this.gameState.getScore();
 	}
 	
+	public Settings getSettings() {
+		return this.gameState.getSettings();
+	}
+	
 	public boolean isAnimating() {
 		return this.animationInProgress;
 	}
+	
 	
 	
 }

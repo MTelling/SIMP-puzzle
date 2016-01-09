@@ -4,6 +4,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 public class SimpController implements KeyListener, MouseListener, MouseMotionListener {
 
@@ -95,12 +96,19 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			} else if(!Window.menuToggle) {
 				int dx, dy;
 				dx = dy = 0;
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_RIGHT:	dx = -1; break;
-					case KeyEvent.VK_LEFT: dx = 1; break;
-					case KeyEvent.VK_DOWN: dy = -1; break;
-					case KeyEvent.VK_UP: dy = 1; break;
-					default: break;
+				int keyCode = e.getKeyCode();
+				
+				int[] controls = gamePanel.getSettings().getControls();
+				
+				if (keyCode == controls[0]) { //Moves tile to the left
+					dx = -1;
+				} else if (keyCode == controls[1]) { //Moves tile to the right
+					dx = 1;
+				} else if (keyCode == controls[2]) { //Moves tile up
+					dy = -1;
+				} else if (keyCode == controls[3]) { //Moves tile down
+					dy = 1;
+				} else {
 				}
 				
 				//Try to make the move. 
