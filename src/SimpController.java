@@ -34,7 +34,9 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			
 			//Move with or without animation depending on what the setting is in settings. 
 			if (gamePanel.getSettings().isAnimationOn()) {
+				
 				gamePanel.animateMove();	
+				
 			} else {
 				//Just sets the board to the new default state and then repaints. 
 				gamePanel.getBoard().moveWithoutAnimation();

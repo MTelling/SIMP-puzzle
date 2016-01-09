@@ -35,10 +35,10 @@ public class Settings implements Serializable{
 		this.setControlsNormal();
 		
 		//Set difficulty
-		this.setDifficulty(40);
+		this.setDifficulty(50);
 		
 		//Sets tiles per row in the board
-		this.setTilesPerRowInBoard(5);
+		this.setTilesPerRowInBoard(4);
 		
 		//Set speed for the scrambling animation
 		this.setScrambleAnimationSpeed(30);
@@ -91,9 +91,25 @@ public class Settings implements Serializable{
 	public void setFramesPerSecond(int framesPerSecond) {
 		this.framesPerSecond = framesPerSecond;
 	}
+
+	public void setAnimationOn(boolean isAnimationOn) {
+		this.isAnimationOn = isAnimationOn;
+	}
+
+	public void setPictureOn(boolean isPictureOn) {
+		this.isPictureOn = isPictureOn;
+	}
+
+	public void setLabelsOn(boolean isLabelsOn) {
+		this.isLabelsOn = isLabelsOn;
+	}
 	
 	/// GETTERS FROM HERE /////
 	
+	public int getFramesPerSecond() {
+		return framesPerSecond;
+	}
+
 	public int[] getControls() {
 		return this.controls;
 	}
@@ -129,7 +145,5 @@ public class Settings implements Serializable{
 	public int getTilesPerRowInBoard() {
 		return tilesPerRowInBoard;
 	}
-
-
 
 }

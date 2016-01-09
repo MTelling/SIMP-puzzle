@@ -27,13 +27,14 @@ public class Board implements Serializable {
 		}
 	}
 	
+	//TODO: There is no difference to init and reset right now .
 	public void init() {
 		this.reset();
 	}
 	
 	//Helper method to make start new game more understandable. 
 	public void reset() {
-		// Make a new, solvable board.
+		// Make a new, solved board.
 		this.makeSolvedBoard();		
 	}
 	

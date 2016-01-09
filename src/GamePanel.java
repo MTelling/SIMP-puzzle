@@ -23,14 +23,15 @@ public class GamePanel extends JPanel {
  	private static final long serialVersionUID = 1L;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
+	private final Color LABEL_WHEN_CORNERED_BACKGROUND_COLOR = new Color(100,100,100,150);
 	private GameState gameState;
 	
 	private Image boardImg;
-	private Image inGameMenuImg;
+	private Image menuButtonImg;
 	private int movesLabelxPos;
 	private int movesLabelyPos;
-	private int cogWheelXPos;
-	private int cogWheelYPos;
+	private int menuButtonXPos;
+	private int menuButtonYPos;
 	private int timeLabelxPos;
 	private int timeLabelyPos;
 	private int[] stringWidths; //Saves width of strings depending how many characters are in. 
@@ -68,6 +69,7 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void scrambleBoard() {
+		//TODO: THIS ASKS THE MODEL TO DO STUFF
 		LinkedList<Move> scramblingSequence = getBoard().makeRandomValidMoves(this.getSettings().getDifficulty());
 		Timer scrambleAnimationTimer = new Timer(getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 		scrambleAnimationTimer.start();
@@ -79,6 +81,7 @@ public class GamePanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
+			//TODO: THIS ASKS THE MODEL TO DO STUFF
 			getScore().addSeconds(1);
 			repaint();
 			
@@ -104,6 +107,7 @@ public class GamePanel extends JPanel {
 		this.animationTimer = new Timer(this.getSettings().getRefreshRate(), new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
+				//TODO: THIS ASKS THE MODEL TO DO STUFF
 				boolean arrivedAtFinalPosition = getBoard().moveWithAnimation(getSettings().getAnimationSpeed());
 				if(arrivedAtFinalPosition) {
 					repaint();
@@ -124,17 +128,16 @@ public class GamePanel extends JPanel {
 	public void stopAnimation() {
 		animationInProgress = false;
 		animationTimer.stop();
-		
 		checkIfGameIsOver();
 	}
 	
+	//TODO: THIS ASKS THE MODEL TO DO STUFF
 	public void checkIfGameIsOver() {
 		if (this.getBoard().isGameOver()){
 			this.gameState.setGameDone(true);
 		}
 	}
 	
-	//TODO: Can we move a lot of code out of this that does not need to be calculated at each repaint? 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -166,7 +169,7 @@ public class GamePanel extends JPanel {
 		}
 		
 		//Draw Board
-		this.drawBoard(g2d);
+		this.drawBoard(g2d, this.getBoard().getTileSize());
 	}
 	
 	private void drawLabelInCenter(Graphics2D g2d, int x, int y, int xCoord, int yCoord, int fieldSize) {
@@ -184,9 +187,7 @@ public class GamePanel extends JPanel {
 	
 	private void drawLabelInCorner(Graphics2D g2d, int x, int y, int xCoord, int yCoord, int cornerSize) {
 		
-		//TODO: Make this color a field.
-		Color clr = new Color(50, 50, 50, 100);
-		g2d.setColor(clr);
+		g2d.setColor(LABEL_WHEN_CORNERED_BACKGROUND_COLOR);
 		g2d.fillRect(xCoord, yCoord, cornerSize, cornerSize);
 		
 		this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, cornerSize);
@@ -199,10 +200,10 @@ public class GamePanel extends JPanel {
 				g2d.drawString("Moves: " + this.getScore().getMoves(), this.movesLabelxPos, this.movesLabelyPos);
 			
 				//Draw cogwheel (settings) button
-				g2d.drawImage(inGameMenuImg, cogWheelXPos, cogWheelYPos, MENUBUTTON_SIZE, MENUBUTTON_SIZE, null);
+				g2d.drawImage(menuButtonImg, menuButtonXPos, menuButtonYPos, MENUBUTTON_SIZE, MENUBUTTON_SIZE, null);
 	}
 	
-	private void drawBoard(Graphics2D g2d) {
+	private void drawBoard(Graphics2D g2d, int tileSize) {
 		Tile[][] tiles = this.getBoard().getTiles();
 		for(int y = 0; y < this.getBoard().getTilesPerRow(); y++) {
 			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
@@ -214,8 +215,7 @@ public class GamePanel extends JPanel {
 					int yCoord = tiles[x][y].getY();
 					
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
-					
+					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, tileSize, this.getBoard().getTileSize(), null);
 					
 					//Draws text on image
 					if(this.getSettings().isPictureOn()) {
@@ -223,17 +223,18 @@ public class GamePanel extends JPanel {
 						//Draw border around unfinished picture
 						if (!this.gameState.isGameDone()){
 							g2d.setColor(Color.BLACK);
-							g2d.drawRect(xCoord, yCoord, this.getBoard().getTileSize(), this.getBoard().getTileSize());
+							g2d.drawRect(xCoord, yCoord, tileSize, this.getBoard().getTileSize());
 						} 
 						
 						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
 						if (this.getSettings().isLabelsOn()) {
-							//TODO: how can we decide the size of this more appropriately? Right now it's just 30. 
-							this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, 30);
+							//TODO: How can we decide the size of this more appropriately? 
+							//		Also the size of the text on the tile should be calculated.. 
+							this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, tileSize/3);
 						} 
 						
 					} else { //No picture is showing, just draw label in center. 
-						this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, this.getBoard().getTileSize());
+						this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, tileSize);
 					}
 					
 				}
@@ -247,11 +248,12 @@ public class GamePanel extends JPanel {
 		this.boardImg = boardIc.getImage();
 		
 		//Load cogwheelImage
-		ImageIcon cogwheelIc = new ImageIcon(RESOURCE_PATH + "inGameMenuIcon.png");
-		this.inGameMenuImg = cogwheelIc.getImage();
+		ImageIcon menuButtonIc = new ImageIcon(RESOURCE_PATH + "inGameMenuIcon.png");
+		this.menuButtonImg = menuButtonIc.getImage();
 		
 		//Create list of tileImages
 		try {
+			//If picture is set to on in settings, get the picture. Otherwise just get a plain image. 
 			if (this.getSettings().isPictureOn()) {
 				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
 			} else {
@@ -274,15 +276,16 @@ public class GamePanel extends JPanel {
 		this.timeLabelxPos = Window.GAME_BORDER;
 		this.timeLabelyPos = g2d.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
 		
-		this.cogWheelXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - MENUBUTTON_SIZE;
-		this.cogWheelYPos = (Window.TOP_CONTROLS_SIZE - MENUBUTTON_SIZE) / 2;
+		this.menuButtonXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - MENUBUTTON_SIZE;
+		this.menuButtonYPos = (Window.TOP_CONTROLS_SIZE - MENUBUTTON_SIZE) / 2;
 	}
 	
-	//Returns an array with the width of the labels according to how many digits there are. Goes from 0 to 4 digits. 
+	//Returns an array with the width of the labels according to how many digits there are. Goes from 1 to 4 digits. 
 	private int[] calcStringWidths(Graphics2D g2d) {
 		int[] stringWidths = new int[5];
 		int counter = 1;
 		stringWidths[0] = 0;
+		
 		for (int i = 1; i < stringWidths.length; i++) {
 			stringWidths[i] = calcWidthOfString(g2d, Integer.toString(counter));
 			counter *= 10;
