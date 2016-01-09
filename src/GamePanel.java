@@ -17,8 +17,7 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel {
 
-	//TODO: Right now you can only use images. Fix this so we can use both images and just plain labels. 
-	public static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
+	public static final int MENUBUTTON_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
 	public static final String RESOURCE_PATH = "resources/";
 	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
  	private static final long serialVersionUID = 1L;
@@ -49,25 +48,23 @@ public class GamePanel extends JPanel {
 		this.setOpaque(true);
 		
 		this.gameState = gs;
+		
+		this.setBackground(BACKGROUND_COLOR);
 				
+		//Set doublebuffering to true. It should be by default, but just in case. 
+		this.setDoubleBuffered(true);
+		
 		this.reset();
 	}
 	
 	public void reset() {
 		this.firstPaint = true;
-
-		this.setBackground(BACKGROUND_COLOR);
 		
 		this.loadImages();
-		
-		//Set doublebuffering to true. It should be by default, but just in case. 
-		this.setDoubleBuffered(true);
 		
 		this.initAnimationTimer();
 		
 		this.repaint();
-		
-		
 	}
 	
 	public void scrambleBoard() {
@@ -202,7 +199,7 @@ public class GamePanel extends JPanel {
 				g2d.drawString("Moves: " + this.getScore().getMoves(), this.movesLabelxPos, this.movesLabelyPos);
 			
 				//Draw cogwheel (settings) button
-				g2d.drawImage(inGameMenuImg, cogWheelXPos, cogWheelYPos, COGWHEEL_SIZE, COGWHEEL_SIZE, null);
+				g2d.drawImage(inGameMenuImg, cogWheelXPos, cogWheelYPos, MENUBUTTON_SIZE, MENUBUTTON_SIZE, null);
 	}
 	
 	private void drawBoard(Graphics2D g2d) {
@@ -213,11 +210,11 @@ public class GamePanel extends JPanel {
 				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2)) {
 				
 					//Get x and y position
-					int xCoord = (int)tiles[x][y].getX();
-					int yCoord = (int)tiles[x][y].getY();
+					int xCoord = tiles[x][y].getX();
+					int yCoord = tiles[x][y].getY();
 					
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize(), null);
+					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, this.getBoard().getTileSize(), this.getBoard().getTileSize(), null);
 					
 					
 					//Draws text on image
@@ -226,7 +223,7 @@ public class GamePanel extends JPanel {
 						//Draw border around unfinished picture
 						if (!this.gameState.isGameDone()){
 							g2d.setColor(Color.BLACK);
-							g2d.drawRect(xCoord, yCoord, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize());
+							g2d.drawRect(xCoord, yCoord, this.getBoard().getTileSize(), this.getBoard().getTileSize());
 						} 
 						
 						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
@@ -236,7 +233,7 @@ public class GamePanel extends JPanel {
 						} 
 						
 					} else { //No picture is showing, just draw label in center. 
-						this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, (int)this.getBoard().getTileSize());
+						this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, this.getBoard().getTileSize());
 					}
 					
 				}
@@ -256,12 +253,11 @@ public class GamePanel extends JPanel {
 		//Create list of tileImages
 		try {
 			if (this.getSettings().isPictureOn()) {
-				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), (int)this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
+				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
 			} else {
-				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), (int)this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic", "jpg");
+				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic", "jpg");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -278,8 +274,8 @@ public class GamePanel extends JPanel {
 		this.timeLabelxPos = Window.GAME_BORDER;
 		this.timeLabelyPos = g2d.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
 		
-		this.cogWheelXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - COGWHEEL_SIZE;
-		this.cogWheelYPos = (Window.TOP_CONTROLS_SIZE - COGWHEEL_SIZE) / 2;
+		this.cogWheelXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - MENUBUTTON_SIZE;
+		this.cogWheelYPos = (Window.TOP_CONTROLS_SIZE - MENUBUTTON_SIZE) / 2;
 	}
 	
 	//Returns an array with the width of the labels according to how many digits there are. Goes from 0 to 4 digits. 

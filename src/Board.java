@@ -13,7 +13,7 @@ public class Board implements Serializable {
 	private Tile[][] tiles;
 	private Point currEmptyTile;
 	private Point nextEmptyTile;
-	private double tileSize;
+	private int tileSize;
 	
 	public Board(int tilesPerRow) {
 		
@@ -45,8 +45,8 @@ public class Board implements Serializable {
 		for(int y = 0; y < this.tilesPerRow; y++) {
 			for(int x = 0; x < this.tilesPerRow; x++) {
 				//create all tiles in board. 
-					double xCoord = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (x * this.tileSize);
-					double yCoord =  Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.tilesPerRow - y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
+					int xCoord = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (x * this.tileSize);
+					int yCoord =  Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.tilesPerRow - y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
 					this.tiles[x][y] = new Tile(tileCount, xCoord, yCoord);
 					tileCount++;
 			}
@@ -121,7 +121,7 @@ public class Board implements Serializable {
 	public boolean moveWithAnimation(int pixelsMovedPerRedraw){
 		int x = this.nextEmptyTile.x;
 		int y = this.nextEmptyTile.y;
-		double dx = 0, dy = 0;
+		int dx = 0, dy = 0;
 		
 		//Find out if the tile has moved up or down.
 		if (this.currEmptyTile.x - 1 == x) { //Tile has moved to the right
@@ -138,8 +138,8 @@ public class Board implements Serializable {
 				
 		boolean isAtFinalPosition = true;
 		//Check if the tile is now at the final position.
-		double finalX = this.tiles[this.currEmptyTile.x][this.currEmptyTile.y].getX();
-		double finalY = this.tiles[this.currEmptyTile.x][this.currEmptyTile.y].getY();
+		int finalX = this.tiles[this.currEmptyTile.x][this.currEmptyTile.y].getX();
+		int finalY = this.tiles[this.currEmptyTile.x][this.currEmptyTile.y].getY();
 		
 		if (dx > 0 && this.tiles[x][y].getX() >= finalX ){
 		} else if (dx < 0 && this.tiles[x][y].getX() <= finalX) {
@@ -155,8 +155,7 @@ public class Board implements Serializable {
 			//Place the next empty tile at new empty tile position. 
 			this.tiles[this.nextEmptyTile.x][this.nextEmptyTile.y].setCoords(finalX-(tileSize*(dx/pixelsMovedPerRedraw)), finalY-(tileSize*(dy/pixelsMovedPerRedraw)));
 			
-			//Reset animationState so curr is equal to new. 
-			//TODO: should just swap tiles really.
+			//Return to default state. 
 			this.setToDefaultState();
 		}
 		return isAtFinalPosition;
@@ -167,7 +166,7 @@ public class Board implements Serializable {
 		this.setToDefaultState();
 	}
 	
-	//Goes from animationStates to defaultState
+	//Goes from animationState to defaultState
 	private void setToDefaultState() {
 		int tmpTileNum = this.tiles[currEmptyTile.x][currEmptyTile.y].getNumber();
 		this.tiles[currEmptyTile.x][currEmptyTile.y].setNumber(this.tiles[nextEmptyTile.x][nextEmptyTile.y].getNumber());
@@ -227,7 +226,7 @@ public class Board implements Serializable {
 		return this.tilesPerRow;
 	}
 
-	public double getTileSize() {
+	public int getTileSize() {
 		return this.tileSize;
 	}
 	

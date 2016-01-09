@@ -98,6 +98,7 @@ public class Window extends JFrame {
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
 			
+			//TODO: THIS SHOULD NOT BE HERE!
 			gamePanel.scrambleBoard();
 		} else if(key.equals("mainMenu")) {
 			toggleMenu(false);

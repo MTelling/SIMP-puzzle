@@ -5,21 +5,21 @@ public class Tile implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	
 	private int number;
-	private double xCoord;
-	private double yCoord;
+	private int xCoord;
+	private int yCoord;
 	
-	public Tile (int tileNum, double xCoord, double yCoord) {
+	public Tile (int tileNum, int xCoord, int yCoord) {
 		this.number = tileNum;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 	}
 	
-	public void translate (double dx, double dy) {
+	public void translate (int dx, int dy) {
 		this.xCoord += dx;
 		this.yCoord += dy;
 	}
 	
-	public void setCoords (double xCoord, double yCoord) {
+	public void setCoords (int xCoord, int yCoord) {
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 	}
@@ -30,11 +30,11 @@ public class Tile implements Serializable, Cloneable {
 	
 	//////GETTERS FROM HERE////
 	
-	public double getX() {
+	public int getX() {
 		return this.xCoord;
 	}
 	
-	public double getY() {
+	public int getY() {
 		return this.yCoord;
 	}
 	
