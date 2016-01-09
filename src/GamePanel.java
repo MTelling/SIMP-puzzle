@@ -40,8 +40,6 @@ public class GamePanel extends JPanel {
 	private boolean animationInProgress;
 	private BufferedImage[] picList;
 	
-	private Timer animationTimer;
-	
 	public GamePanel(GameState gs) {
 		
 		this.animationInProgress = false;
@@ -62,8 +60,6 @@ public class GamePanel extends JPanel {
 		this.firstPaint = true;
 		
 		this.loadImages();
-		
-		this.initAnimationTimer();
 		
 		this.repaint();
 	}
@@ -102,34 +98,7 @@ public class GamePanel extends JPanel {
 		clock.stop();
 	}
 	
-	//Animationtimer must be initted in the constructor because it needs variables from the gamestate. 
-	private void initAnimationTimer() {
-		this.animationTimer = new Timer(this.getSettings().getRefreshRate(), new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
-				//TODO: THIS ASKS THE MODEL TO DO STUFF
-				boolean arrivedAtFinalPosition = getBoard().moveWithAnimation(getSettings().getAnimationSpeed());
-				if(arrivedAtFinalPosition) {
-					repaint();
-					stopAnimation();
-					
-				} else {
-					repaint();
-				}
-			}
-			
-		});
-	}
-	
-	public void animateMove() {
-		animationInProgress = true;
-		animationTimer.start();
-	}
-	public void stopAnimation() {
-		animationInProgress = false;
-		animationTimer.stop();
-		checkIfGameIsOver();
-	}
+
 	
 	//TODO: THIS ASKS THE MODEL TO DO STUFF
 	public void checkIfGameIsOver() {

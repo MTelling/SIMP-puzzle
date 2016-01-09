@@ -5,14 +5,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.Timer;
+
 public class SimpController implements KeyListener, MouseListener, MouseMotionListener {
 
 	private GamePanel gamePanel;
+	private boolean isAnimating;
+	private Timer moveAnimator;
 	
 	public SimpController(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
+		this.isAnimating = false;
+		this.moveAnimator = new Timer(gamePanel.getSettings().getRefreshRate(), new MoveAnimator(this));
 	}
-	
 	
 	private void makeMove(Move move) {
 		//Before making a move, check if a move should be made. 
@@ -32,16 +37,17 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			//Add a move to scoreModel.
 			gamePanel.getScore().addMoves(1);
 			
+			//TODO: Somehow we need to check around here if the game is won. 
+			
 			//Move with or without animation depending on what the setting is in settings. 
 			if (gamePanel.getSettings().isAnimationOn()) {
 				
-				gamePanel.animateMove();	
+				this.moveAnimator.start();	
 				
 			} else {
 				//Just sets the board to the new default state and then repaints. 
 				gamePanel.getBoard().moveWithoutAnimation();
 				
-				gamePanel.checkIfGameIsOver();
 				//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
 				gamePanel.repaint();
 			}
@@ -51,7 +57,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (!gamePanel.isAnimating()) {
+		if (!this.isAnimating) {
 			if (!Window.menuToggle) {
 				
 				if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 
@@ -89,20 +95,23 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (!gamePanel.isAnimating()) {
+		if (!this.isAnimating) {
 			//Redo undo if ctrl+z and ctrl+y
 			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
+					
+					//TODO: Should this really start the clock on each time through? 
 					gamePanel.startClock();
-					gamePanel.animateMove();
+					
+					this.moveAnimator.start();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
-					gamePanel.animateMove();
+					this.moveAnimator.start();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				Window.toggleMenu(false);
@@ -144,6 +153,21 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			gamePanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 	}
+	
+	/// SETTERS FROM HERE ///
+	
+	public void setAnimating(boolean isAnimating) {
+		this.isAnimating = isAnimating;
+	}
+	
+	/// GETTERS FROM HERE ///
+	
+	public GamePanel getGamePanel() {
+		return this.gamePanel;
+	}
+	
+	
+	/// UNUSUED FROM HERE ///
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {}
