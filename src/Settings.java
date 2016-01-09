@@ -26,18 +26,17 @@ public class Settings implements Serializable{
 		//Set settings to Normal or inverted. 
 		this.controls = NORMAL_CONTROLS;
 		
-		//TODO: We need to state that the refreshrate will only be updated if you restart. 
-		//		It sets the animationTimer speed when the gamePanel is created. 
+		//Sets refreshRate for drawing.
 		this.refreshRate = (int)Math.round(1000.0/framesPerSecond);
 		
 		//Turn animation on and off. 
 		this.isAnimationOn = true;
 		
 		//Turn pictures on or off.
-		this.isPictureOn = false;
+		this.isPictureOn = true;
 		
 		//Turn labels on or off when picture is active.
-		this.isLabelsOn = false;
+		this.isLabelsOn = true;
 	}
 	
 	/// GETTERS FROM HERE /////

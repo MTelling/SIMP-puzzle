@@ -26,7 +26,7 @@ public class GamePanel extends JPanel {
 	private GameState gameState;
 	
 	private Image boardImg;
-	private Image cogwheelImg;
+	private Image inGameMenuImg;
 	private int movesLabelxPos;
 	private int movesLabelyPos;
 	private int cogWheelXPos;
@@ -47,12 +47,15 @@ public class GamePanel extends JPanel {
 		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		this.setOpaque(true);
 		
-		//TODO: Shouldn't this just get board and score from gamestate?
-		this.setBackground(BACKGROUND_COLOR);
-
 		this.gameState = gs;
 				
+		this.reset();
+	}
+	
+	public void reset() {
 		this.firstPaint = true;
+
+		this.setBackground(BACKGROUND_COLOR);
 		
 		this.loadImages();
 		
@@ -61,6 +64,7 @@ public class GamePanel extends JPanel {
 		
 		this.initAnimationTimer();
 		
+		this.repaint();
 	}
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -106,7 +110,7 @@ public class GamePanel extends JPanel {
 		});
 	}
 	
-	public void startAnimation() {
+	public void animateMove() {
 		animationInProgress = true;
 		animationTimer.start();
 	}
@@ -166,8 +170,6 @@ public class GamePanel extends JPanel {
 	private void drawLabelInCorner(Graphics2D g2d, int x, int y, int xCoord, int yCoord, int cornerSize) {
 		
 		//TODO: Make this color a field.
-		
-		
 		Color clr = new Color(50, 50, 50, 100);
 		g2d.setColor(clr);
 		g2d.fillRect(xCoord, yCoord, cornerSize, cornerSize);
@@ -182,7 +184,7 @@ public class GamePanel extends JPanel {
 				g2d.drawString("Moves: " + this.getScore().getMoves(), this.movesLabelxPos, this.movesLabelyPos);
 			
 				//Draw cogwheel (settings) button
-				g2d.drawImage(cogwheelImg, cogWheelXPos, cogWheelYPos, COGWHEEL_SIZE, COGWHEEL_SIZE, null);
+				g2d.drawImage(inGameMenuImg, cogWheelXPos, cogWheelYPos, COGWHEEL_SIZE, COGWHEEL_SIZE, null);
 	}
 	
 	private void drawBoard(Graphics2D g2d) {
@@ -197,7 +199,7 @@ public class GamePanel extends JPanel {
 					int yCoord = (int)tiles[x][y].getY();
 										
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g2d.drawImage(picList[tiles[x][y].getNumber() -1], xCoord, yCoord, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize(), null);
+					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize(), null);
 					
 					//Draws text on image
 					if(this.getSettings().isPictureOn()) {
@@ -223,8 +225,8 @@ public class GamePanel extends JPanel {
 		this.boardImg = boardIc.getImage();
 		
 		//Load cogwheelImage
-		ImageIcon cogwheelIc = new ImageIcon(RESOURCE_PATH + "cogwheel.png");
-		this.cogwheelImg = cogwheelIc.getImage();
+		ImageIcon cogwheelIc = new ImageIcon(RESOURCE_PATH + "inGameMenuIcon.png");
+		this.inGameMenuImg = cogwheelIc.getImage();
 		
 		//Create list of tileImages
 		try {

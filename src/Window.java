@@ -35,7 +35,7 @@ public class Window extends JFrame {
 		super("N-Puzzle Game");
 		
 		//Initialize the model.
-		Board board = new Board(4);
+		Board board = new Board(3);
 		board.init();
 		Score score = new Score();
 		Settings settings = new Settings();

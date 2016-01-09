@@ -35,8 +35,9 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			
 			//Move with or without animation depending on what the setting is in settings. 
 			if (gamePanel.getSettings().isAnimationOn()) {
-				gamePanel.startAnimation();	
+				gamePanel.animateMove();	
 			} else {
+				//Just sets the board to the new default state and then repaints. 
 				gamePanel.getBoard().moveWithoutAnimation(dx, dy);
 				gamePanel.repaint();
 			}
@@ -90,13 +91,13 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
 					gamePanel.startClock();
-					gamePanel.startAnimation();
+					gamePanel.animateMove();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
-					gamePanel.startAnimation();
+					gamePanel.animateMove();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				Window.toggleMenu(false);
