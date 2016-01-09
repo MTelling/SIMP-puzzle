@@ -5,8 +5,8 @@ import java.util.Stack;
 public class GameState implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Stack<Point> undoMoveStack;
-	private Stack<Point> redoMoveStack;
+	private Stack<Move> undoMoveStack;
+	private Stack<Move> redoMoveStack;
 
 	private Score score;
 	private Board board;	
@@ -15,39 +15,39 @@ public class GameState implements Serializable {
 	private boolean isGameDone;
 	
 	public GameState (Board board, Score score, Settings settings) {
-		this.undoMoveStack = new Stack<Point>();
-		this.redoMoveStack = new Stack<Point>();
+		this.undoMoveStack = new Stack<Move>();
+		this.redoMoveStack = new Stack<Move>();
 		
 		this.score = score;
 		this.board = board;
 		this.settings = settings;
 	}
 	
-	public void saveCurrentMove(int dx, int dy) {
-		this.undoMoveStack.push(new Point(dx, dy));
+	public void saveCurrentMove(Move move) {
+		this.undoMoveStack.push(move);
 				
 		this.redoMoveStack.clear();
 	}
 	
 	public void undoMove () {
-		Point undoMove = this.undoMoveStack.pop();
+		Move undoMove = this.undoMoveStack.pop();
 		//Add current tilepositions to redo stack, if you want to redo your undoing :)
 		this.redoMoveStack.push(undoMove);
 		
 		//Update current tiles to last added move in undoStack.
-		this.board.setToAnimationState(-undoMove.x, -undoMove.y);
+		this.board.setToAnimationState(undoMove.reverse());
 		
 		//You have undone a move. Let score know last move didn't happen
 		this.score.addMoves(-1);
 	}
 	
 	public void redoMove () {
-		Point redoMove = this.redoMoveStack.pop();
+		Move redoMove = this.redoMoveStack.pop();
 		//Add current tilepositions to redo stack, if you want to redo your undoing :)
 		this.undoMoveStack.push(redoMove);
 		
 		//Update current tiles to last added move in undoStack.
-		this.board.setToAnimationState(redoMove.x, redoMove.y);
+		this.board.setToAnimationState(redoMove);
 		
 		//You have undone a move. Let score know last move didn't happen
 		this.score.addMoves(1);

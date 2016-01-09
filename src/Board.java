@@ -80,15 +80,15 @@ public class Board implements Serializable {
 				
 				int randomNumber = validNums[rand.nextInt(2)];
 				
-				if(isMoveValid(randomNumber , 0)  && !justMovedX ) {
-					setToAnimationState(randomNumber , 0);
-					this.moveWithoutAnimation(randomNumber, 0);
+				if(isMoveValid(new Move(randomNumber, 0))  && !justMovedX ) {
+					setToAnimationState(new Move(randomNumber, 0));
+					this.moveWithoutAnimation();
 					
 					justMovedX = true;
 					hasNotMoved = false;
-				} else if (isMoveValid(0 , randomNumber) && justMovedX ) {
-					setToAnimationState(0 , randomNumber);
-					this.moveWithoutAnimation(0, randomNumber);
+				} else if (isMoveValid(new Move(0, randomNumber)) && justMovedX ) {
+					setToAnimationState(new Move(0, randomNumber));
+					this.moveWithoutAnimation();
 
 					justMovedX = false;
 					hasNotMoved = false;
@@ -104,10 +104,10 @@ public class Board implements Serializable {
 		
 	//Moves tile to the currEmptyTile position and swaps in tileArray + sets what the nextEmptyTile should be.
 	//This activates the animationStae
-	public void setToAnimationState(int dx, int dy) {
+	public void setToAnimationState(Move move) {
 		
 		//Translate next empty tile to the clicked position. 
-		nextEmptyTile.translate(dx, dy);
+		nextEmptyTile.translate(move.dx, move.dy);
 	}
 	
 	//Returns true if arrived at final coord. 
@@ -150,18 +150,18 @@ public class Board implements Serializable {
 			
 			//Reset animationState so curr is equal to new. 
 			//TODO: should just swap tiles really.
-			this.setToDefaultState((int)(dx/velocity), (int)(dy/velocity));
+			this.setToDefaultState();
 		}
 		return isAtFinalPosition;
 	}
 	
 	//Moves coordinates without animating. 
-	public void moveWithoutAnimation(int dx, int dy) {
-		this.setToDefaultState(dx, dy);
+	public void moveWithoutAnimation() {
+		this.setToDefaultState();
 	}
 	
 	//Goes from animationStates to defaultState
-	private void setToDefaultState(int dx, int dy) {
+	private void setToDefaultState() {
 		int tmpTileNum = this.tiles[currEmptyTile.x][currEmptyTile.y].getNumber();
 		this.tiles[currEmptyTile.x][currEmptyTile.y].setNumber(this.tiles[nextEmptyTile.x][nextEmptyTile.y].getNumber());
 		this.tiles[nextEmptyTile.x][nextEmptyTile.y].setNumber(tmpTileNum);
@@ -191,15 +191,15 @@ public class Board implements Serializable {
 	}
 	
 	//Method to determine if a move can be made. 
-	public boolean isMoveValid(int dx, int dy) {
+	public boolean isMoveValid(Move move) {
 		boolean shouldMove = false;
-		if (dx == -1) { //Right arrow
+		if (move.dx == -1) { //Right arrow
 			shouldMove = (currEmptyTile.x > 0) ? true : false;
-		} else if (dx == 1) { //Left arrow
+		} else if (move.dx == 1) { //Left arrow
 			shouldMove = (currEmptyTile.x < this.tilesPerRow - 1) ? true : false;
-		} else if (dy == -1) { //Down arrow
+		} else if (move.dy == -1) { //Down arrow
 			shouldMove = (currEmptyTile.y > 0) ? true : false;
-		} else if (dy == 1) { //Up arrow
+		} else if (move.dy == 1) { //Up arrow
 			shouldMove = (currEmptyTile.y < this.tilesPerRow - 1) ? true : false;
 		}
 		return shouldMove;

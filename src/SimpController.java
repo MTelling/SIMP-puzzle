@@ -14,20 +14,20 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 	}
 	
 	
-	private void makeMove(int dx, int dy) {
+	private void makeMove(Move move) {
 		//Before making a move, check if a move should be made. 
 		//If it should be made saveGameState to the current board and then make the move. 
-		if (gamePanel.getBoard().isMoveValid(dx, dy)) {
+		if (gamePanel.getBoard().isMoveValid(move)) {
 			//Start time if it's the first move in the game, or if it's the first new move after load game. 
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 				gamePanel.startClock();
 			}
 			
 			//Before making the move, save current game stat to gameState. 
-			gamePanel.getGameState().saveCurrentMove(dx, dy);
+			gamePanel.getGameState().saveCurrentMove(move);
 			
 			//Move tile
-			gamePanel.getBoard().setToAnimationState(dx, dy);
+			gamePanel.getBoard().setToAnimationState(move);
 			
 			//Add a move to scoreModel.
 			gamePanel.getScore().addMoves(1);
@@ -37,7 +37,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 				gamePanel.animateMove();	
 			} else {
 				//Just sets the board to the new default state and then repaints. 
-				gamePanel.getBoard().moveWithoutAnimation(dx, dy);
+				gamePanel.getBoard().moveWithoutAnimation();
 				
 				gamePanel.checkIfGameIsOver();
 				//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
@@ -79,7 +79,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 					}
 					
 					//Try to make the move
-					makeMove(dx, dy);
+					makeMove(new Move(dx,dy));
 				}
 			}
 		}
@@ -123,7 +123,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 				}
 				
 				//Try to make the move. 
-				makeMove(dx, dy);
+				makeMove(new Move(dx, dy));
 			}
 		}
 	}
