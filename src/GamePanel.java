@@ -20,7 +20,6 @@ public class GamePanel extends JPanel {
 	public static final int COGWHEEL_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
 	public static final String RESOURCE_PATH = "resources/";
 	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
-	public static final int ANIMATION_SPEED = 17; //Lower is faster. 17 is approx. 60fps
  	private static final long serialVersionUID = 1L;
 	private final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
@@ -35,9 +34,12 @@ public class GamePanel extends JPanel {
 	private int timeLabelxPos;
 	private int timeLabelyPos;
 	private int[] stringWidths; //Saves width of strings depending how many characters are in. 
+	private int stringHeight;
 	private boolean firstPaint;
 	private boolean animationInProgress;
 	private BufferedImage[] picList;
+	
+	private Timer animationTimer;
 	
 	public GamePanel(GameState gs) {
 		
@@ -57,10 +59,12 @@ public class GamePanel extends JPanel {
 		//Set doublebuffering to true. It should be by default, but just in case. 
 		this.setDoubleBuffered(true);
 		
+		this.initAnimationTimer();
+		
 	}
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
-	private Timer timer = new Timer(1000, new ActionListener(){
+	private Timer clock = new Timer(1000, new ActionListener(){
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -70,33 +74,37 @@ public class GamePanel extends JPanel {
 		}
 	});
 	
-	public void startTiming () {
-		timer.start();
+	public void startClock () {
+		clock.start();
 	}
 	
-	public void stopTiming() {
-		timer.stop();
+	public void stopClock() {
+		clock.stop();
 	}
 	
-	private Timer animationTimer = new Timer(ANIMATION_SPEED, new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			boolean arrivedAtFinalPosition = getBoard().moveWithAnimation();
-			if(arrivedAtFinalPosition) {
-				repaint();
-				stopAnimation();
-				
-				if (getBoard().isGameOver()) {
-					JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
-					stopTiming();
+	//Animationtimer must be initted in the constructor because it needs variables from the gamestate. 
+	private void initAnimationTimer() {
+		this.animationTimer = new Timer(this.getSettings().getRefreshRate(), new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				boolean arrivedAtFinalPosition = getBoard().moveWithAnimation();
+				if(arrivedAtFinalPosition) {
+					repaint();
+					stopAnimation();
+					
+					if (getBoard().isGameOver()) {
+
+						JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
+						stopClock();
+					}
+					
+				} else {
+					repaint();
 				}
-				
-			} else {
-				repaint();
 			}
 			
-		}
-	});
+		});
+	}
 	
 	public void startAnimation() {
 		animationInProgress = true;
@@ -134,6 +142,7 @@ public class GamePanel extends JPanel {
 		//Calculate width of strings with 1 digit to 4 digits. 
 		if (this.firstPaint) {
 			this.stringWidths = calcStringWidths(g2d);
+			this.stringHeight = g2d.getFontMetrics().getHeight();
 			this.firstPaint = false;
 		}
 		
@@ -141,17 +150,30 @@ public class GamePanel extends JPanel {
 		this.drawBoard(g2d);
 	}
 	
-	private void drawLabel(Graphics2D g2d, int x, int y, int xPos, int yPos) {
+	private void drawLabelInCenter(Graphics2D g2d, int x, int y, int xCoord, int yCoord, int fieldSize) {
 		//Set text color
 		g2d.setColor(TILE_TEXT_COLOR);
 		
 		//Position labels on tiles. 
 		String TileNum = Integer.toString(this.getBoard().getTiles()[x][y].getNumber());
-		int strXPos = xPos + ((int)this.getBoard().getTileSize() / 2) - this.stringWidths[TileNum.length()] / 2;
-		int strYPos = yPos + ((int)this.getBoard().getTileSize() / 2) + g2d.getFontMetrics().getHeight()/4;
+		int strXCoord = xCoord + (fieldSize / 2) - this.stringWidths[TileNum.length()] / 2;
+		int strYCoord = yCoord + (fieldSize / 2) + this.stringHeight / 4;
 		
 		//Draw text for each tile
-		g2d.drawString(TileNum, strXPos, strYPos);
+		g2d.drawString(TileNum, strXCoord, strYCoord);
+	}
+	
+	private void drawLabelInCorner(Graphics2D g2d, int x, int y, int xCoord, int yCoord, int cornerSize) {
+		
+		//TODO: Make this color a field.
+		
+		
+		Color clr = new Color(50, 50, 50, 100);
+		g2d.setColor(clr);
+		g2d.fillRect(xCoord, yCoord, cornerSize, cornerSize);
+		
+		this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, cornerSize);
+		
 	}
 	
 	private void drawControls(Graphics2D g2d) {
@@ -171,14 +193,24 @@ public class GamePanel extends JPanel {
 				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2)) {
 				
 					//Get x and y position
-					int xPos = (int)tiles[x][y].getX();
-					int yPos = (int)tiles[x][y].getY();
+					int xCoord = (int)tiles[x][y].getX();
+					int yCoord = (int)tiles[x][y].getY();
 										
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g2d.drawImage(picList[tiles[x][y].getNumber() -1], xPos, yPos, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize(), null);
+					g2d.drawImage(picList[tiles[x][y].getNumber() -1], xCoord, yCoord, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize(), null);
 					
 					//Draws text on image
-					this.drawLabel(g2d, x, y, xPos, yPos);
+					if(this.getSettings().isPictureOn()) {
+
+						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
+						if (this.getSettings().isLabelsOn()) {
+							//TODO: how can we decide the size of this more appropriately? Right now it's just 30. 
+							this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, 30);
+						} 
+						
+					} else { //No picture is showing, just draw label in center. 
+						this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, (int)this.getBoard().getTileSize());
+					}
 					
 				}
 			}
@@ -196,7 +228,11 @@ public class GamePanel extends JPanel {
 		
 		//Create list of tileImages
 		try {
-			this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), (int)this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
+			if (this.getSettings().isPictureOn()) {
+				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), (int)this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
+			} else {
+				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), (int)this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic", "jpg");
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

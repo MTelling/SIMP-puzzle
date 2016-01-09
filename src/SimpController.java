@@ -21,7 +21,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 		if (gamePanel.getBoard().isMoveValid(dx, dy)) {
 			//Start time if it's the first move in the game, or if it's the first new move after load game. 
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
-				gamePanel.startTiming();
+				gamePanel.startClock();
 			}
 			
 			//Before making the move, save current game stat to gameState. 
@@ -32,7 +32,14 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			
 			//Add a move to scoreModel.
 			gamePanel.getScore().addMoves(1);
-			gamePanel.startAnimation();	
+			
+			//Move with or without animation depending on what the setting is in settings. 
+			if (gamePanel.getSettings().isAnimationOn()) {
+				gamePanel.startAnimation();	
+			} else {
+				gamePanel.getBoard().moveWithoutAnimation(dx, dy);
+				gamePanel.repaint();
+			}
 		}
 	}
 
@@ -82,7 +89,7 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
-					gamePanel.startTiming();
+					gamePanel.startClock();
 					gamePanel.startAnimation();
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {

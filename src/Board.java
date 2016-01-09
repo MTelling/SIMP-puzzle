@@ -152,7 +152,7 @@ public class Board implements Serializable {
 	}
 	
 	//Moves coordinates without animating. 
-	private void moveWithoutAnimation(int dx, int dy) {
+	public void moveWithoutAnimation(int dx, int dy) {
 		this.setToDefaultState(dx, dy);
 	}
 	

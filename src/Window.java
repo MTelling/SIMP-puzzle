@@ -99,7 +99,7 @@ public class Window extends JFrame {
 			gamePanel.requestFocus();
 		} else if(key.equals("mainMenu")) {
 			toggleMenu(false);
-			gamePanel.stopTiming();
+			gamePanel.stopClock();
 		}
 	}
 	
@@ -107,9 +107,9 @@ public class Window extends JFrame {
 		menuToggle = !menuToggle;
 		inGameMenuPanel.setVisible(menuToggle);
 		if(menuToggle || !(shouldStartTimer)) {
-			gamePanel.stopTiming();
+			gamePanel.stopClock();
 		} else {
-			gamePanel.startTiming();
+			gamePanel.startClock();
 		}
 		//Fixes issue of gamePanel being painted wrong when new game is started. 
 		gamePanel.repaint();
