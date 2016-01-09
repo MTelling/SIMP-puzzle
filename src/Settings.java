@@ -24,7 +24,7 @@ public class Settings implements Serializable{
 	
 	public Settings() {
 		//Set settings to Normal or inverted. 
-		this.controls = NORMAL_CONTROLS;
+		this.setControlsNormal();
 		
 		//Sets refreshRate for drawing.
 		this.refreshRate = (int)Math.round(1000.0/framesPerSecond);
@@ -33,10 +33,20 @@ public class Settings implements Serializable{
 		this.isAnimationOn = true;
 		
 		//Turn pictures on or off.
-		this.isPictureOn = true;
+		this.isPictureOn = false;
 		
 		//Turn labels on or off when picture is active.
 		this.isLabelsOn = true;
+	}
+	
+	/// SETTERS FROM HERE ///
+	
+	public void setControlsNormal() {
+		this.controls = NORMAL_CONTROLS;
+	}
+	
+	public void setControlsInverted() {
+		this.controls = INVERTED_CONTROLS;
 	}
 	
 	/// GETTERS FROM HERE /////

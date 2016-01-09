@@ -12,6 +12,8 @@ public class GameState implements Serializable {
 	private Board board;	
 	private Settings settings;
 	
+	private boolean isGameDone;
+	
 	public GameState (Board board, Score score, Settings settings) {
 		this.undoMoveStack = new Stack<Point>();
 		this.redoMoveStack = new Stack<Point>();
@@ -23,7 +25,7 @@ public class GameState implements Serializable {
 	
 	public void saveCurrentMove(int dx, int dy) {
 		this.undoMoveStack.push(new Point(dx, dy));
-		
+				
 		this.redoMoveStack.clear();
 	}
 	
@@ -62,6 +64,7 @@ public class GameState implements Serializable {
 	public void restartGame() {
 		this.board.reset();
 		this.score.reset();
+		this.setGameDone(false);
 	}
 
 	
@@ -78,6 +81,14 @@ public class GameState implements Serializable {
 	
 	public Settings getSettings() {
 		return this.settings;
+	}
+
+	public boolean isGameDone() {
+		return this.isGameDone;
+	}
+
+	public void setGameDone(boolean isGameDone) {
+		this.isGameDone = isGameDone;
 	}
 	
 }

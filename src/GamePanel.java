@@ -75,6 +75,13 @@ public class GamePanel extends JPanel {
 			// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
 			getScore().addSeconds(1);
 			repaint();
+			
+			//TODO: We must agree on where to put this. 
+			if (gameState.isGameDone()) {
+				gameState.setGameDone(true);
+				JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
+				stopClock();
+			}
 		}
 	});
 	
@@ -96,12 +103,6 @@ public class GamePanel extends JPanel {
 					repaint();
 					stopAnimation();
 					
-					if (getBoard().isGameOver()) {
-
-						JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
-						stopClock();
-					}
-					
 				} else {
 					repaint();
 				}
@@ -117,6 +118,14 @@ public class GamePanel extends JPanel {
 	public void stopAnimation() {
 		animationInProgress = false;
 		animationTimer.stop();
+		
+		checkIfGameIsOver();
+	}
+	
+	public void checkIfGameIsOver() {
+		if (this.getBoard().isGameOver()){
+			this.gameState.setGameDone(true);
+		}
 	}
 	
 	//TODO: Can we move a lot of code out of this that does not need to be calculated at each repaint? 
@@ -197,13 +206,20 @@ public class GamePanel extends JPanel {
 					//Get x and y position
 					int xCoord = (int)tiles[x][y].getX();
 					int yCoord = (int)tiles[x][y].getY();
-										
+					
 					//Draws tile at x and y pos with image gotten from ressources. 
 					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize(), null);
+					
 					
 					//Draws text on image
 					if(this.getSettings().isPictureOn()) {
 
+						//Draw border around unfinished picture
+						if (!this.gameState.isGameDone()){
+							g2d.setColor(Color.BLACK);
+							g2d.drawRect(xCoord, yCoord, (int)this.getBoard().getTileSize(), (int)this.getBoard().getTileSize());
+						} 
+						
 						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
 						if (this.getSettings().isLabelsOn()) {
 							//TODO: how can we decide the size of this more appropriately? Right now it's just 30. 

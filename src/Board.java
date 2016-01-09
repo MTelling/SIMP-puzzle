@@ -7,7 +7,7 @@ public class Board implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final int MIN_BOARDSIZE = 3;
 	private static final int MAX_BOARDSIZE = 100;
-	private static final int DIFFICULTY = 100;
+	private static final int DIFFICULTY = 1;
 	
 	private int tilesPerRow;
 	private Tile[][] tiles;
@@ -38,7 +38,9 @@ public class Board implements Serializable {
 		// Make a new, solvable board.
 		this.makeSolvedBoard();
 		this.makeRandomValidMoves(this.tilesPerRow * DIFFICULTY);
+		
 	}
+	
 	
 	//Helper method to init a solvable board
 	//Aligns the tiles, to make a solved board.
@@ -97,6 +99,8 @@ public class Board implements Serializable {
 			}
 		 }
 	}
+	
+
 		
 	//Moves tile to the currEmptyTile position and swaps in tileArray + sets what the nextEmptyTile should be.
 	//This activates the animationStae
@@ -170,7 +174,7 @@ public class Board implements Serializable {
 	//TODO: Should we allow a gamemode with a set time to win the game?
 	public boolean isGameOver(){	
 		//Only do the loops if the empty tile is in the bottom right corner
-		if (this.tiles[tilesPerRow - 1][tilesPerRow - 1].getNumber() == Math.pow(tilesPerRow, 2) ) {
+		if (this.tiles[tilesPerRow - 1][tilesPerRow - 1].getNumber() == tilesPerRow*tilesPerRow ) {
 			//Check if the tiles are aligned from 1 to tilesPerRow^2
 			int counter = 1;
 			for (int y = 0; y < tilesPerRow; y++){
