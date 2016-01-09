@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class GameState implements Serializable {
@@ -66,6 +67,7 @@ public class GameState implements Serializable {
 		this.score.reset();
 		this.setGameDone(false);
 	}
+	
 
 	
 	////// GETTERS FROM HERE //////

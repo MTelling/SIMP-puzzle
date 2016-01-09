@@ -35,10 +35,10 @@ public class Window extends JFrame {
 		super("N-Puzzle Game");
 		
 		//Initialize the model.
-		Board board = new Board(3);
-		board.init();
-		Score score = new Score();
 		Settings settings = new Settings();
+		Board board = new Board(settings.getTilesPerRowInBoard());
+		board.init();
+		Score score = new Score();	
 		GameState gs = new GameState(board, score, settings);
 				
 		//Create CardLayout
@@ -97,6 +97,8 @@ public class Window extends JFrame {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
+			
+			gamePanel.scrambleBoard();
 		} else if(key.equals("mainMenu")) {
 			toggleMenu(false);
 			gamePanel.stopClock();

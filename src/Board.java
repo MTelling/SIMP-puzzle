@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Board implements Serializable {
@@ -7,14 +8,12 @@ public class Board implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final int MIN_BOARDSIZE = 3;
 	private static final int MAX_BOARDSIZE = 100;
-	private static final int DIFFICULTY = 1;
 	
 	private int tilesPerRow;
 	private Tile[][] tiles;
 	private Point currEmptyTile;
 	private Point nextEmptyTile;
 	private double tileSize;
-	private double velocity;
 	
 	public Board(int tilesPerRow) {
 		
@@ -29,16 +28,13 @@ public class Board implements Serializable {
 	}
 	
 	public void init() {
-		this.velocity = 4;
 		this.reset();
 	}
 	
 	//Helper method to make start new game more understandable. 
 	public void reset() {
 		// Make a new, solvable board.
-		this.makeSolvedBoard();
-		this.makeRandomValidMoves(this.tilesPerRow * DIFFICULTY);
-		
+		this.makeSolvedBoard();		
 	}
 	
 	
@@ -63,8 +59,9 @@ public class Board implements Serializable {
 	}
 	
 	//Helper method to init a solvable board.
-	public void makeRandomValidMoves(int howMany) {
+	public LinkedList<Move> makeRandomValidMoves(int howMany) {
 		
+		 LinkedList<Move> scrambleMoves = new LinkedList<>();
 		 Random rand = new Random();
 		 
 		 //Move x, then y, then x etc. Was x moved last?
@@ -80,24 +77,34 @@ public class Board implements Serializable {
 				
 				int randomNumber = validNums[rand.nextInt(2)];
 				
-				if(isMoveValid(new Move(randomNumber, 0))  && !justMovedX ) {
-					setToAnimationState(new Move(randomNumber, 0));
+				Move xMove = new Move(randomNumber, 0);
+				Move yMove = new Move(0, randomNumber);
+				
+				if(isMoveValid(xMove)  && !justMovedX ) {
+					setToAnimationState(xMove);
 					this.moveWithoutAnimation();
+					
+					scrambleMoves.add(xMove);
 					
 					justMovedX = true;
 					hasNotMoved = false;
-				} else if (isMoveValid(new Move(0, randomNumber)) && justMovedX ) {
-					setToAnimationState(new Move(0, randomNumber));
+				} else if (isMoveValid(yMove) && justMovedX ) {
+					setToAnimationState(yMove);
 					this.moveWithoutAnimation();
-
+					
+					scrambleMoves.add(yMove);
+					
 					justMovedX = false;
 					hasNotMoved = false;
 				}
-				
-				
 
 			}
 		 }
+		 
+		 //Set board back to solved state.
+		 this.reset();
+		 
+		 return scrambleMoves;
 	}
 	
 
@@ -111,20 +118,20 @@ public class Board implements Serializable {
 	}
 	
 	//Returns true if arrived at final coord. 
-	public boolean moveWithAnimation(){
+	public boolean moveWithAnimation(int pixelsMovedPerRedraw){
 		int x = this.nextEmptyTile.x;
 		int y = this.nextEmptyTile.y;
 		double dx = 0, dy = 0;
 		
 		//Find out if the tile has moved up or down.
 		if (this.currEmptyTile.x - 1 == x) { //Tile has moved to the right
-			dx = velocity;
+			dx = pixelsMovedPerRedraw;
 		} else if (this.currEmptyTile.x + 1 == x) { //Tile has moved to the left
-			dx = -velocity;
+			dx = -pixelsMovedPerRedraw;
 		} else if (this.currEmptyTile.y - 1 == y) { //Tile has moved down
-			dy = velocity;
+			dy = pixelsMovedPerRedraw;
 		} else if (this.currEmptyTile.y + 1 == y) { //Tile has moved up
-			dy = -velocity;
+			dy = -pixelsMovedPerRedraw;
 		} 
 		
 		this.tiles[x][y].translate(dx, dy);
@@ -146,7 +153,7 @@ public class Board implements Serializable {
 			//Secure that the new tile is placed exactly at the right spot.
 			this.tiles[this.currEmptyTile.x][this.currEmptyTile.y].setCoords(finalX, finalY);
 			//Place the next empty tile at new empty tile position. 
-			this.tiles[this.nextEmptyTile.x][this.nextEmptyTile.y].setCoords(finalX-(tileSize*(dx/velocity)), finalY-(tileSize*(dy/velocity)));
+			this.tiles[this.nextEmptyTile.x][this.nextEmptyTile.y].setCoords(finalX-(tileSize*(dx/pixelsMovedPerRedraw)), finalY-(tileSize*(dy/pixelsMovedPerRedraw)));
 			
 			//Reset animationState so curr is equal to new. 
 			//TODO: should just swap tiles really.

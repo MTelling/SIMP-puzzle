@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -65,6 +66,14 @@ public class GamePanel extends JPanel {
 		this.initAnimationTimer();
 		
 		this.repaint();
+		
+		
+	}
+	
+	public void scrambleBoard() {
+		LinkedList<Move> scramblingSequence = getBoard().makeRandomValidMoves(this.getSettings().getDifficulty());
+		Timer scrambleAnimationTimer = new Timer(getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
+		scrambleAnimationTimer.start();
 	}
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -98,7 +107,7 @@ public class GamePanel extends JPanel {
 		this.animationTimer = new Timer(this.getSettings().getRefreshRate(), new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				boolean arrivedAtFinalPosition = getBoard().moveWithAnimation();
+				boolean arrivedAtFinalPosition = getBoard().moveWithAnimation(getSettings().getAnimationSpeed());
 				if(arrivedAtFinalPosition) {
 					repaint();
 					stopAnimation();
@@ -320,6 +329,10 @@ public class GamePanel extends JPanel {
 	
 	public boolean isAnimating() {
 		return this.animationInProgress;
+	}
+	
+	public void setAnimationInProgress(boolean animationInProgress) {
+		this.animationInProgress = animationInProgress;
 	}
 	
 	

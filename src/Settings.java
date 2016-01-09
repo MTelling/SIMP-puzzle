@@ -11,7 +11,7 @@ public class Settings implements Serializable{
 	private static final int[] NORMAL_CONTROLS = {KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN, KeyEvent.VK_UP};
 	
 	//Variable for animation
-	private int framesPerSecond = 100;
+	private int framesPerSecond;
 	private int refreshRate;
 	
 	//Move with or without animation
@@ -21,22 +21,45 @@ public class Settings implements Serializable{
 	private boolean isPictureOn;
 	private boolean isLabelsOn;
 	
+	//Animation speeds
+	private int scrambleAnimationSpeed;
+	private int animationSpeed;
+	
+	//Board difficulty
+	private int difficulty;
+	private int tilesPerRowInBoard;
 	
 	public Settings() {
+		
 		//Set settings to Normal or inverted. 
 		this.setControlsNormal();
 		
-		//Sets refreshRate for drawing.
-		this.refreshRate = (int)Math.round(1000.0/framesPerSecond);
+		//Set difficulty
+		this.setDifficulty(40);
+		
+		//Sets tiles per row in the board
+		this.setTilesPerRowInBoard(5);
+		
+		//Set speed for the scrambling animation
+		this.setScrambleAnimationSpeed(30);
+		
+		//Set speed for normal move animation
+		this.setAnimationSpeed(5);
 		
 		//Turn animation on and off. 
 		this.isAnimationOn = true;
 		
 		//Turn pictures on or off.
-		this.isPictureOn = false;
+		this.isPictureOn = true;
 		
 		//Turn labels on or off when picture is active.
 		this.isLabelsOn = true;
+		
+		//Set frames per second
+		this.setFramesPerSecond(80);
+		
+		//calculate refreshRate for drawing.
+		this.refreshRate = (int)Math.round(1000.0/framesPerSecond);
 	}
 	
 	/// SETTERS FROM HERE ///
@@ -47,6 +70,26 @@ public class Settings implements Serializable{
 	
 	public void setControlsInverted() {
 		this.controls = INVERTED_CONTROLS;
+	}
+	
+	public void setScrambleAnimationSpeed(int scrambleAnimationSpeed) {
+		this.scrambleAnimationSpeed = scrambleAnimationSpeed;
+	}
+	
+	public void setAnimationSpeed(int animationSpeed) {
+		this.animationSpeed = animationSpeed;
+	}
+	
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	public void setTilesPerRowInBoard(int tilesPerRowInBoard) {
+		this.tilesPerRowInBoard = tilesPerRowInBoard;
+	}
+	
+	public void setFramesPerSecond(int framesPerSecond) {
+		this.framesPerSecond = framesPerSecond;
 	}
 	
 	/// GETTERS FROM HERE /////
@@ -70,4 +113,23 @@ public class Settings implements Serializable{
 	public boolean isPictureOn() {
 		return this.isPictureOn;
 	}
+
+	public int getScrambleAnimationSpeed() {
+		return scrambleAnimationSpeed;
+	}
+
+	public int getAnimationSpeed() {
+		return animationSpeed;
+	}
+
+	public int getDifficulty() {
+		return difficulty;
+	}
+
+	public int getTilesPerRowInBoard() {
+		return tilesPerRowInBoard;
+	}
+
+
+
 }
