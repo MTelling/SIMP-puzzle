@@ -11,16 +11,14 @@ public class ImageHandler {
 
 		BufferedImage mainPic = ImageIO.read(new File(fileName + "." + fileExt));
 		BufferedImage[] tilePics = new BufferedImage[(int) Math.pow(boardSize, 2)];
-		int counter = 0;
     	for(int y = 0; y < boardSize; y++) {
     		for(int x = 0; x < boardSize; x++) {
     			
-    			tilePics[counter] = mainPic.getSubimage(
+    			tilePics[y*boardSize + x] = mainPic.getSubimage(
     					x * tileSize, 	// x coordinates
     					y * tileSize, 	// y coordinates
     					tileSize, 		// width
     					tileSize);		// height
-    			counter++;
     		}
     	}
     	
