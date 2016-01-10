@@ -6,3 +6,5 @@ Now at version 2.1.1
 - Need to put clock inside controller. 
 - Need to figure out how labeltextsize is calculated
 - Need to figure out what size the small rectangles behind the numbers in the corners should have. 
+
+Save/Load and new game does not work because of the way the gamePanel calls scrambler right now. 
