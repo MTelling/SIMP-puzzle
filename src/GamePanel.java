@@ -65,7 +65,7 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void scrambleBoard() {
-		//TODO: THIS ASKS THE MODEL TO DO STUFF
+		//TODO: THIS ASKS THE MODEL TO DO STUFF. Move it out and refactor. 
 		LinkedList<Move> scramblingSequence = getBoard().makeRandomValidMoves(this.getSettings().getDifficulty());
 		Timer scrambleAnimationTimer = new Timer(getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 		scrambleAnimationTimer.start();
@@ -156,6 +156,7 @@ public class GamePanel extends JPanel {
 	
 	private void drawLabelInCorner(Graphics2D g2d, int x, int y, int xCoord, int yCoord, int cornerSize) {
 		
+		//add rectangle to the back of the label.
 		g2d.setColor(LABEL_WHEN_CORNERED_BACKGROUND_COLOR);
 		g2d.fillRect(xCoord, yCoord, cornerSize, cornerSize);
 		

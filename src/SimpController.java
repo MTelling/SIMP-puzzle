@@ -40,18 +40,21 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			//TODO: Somehow we need to check around here if the game is won. 
 			
 			//Move with or without animation depending on what the setting is in settings. 
-			if (gamePanel.getSettings().isAnimationOn()) {
-				
-				this.moveAnimator.start();	
-				
-			} else {
-				//Just sets the board to the new default state and then repaints. 
-				gamePanel.getBoard().moveWithoutAnimation();
-				
-				//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
-				gamePanel.repaint();
-			}
+			showMove(gamePanel.getSettings().isAnimationOn());
 			
+		}
+	}
+	
+	//Shows a move. Animated or not. 
+	private void showMove(boolean shouldAnimate) {
+		if (shouldAnimate) {
+			this.moveAnimator.start();	
+		} else {
+			//Just sets the board to the new default state and then repaints. 
+			gamePanel.getBoard().moveWithoutAnimation();
+			
+			//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
+			gamePanel.repaint();
 		}
 	}
 
@@ -105,13 +108,13 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 					//TODO: Should this really start the clock on each time through? 
 					gamePanel.startClock();
 					
-					this.moveAnimator.start();
+					showMove(gamePanel.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
-					this.moveAnimator.start();
+					showMove(gamePanel.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				Window.toggleMenu(false);
