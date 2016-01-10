@@ -16,6 +16,11 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 	public SimpController(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 		this.isAnimating = false;
+		
+		initMoveAnimator();
+	}
+	
+	public void initMoveAnimator() {
 		this.moveAnimator = new Timer(gamePanel.getSettings().getRefreshRate(), new MoveAnimator(this));
 	}
 	
@@ -57,6 +62,8 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 			gamePanel.repaint();
 		}
 	}
+	
+	/// ALL EVENTS FROM HERE /// 
 
 	@Override
 	public void mousePressed(MouseEvent e) {

@@ -109,7 +109,6 @@ public class Board implements Serializable {
 	}
 	
 
-		
 	//Moves tile to the currEmptyTile position and swaps in tileArray + sets what the nextEmptyTile should be.
 	//This activates the animationStae
 	public void setToAnimationState(Move move) {
@@ -213,7 +212,7 @@ public class Board implements Serializable {
 	}
 	
 	
-	////////Getter methods from here////////
+	/// Getters from here ///
 	
 	public Point getCurrEmptyTile() {
 		return this.currEmptyTile;
@@ -244,25 +243,4 @@ public class Board implements Serializable {
 		return str;
 	}
 	
-	
-	
-	/*
-	
-	
-	//Discard current tile positions and update to new ones.
-	public void setTiles(int[][] tiles) {
-		int[][] newArray = new int[tiles.length][];
-		for (int i = 0; i < newArray.length; i++) {
-			newArray[i] = Arrays.copyOf(tiles[i], tiles[i].length);
-		}
-		this.tiles = newArray;
-	}
-	
-	*
-	public void setEmptyTile(Point newEmptyTile) {
-		this.emptyTile = new Point(newEmptyTile.x, newEmptyTile.y);
-	}
-	*
-	*
-	*/
 }

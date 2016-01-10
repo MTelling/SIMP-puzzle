@@ -62,6 +62,7 @@ public class GamePanel extends JPanel {
 		this.loadImages();
 		
 		this.repaint();
+		
 	}
 	
 	public void scrambleBoard() {

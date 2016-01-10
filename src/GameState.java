@@ -68,7 +68,7 @@ public class GameState implements Serializable {
 	
 
 	
-	////// GETTERS FROM HERE //////
+	/// GETTERS FROM HERE ///
 	
 
 	public Score getScore() {

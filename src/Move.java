@@ -1,4 +1,8 @@
-public class Move {
+import java.io.Serializable;
+
+public class Move implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	//These fields are public for easy access. 
 	public int dx;
 	public int dy;
