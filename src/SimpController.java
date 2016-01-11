@@ -5,42 +5,80 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 public class SimpController implements KeyListener, MouseListener, MouseMotionListener {
 
-	GamePanel gamePanel;
+	private GamePanel gamePanel;
+	private boolean isAnimating;
+	private Timer moveAnimator;
 	
 	public SimpController(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
+		this.isAnimating = false;
+		
+		initMoveAnimator();
 	}
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {}
+	public void initMoveAnimator() {
+		this.moveAnimator = new Timer(gamePanel.getSettings().getRefreshRate(), new MoveAnimator(this));
+	}
 	
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {}
-
+	private void makeMove(Move move) {
+		//Before making a move, check if a move should be made. 
+		//If it should be made saveGameState to the current board and then make the move. 
+		if (gamePanel.getBoard().isMoveValid(move)) {
+			//Start time if it's the first move in the game, or if it's the first new move after load game. 
+			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
+				gamePanel.startClock();
+			}
+			
+			//Before making the move, save current game stat to gameState. 
+			gamePanel.getGameState().saveCurrentMove(move);
+			
+			//Move tile
+			gamePanel.getBoard().setToAnimationState(move);
+			
+			//Add a move to scoreModel.
+			gamePanel.getScore().addMoves(1);
+			
+			//TODO: Somehow we need to check around here if the game is won. 
+			
+			//Move with or without animation depending on what the setting is in settings. 
+			showMove(gamePanel.getSettings().isAnimationOn());
+			
+		}
+	}
 	
+	//Shows a move. Animated or not. 
+	private void showMove(boolean shouldAnimate) {
+		if (shouldAnimate) {
+			this.moveAnimator.start();	
+		} else {
+			//Just sets the board to the new default state and then repaints. 
+			gamePanel.getBoard().moveWithoutAnimation();
+			
+			//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
+			gamePanel.repaint();
+		}
+	}
+	
+	/// ALL EVENTS FROM HERE /// 
+
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (!gamePanel.isAnimating()) {
+		if (!this.isAnimating) {
 			if (!Window.menuToggle) {
 				
-				if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 
-						&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 + GamePanel.COGWHEEL_SIZE) {
-					if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.COGWHEEL_SIZE 
+				if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 
+						&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
+					if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.MENUBUTTON_SIZE 
 							&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
 						Window.toggleMenu(false);
 					}
 				} else {
-				
-					double xPos = (e.getX() - Window.GAME_BORDER) / gamePanel.getBoard().getTileSize();
-					double yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / gamePanel.getBoard().getTileSize();
+					int xPos = (e.getX() - Window.GAME_BORDER) / (int)gamePanel.getBoard().getTileSize();
+					int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / (int)gamePanel.getBoard().getTileSize();
 					
 					//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
 					int dx = 0, dy = 0;
@@ -58,102 +96,108 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 						dy = 1;
 					}
 					
-					//Before making a move, check if a move should be made. 
-					//If it should be made saveGameState to the current board and then make the move.  
-					if (gamePanel.getBoard().isMoveValid(dx, dy)) {
-						makeMove(dx, dy);
-					}
+					//Try to make the move
+					makeMove(new Move(dx,dy));
 				}
 			}
 		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {}
-
-	@Override
-	public void keyPressed(KeyEvent e) {}
-
-	@Override
 	public void keyReleased(KeyEvent e) {
-		if (!gamePanel.isAnimating()) {
+		if (!this.isAnimating) {
 			//Redo undo if ctrl+z and ctrl+y
 			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
-					gamePanel.startTiming();
-					gamePanel.startAnimation();
+					
+					//TODO: Should this really start the clock on each time through? 
+					gamePanel.startClock();
+					
+					showMove(gamePanel.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
-					gamePanel.startAnimation();
+					showMove(gamePanel.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				Window.toggleMenu(false);
 			} else if(!Window.menuToggle) {
 				int dx, dy;
 				dx = dy = 0;
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_RIGHT:	dx = -1; break;
-					case KeyEvent.VK_LEFT: dx = 1; break;
-					case KeyEvent.VK_DOWN: dy = -1; break;
-					case KeyEvent.VK_UP: dy = 1; break;
-					default: break;
+				int keyCode = e.getKeyCode();
+				
+				int[] controls = gamePanel.getSettings().getControls();
+				
+				if (keyCode == controls[0]) { //Moves tile to the left
+					dx = -1;
+				} else if (keyCode == controls[1]) { //Moves tile to the right
+					dx = 1;
+				} else if (keyCode == controls[2]) { //Moves tile up
+					dy = -1;
+				} else if (keyCode == controls[3]) { //Moves tile down
+					dy = 1;
+				} else {
 				}
 				
-				//Before making a move, check if a move should be made at all. 
-				if (gamePanel.getBoard().isMoveValid(dx, dy)) {
-					makeMove(dx, dy);
-				} 
+				//Try to make the move. 
+				makeMove(new Move(dx, dy));
 			}
 		}
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {}	
 	
-
-	private void makeMove(int dx, int dy) {
-		//Start time if it's the first move in the game, or if it's the first new move after load game. 
-		if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
-			gamePanel.startTiming();
-		}
-		
-		
-		//Before making the move, save current game stat to gameState. 
-		gamePanel.getGameState().saveCurrentMove(dx, dy);
-		
-		//Move tile
-		gamePanel.getBoard().setToAnimationState(dx, dy);
-		
-		//Add a move to scoreModel.
-		gamePanel.getScore().addMoves(1);
-		gamePanel.startAnimation();
-		
-
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (!Window.menuToggle && e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 
-				&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.COGWHEEL_SIZE) / 2 + GamePanel.COGWHEEL_SIZE) {
-			if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.COGWHEEL_SIZE 
+		//Check if the mouse is over the cogwheel.
+		if (!Window.menuToggle && e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 
+				&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
+			if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.MENUBUTTON_SIZE 
 					&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
+				//If the mouse is over the cogwheel make it a hand. 
 				gamePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
-		} else {
+		} else { //Mouse must be outside the cogwheel and should be normal
 			gamePanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
-		
 	}
+	
+	/// SETTERS FROM HERE ///
+	
+	public void setAnimating(boolean isAnimating) {
+		this.isAnimating = isAnimating;
+	}
+	
+	/// GETTERS FROM HERE ///
+	
+	public GamePanel getGamePanel() {
+		return this.gamePanel;
+	}
+	
+	
+	/// UNUSUED FROM HERE ///
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+	
+	@Override
+	public void mouseExited(MouseEvent arg0) {}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {}
+
+	@Override
+	public void keyPressed(KeyEvent e) {}
+	
+	@Override
+	public void keyTyped(KeyEvent e) {}	
+
 }

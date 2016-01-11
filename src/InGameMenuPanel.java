@@ -12,24 +12,24 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	GameState gameState;
+	private GameState gameState;
 	
-	JButton btnContinueGame;
-	JButton btnNewGame;
-	JButton btnSaveGame;
-	JButton btnHighScore;
-	JButton btnSettings;
-	JButton btnQuitGame;
+	private JButton btnContinueGame;
+	private JButton btnNewGame;
+	private JButton btnSaveGame;
+	private JButton btnHighScore;
+	private JButton btnSettings;
+	private JButton btnQuitGame;
 	
 	public InGameMenuPanel(GameState gs) {
 		this.gameState = gs;
 		
-		addButton(btnContinueGame, "Continue Game");
-		addButton(btnNewGame, "New Game");
-		addButton(btnSaveGame, "Save Game");
-		addButton(btnHighScore, "Highscores");
-		addButton(btnContinueGame, "Settings");
-		addButton(btnSettings, "Exit to Main Menu");
+		this.addButton(btnContinueGame, "Continue Game");
+		this.addButton(btnNewGame, "New Game");
+		this.addButton(btnSaveGame, "Save Game");
+		this.addButton(btnHighScore, "Highscores");
+		this.addButton(btnSettings, "Settings");
+		this.addButton(btnQuitGame, "Exit to Main Menu");
 		this.add(Box.createVerticalGlue());
 		
 		this.setBounds(Window.GAME_BORDER, Window.GAME_BORDER, Window.WINDOW_WIDTH - 2 * Window.GAME_BORDER, Window.WINDOW_HEIGHT  - 2 * Window.GAME_BORDER);

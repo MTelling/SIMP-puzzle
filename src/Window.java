@@ -30,12 +30,18 @@ public class Window extends JFrame {
 		@SuppressWarnings("unused")
 		Window game = new Window();
 	}
-	
 
 	
 	public Window() {
 		super("N-Puzzle Game");
 		
+		//Initialize the model.
+		Settings settings = new Settings();
+		Board board = new Board(settings.getTilesPerRowInBoard());
+		board.init();
+		Score score = new Score();	
+		GameState gs = new GameState(board, score, settings);
+				
 		//Create CardLayout
 		cardPanel = new JPanel();
 		this.getContentPane().add(cardPanel);
@@ -43,28 +49,30 @@ public class Window extends JFrame {
 		cardPanel.setLayout(cardLayout);
 		cardPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
-		//Initialize the different panels
-		Board board = new Board(4);
-		board.init();
-		Score score = new Score();
-		GameState gs = new GameState(board, score);
-		
+		//Create mainManuPanel
 		mainMenuPanel = new MainMenuPanel(gs);
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
 		
+
 		settingsPanel = new SettingsPanel();
-		
+		//Create puzzlePane. 
 		JLayeredPane puzzlePane = new JLayeredPane();
 
+		//create gamePanel and its controller
 		gamePanel = new GamePanel(gs);
 		SimpController controller = new SimpController(gamePanel);
 
+		//Add controller to gamePanel
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
 		gamePanel.addMouseMotionListener(controller);
+		
+		//Create inGameMenuPanel initially not visible
 		inGameMenuPanel = new InGameMenuPanel(gs);
 		inGameMenuPanel.setLayout(new BoxLayout(inGameMenuPanel, BoxLayout.Y_AXIS));
 		inGameMenuPanel.setVisible(false);
+		
+		//Add gamePanel and inGameMenuPanel to puzzlePane
 		puzzlePane.add(gamePanel, new Integer(0), 0);
 		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
 		
@@ -74,6 +82,7 @@ public class Window extends JFrame {
 		cardPanel.add(settingsPanel, "settings");
 		cardPanel.add(puzzlePane, "puzzle");
 		
+		//Set settings for main window. 
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
@@ -82,7 +91,6 @@ public class Window extends JFrame {
 	}
 	
 	public static void loadGame(GameState gs) {
-		
 		mainMenuPanel.updateGameState(gs);
 		inGameMenuPanel.updateGameState(gs);
 		gamePanel.updateGameState(gs);
@@ -94,9 +102,12 @@ public class Window extends JFrame {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
+			
+			//TODO: THIS SHOULD NOT BE HERE!
+			gamePanel.scrambleBoard();
 		} else if(key.equals("mainMenu")) {
 			toggleMenu(false);
-			gamePanel.stopTiming();
+			gamePanel.stopClock();
 		}
 	}
 	
@@ -104,9 +115,11 @@ public class Window extends JFrame {
 		menuToggle = !menuToggle;
 		inGameMenuPanel.setVisible(menuToggle);
 		if(menuToggle || !(shouldStartTimer)) {
-			gamePanel.stopTiming();
+			gamePanel.stopClock();
 		} else {
-			gamePanel.startTiming();
+			gamePanel.startClock();
 		}
+		//Fixes issue of gamePanel being painted wrong when new game is started. 
+		gamePanel.repaint();
 	}
 }

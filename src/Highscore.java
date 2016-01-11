@@ -104,7 +104,7 @@ public class Highscore implements Serializable {
 	
 	//Add highscore. 
 	//Must be used after isHighScore, as it always adds any score to last place, if it can't put it higher.
-	public void addHighScore (String name, int score) {
+	public void addHighscore (String name, int score) {
 		int scoreSpot = HIGHSCORE_SIZE - 1;
 		
 		for(int i = scoreSpot; i >= 0 ; i++) {
@@ -118,7 +118,7 @@ public class Highscore implements Serializable {
 	}
 	
 	//Transfer current scores to the hashmap of all scores and save the file.
-	public void updateHighScores () {
+	public void updateHighscores () {
 		HashMap<String, Integer> temp = new HashMap<String, Integer>();
 		for(int i = 0; i < HIGHSCORE_SIZE; i++) {
 			temp.put(highscoreNames[i], scores[i]);
