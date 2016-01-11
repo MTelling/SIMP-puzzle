@@ -68,7 +68,7 @@ public class GameState implements Serializable {
 	}
 		
 	public void restartGame() {
-		this.board.reset();
+		this.board = new Board();
 		this.score.reset();
 		this.setGameDone(false);
 	}

@@ -139,8 +139,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					this.startClock();
 				Window.toggleMenu();
 			} else if(!Window.menuToggle) {
-				int dx, dy;
-				dx = dy = 0;
+				int dx = 0, dy = 0;
 				int keyCode = e.getKeyCode();
 				
 				int[] controls = Window.getSettings().getControls();

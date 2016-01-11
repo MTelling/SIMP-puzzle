@@ -37,7 +37,7 @@ public class Window extends JFrame {
 		
 		//Initialize the model.
 		settings = new Settings();
-		Board board = new Board(settings.getTilesPerRowInBoard());
+		Board board = new Board();
 		board.init();
 		Score score = new Score();	
 		GameState gs = new GameState(board, score);
