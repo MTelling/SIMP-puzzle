@@ -151,18 +151,34 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void drawBoard(Graphics2D g2d, int tileSize) {
+		int plusx = 0, plusy = 0;
+		int tilesNeededToBeLarger = (currWindowSize.getBOARD_SIZE() - currWindowSize.getBOARD_BORDER_SIZE()*2) % this.getBoard().getTilesPerRow();
+		
 		Tile[][] tiles = this.getBoard().getTiles();
 		for(int y = 0; y < this.getBoard().getTilesPerRow(); y++) {
+			plusx = 0;
+			int thisYSize = tileSize;
+			if (plusy < tilesNeededToBeLarger) {
+				thisYSize++;
+			}
 			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
 				//Draw all tiles except for the empty one.
 				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2)) {
 				
 					//Get x and y position
-					int xCoord = tiles[x][y].getX();
-					int yCoord = tiles[x][y].getY();
+					int xCoord = tiles[x][y].getX() + plusx;
+					int yCoord = tiles[x][y].getY() - (tilesNeededToBeLarger - plusy);
+					
+					int thisSize = tileSize;
+					if (plusx < tilesNeededToBeLarger) {
+						plusx++;
+						thisSize += 1;
+
+					}
 					
 					//Draws tile at x and y pos with image gotten from ressources. 
-					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, tileSize, this.getBoard().getTileSize(), null);
+					
+					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, thisSize, thisYSize, null);
 					
 					//Draws text on image
 					if(this.gameState.isPictureOn()) {
@@ -170,7 +186,7 @@ public class GamePanel extends JPanel {
 						//Draw border around unfinished picture
 						if (!this.gameState.isGameDone()){
 							g2d.setColor(Color.BLACK);
-							g2d.drawRect(xCoord, yCoord, tileSize, this.getBoard().getTileSize());
+							g2d.drawRect(xCoord, yCoord, thisSize, thisYSize);
 						} 
 						
 						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
@@ -186,7 +202,12 @@ public class GamePanel extends JPanel {
 					
 				}
 			}
+			if (plusy < tilesNeededToBeLarger) {
+				plusy++;
+			}
+			
 		}
+		
 	}
 	
 	private void loadImages() {
