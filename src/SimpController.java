@@ -36,7 +36,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 				this.startClock();
 			}
-			
+		
 			//Before making the move, save current game stat to gameState. 
 			gamePanel.getGameState().saveCurrentMove(move);
 			
@@ -44,13 +44,13 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.getBoard().setToAnimationState(move);
 			
 			//Add a move to scoreModel.
-			gamePanel.getScore().addMoves(1);
+			gamePanel.getScore().addMoves(1);			
 			
-			//TODO: Somehow we need to check around here if the game is won. 
-			
+			System.out.println(gamePanel.getBoard().toString());
 			//Move with or without animation depending on what the setting is in settings. 
 			showMove(Window.getSettings().isAnimationOn());
-			
+			this.isAnimating = true;
+		
 		}
 	}
 	
@@ -71,17 +71,18 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
 		if (!this.isAnimating) {
 			if (!Window.menuToggle) {
-				if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 
-						&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
-					if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.MENUBUTTON_SIZE 
-							&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
+				if (e.getY() > (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 
+						&& e.getY() < (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
+					if (e.getX() > currWindowSize.getWINDOW_WIDTH()-currWindowSize.getGAME_BORDER()-GamePanel.MENUBUTTON_SIZE 
+							&& e.getX() < currWindowSize.getWINDOW_WIDTH() - currWindowSize.getGAME_BORDER()) {
 						Window.toggleMenu();
 					}
 				} else {
-					int xPos = (e.getX() - Window.GAME_BORDER) / (int)gamePanel.getBoard().getTileSize();
-					int yPos = (e.getY() - Window.TOP_CONTROLS_SIZE) / (int)gamePanel.getBoard().getTileSize();
+					int xPos = (e.getX() - currWindowSize.getGAME_BORDER()) / (int)gamePanel.getBoard().getTileSize();
+					int yPos = (e.getY() - currWindowSize.getTOP_CONTROLS_SIZE()) / (int)gamePanel.getBoard().getTileSize();
 					
 					//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
 					int dx = 0, dy = 0;
@@ -163,11 +164,12 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
 		//Check if the mouse is over the cogwheel.
-		if (!Window.menuToggle && e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 
-				&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
-			if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.MENUBUTTON_SIZE 
-					&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
+		if (!Window.menuToggle && e.getY() > (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 
+				&& e.getY() < (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
+			if (e.getX() > currWindowSize.getWINDOW_WIDTH()-currWindowSize.getGAME_BORDER()-GamePanel.MENUBUTTON_SIZE 
+					&& e.getX() < currWindowSize.getWINDOW_WIDTH() - currWindowSize.getGAME_BORDER()) {
 				//If the mouse is over the cogwheel make it a hand. 
 				gamePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
@@ -180,8 +182,14 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("mainMenuNewGame")) {
 			Window.swapView("puzzle");
+			
+			//Settings could have changed so reinit moveAnimator to get the new FPS
+			initMoveAnimator();
+			
+			//Reset the game
 			gamePanel.getGameState().restartGame();
 			gamePanel.reset();
+			
 			this.scrambleBoard();
 		} else if (e.getActionCommand().equals("mainMenuLoadGame")) {
 			//Load the game from file
@@ -221,6 +229,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
 		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 		scrambleAnimationTimer.start();
+
 	}
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -231,7 +240,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
 				gamePanel.getScore().addSeconds(1);
 				gamePanel.repaint();
-				
+				System.out.println(gamePanel.getBoard().toString());
+
 				//TODO: We must agree on where to put this. 
 				if (gamePanel.getGameState().isGameDone()) {
 					gamePanel.getGameState().setGameDone(true);

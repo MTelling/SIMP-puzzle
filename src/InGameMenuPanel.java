@@ -31,7 +31,11 @@ public class InGameMenuPanel extends JPanel {
 		this.add(Box.createVerticalGlue());
 		
 		//Set boundaries for the ingame menu
-		this.setBounds(Window.GAME_BORDER, Window.GAME_BORDER, Window.WINDOW_WIDTH - 2 * Window.GAME_BORDER, Window.WINDOW_HEIGHT  - 2 * Window.GAME_BORDER);
+		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		this.setBounds(currWindowSize.getGAME_BORDER(), 
+				currWindowSize.getGAME_BORDER(), 
+				currWindowSize.getWINDOW_WIDTH() - 2 * currWindowSize.getGAME_BORDER(), 
+				currWindowSize.getWINDOW_HEIGHT()  - 2 * currWindowSize.getGAME_BORDER());
 		this.setOpaque(false);
 	}
 	
@@ -59,6 +63,7 @@ public class InGameMenuPanel extends JPanel {
 		super.paintComponent(g);
 		
 		g.setColor(new Color(128, 128, 128, 225));
-		g.fillRect(0, 0, 448 - Window.GAME_BORDER * 2, 512 - Window.GAME_BORDER * 2);
+		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		g.fillRect(0, 0, currWindowSize.getWINDOW_WIDTH() - currWindowSize.getGAME_BORDER() * 2, currWindowSize.getWINDOW_HEIGHT() - currWindowSize.getGAME_BORDER() * 2);
 	}	
 }

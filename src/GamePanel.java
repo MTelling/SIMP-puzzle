@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
 
-	public static final int MENUBUTTON_SIZE = Window.TOP_CONTROLS_SIZE - Window.TOP_CONTROLS_SIZE/4;
+	public static final int MENUBUTTON_SIZE = Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE() - Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE()/4;
 	public static final String RESOURCE_PATH = "resources/";
 	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
  	private static final long serialVersionUID = 1L;
@@ -31,11 +31,12 @@ public class GamePanel extends JPanel {
 	private int timeLabelyPos;
 	private int[] stringWidths; //Saves width of strings depending how many characters are in. 
 	private int stringHeight;
+	private int labelTextSize;
 	private boolean firstPaint;
 	private BufferedImage[] picList;
 	
 	public GamePanel(GameState gs) {
-		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
+		this.setBounds(0, 0, Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT());
 		this.setOpaque(true);
 		
 		this.gameState = gs;
@@ -54,41 +55,49 @@ public class GamePanel extends JPanel {
 		this.loadImages();
 		
 		this.repaint();
+		this.labelTextSize = getGameState().getBoard().getTileSize()/4;
 		
 	}
 	
-	//TODO: THIS ASKS THE MODEL TO DO STUFF
-	public void checkIfGameIsOver() {
-		if (this.getBoard().isGameOver()){
-			this.gameState.setGameDone(true);
-		}
-	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g.create();
+		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+
 		//Set font. Has to be done on each repaint, because it defaults it otherwise. 
-		g2d.setFont(new Font("Sans Serif", Font.PLAIN, Window.LABEL_TEXT_SIZE));
+		g2d.setFont(new Font("Sans Serif", Font.PLAIN, currWindowSize.getCONTROLS_TEXT_SIZE()));
+		
+		
+		int boardSize = currWindowSize.getBOARD_SIZE();
+		int gameBorder = currWindowSize.getGAME_BORDER();
+		int windowHeight = currWindowSize.getWINDOW_HEIGHT();
 		
 		//Only calculate labelpositions first time round. 
 		//We do this so it doesn't have to calculate the positions every single time the view is repainted. 
 		//It only saves a bit cpu, but we think it's worth it. 
 		if (this.firstPaint) {
-			calcItemPositions(g2d);
+			calcItemPositions(g2d, currWindowSize.getWINDOW_WIDTH(), currWindowSize.getTOP_CONTROLS_SIZE(), gameBorder);
 		}
 		
 		//Draw everything above the board.
 		this.drawControls(g2d);
 		
 		//Draw board background. 
-		g2d.drawImage(boardImg, Window.GAME_BORDER, Window.WINDOW_HEIGHT - Window.GAME_BORDER - Window.BOARD_SIZE, Window.BOARD_SIZE, Window.BOARD_SIZE, null);
 		
-		//Set font for text on tiles. 
-		g2d.setFont(new Font("Sans Serif", Font.ITALIC, Window.LABEL_TEXT_SIZE));
+		g2d.drawImage(boardImg, gameBorder, windowHeight - gameBorder - boardSize, boardSize, boardSize, null);
+		
+		//Set font for text when picture and labels are on
+		if (Window.getSettings().isPictureOn() && Window.getSettings().isLabelsOn()) {
+			g2d.setFont(new Font("Sans Serif", Font.ITALIC, this.getBoard().getTileSize()/5));
+		} else { //No picture is showing. Set font to usual
+			g2d.setFont(new Font("Sans Serif", Font.ITALIC, labelTextSize));
+		}
 		
 		//Calculate width of strings with 1 digit to 4 digits. 
 		if (this.firstPaint) {
+			System.out.println("Got here");
 			this.stringWidths = calcStringWidths(g2d);
 			this.stringHeight = g2d.getFontMetrics().getHeight();
 			this.firstPaint = false;
@@ -113,9 +122,14 @@ public class GamePanel extends JPanel {
 	
 	private void drawLabelInCorner(Graphics2D g2d, int x, int y, int xCoord, int yCoord, int cornerSize) {
 		
-		//add rectangle to the back of the label.
+		int width = cornerSize, height = cornerSize;
+		//add rectangle behind the label for readability
+		//If the tilenumber is larger than 99, make the label a bit wider. 
+		if (getBoard().getTiles()[x][y].getNumber() > 99) {
+			width *= 1.3;
+		}
 		g2d.setColor(LABEL_WHEN_CORNERED_BACKGROUND_COLOR);
-		g2d.fillRect(xCoord, yCoord, cornerSize, cornerSize);
+		g2d.fillRect(xCoord, yCoord, width, height);
 		
 		this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, cornerSize);
 		
@@ -192,19 +206,19 @@ public class GamePanel extends JPanel {
 	}
 	
 	//Helper method to calculate label positions. 
-	private void calcItemPositions(Graphics2D g2d) {
+	private void calcItemPositions(Graphics2D g2d, int windowWidth, int topControlsSize, int gameBorder) {
 		
 		//Calculate position so it will be in the middle. To do this we need to know the width of the label with current font. 
 		int movesLabelWidth = calcWidthOfString(g2d, "Move: " + this.getScore().getMoves());
 		
-		this.movesLabelxPos = (Window.WINDOW_WIDTH-movesLabelWidth)/2;
-		this.movesLabelyPos = g2d.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
+		this.movesLabelxPos = (windowWidth-movesLabelWidth)/2;
+		this.movesLabelyPos = g2d.getFontMetrics().getHeight() + topControlsSize / 4;
 		
-		this.timeLabelxPos = Window.GAME_BORDER;
-		this.timeLabelyPos = g2d.getFontMetrics().getHeight() + Window.TOP_CONTROLS_SIZE / 4;
+		this.timeLabelxPos = gameBorder;
+		this.timeLabelyPos = g2d.getFontMetrics().getHeight() + topControlsSize / 4;
 		
-		this.menuButtonXPos = Window.WINDOW_WIDTH - Window.GAME_BORDER - MENUBUTTON_SIZE;
-		this.menuButtonYPos = (Window.TOP_CONTROLS_SIZE - MENUBUTTON_SIZE) / 2;
+		this.menuButtonXPos = windowWidth - gameBorder - MENUBUTTON_SIZE;
+		this.menuButtonYPos = (topControlsSize - MENUBUTTON_SIZE) / 2;
 	}
 	
 	//Returns an array with the width of the labels according to how many digits there are. Goes from 1 to 4 digits. 
