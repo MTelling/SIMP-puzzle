@@ -123,7 +123,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String actionCommand = e.getActionCommand();
-		System.out.println(actionCommand);
 		switch (actionCommand) {
 
 			//animation on or off
@@ -173,14 +172,12 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	
 					//Check if it's a valid boardSize and set it or revert to the one before. 
 					if (boardSize >= 3 && boardSize <= 100) {
-						System.out.println("Got here with boardsize " + boardSize);
 						settings.setTilesPerRowInBoard(boardSize);
 						boardSizeChooser.setText(newBoardSize);
 					} else {
 						boardSizeChooser.setText("" + settings.getTilesPerRowInBoard());
 					}
 				} catch (Exception exc){
-					System.out.println("got here");
 					boardSizeChooser.setText("" + settings.getTilesPerRowInBoard());
 				}
 			
@@ -208,6 +205,8 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				
 			//Close settings window
 			case "Close settings":
+				
+				//TODO: Should do something different depending on where it's coming from. 
 				Window.swapView("mainMenu");
 				break;
 				
