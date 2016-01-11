@@ -35,6 +35,7 @@ public class Board implements Serializable {
 	//Helper method to make start new game more understandable. 
 	public void reset() {
 		// Make a new, solved board.
+		this.tilesPerRow = Window.getSettings().getTilesPerRowInBoard();
 		this.makeSolvedBoard();		
 	}
 	
