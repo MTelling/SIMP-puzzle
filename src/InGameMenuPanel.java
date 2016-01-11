@@ -1,44 +1,50 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class InGameMenuPanel extends JPanel implements ActionListener {
-
+public class InGameMenuPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-
-	GameState gameState;
 	
-	JButton btnContinueGame;
-	JButton btnNewGame;
-	JButton btnSaveGame;
-	JButton btnHighScore;
-	JButton btnSettings;
-	JButton btnQuitGame;
+	SimpController controller;
 	
-	public InGameMenuPanel(GameState gs) {
-		this.gameState = gs;
+	private JButton btnContinueGame;
+	private JButton btnNewGame;
+	private JButton btnSaveGame;
+	private JButton btnHighScore;
+	private JButton btnSettings;
+	private JButton btnQuitGame;
+	
+	public InGameMenuPanel(SimpController controller) {
+		this.controller = controller;
 		
-		addButton(btnContinueGame, "Continue Game");
-		addButton(btnNewGame, "New Game");
-		addButton(btnSaveGame, "Save Game");
-		addButton(btnHighScore, "Highscores");
-		addButton(btnContinueGame, "Settings");
-		addButton(btnSettings, "Exit to Main Menu");
+		//Create Buttons
+		this.addButton(btnContinueGame, "Continue Game", "ContinueGame");
+		this.addButton(btnNewGame, "New Game", "NewGame");
+		this.addButton(btnSaveGame, "Save Game", "SaveGame");
+		this.addButton(btnHighScore, "Highscores", "Highscores");
+		this.addButton(btnSettings, "Settings", "Settings");
+		this.addButton(btnQuitGame, "Exit to Main Menu", "ExitToMainMenu");
 		this.add(Box.createVerticalGlue());
 		
-		this.setBounds(Window.GAME_BORDER, Window.GAME_BORDER, Window.WINDOW_WIDTH - 2 * Window.GAME_BORDER, Window.WINDOW_HEIGHT  - 2 * Window.GAME_BORDER);
+		//Set boundaries for the ingame menu
+		this.resetBounds();
 		this.setOpaque(false);
 	}
 	
-	private void addButton(JButton button, String label) {
+	public void resetBounds() {
+		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		this.setBounds(currWindowSize.getGAME_BORDER(), 
+				currWindowSize.getGAME_BORDER(), 
+				currWindowSize.getWINDOW_WIDTH() - 2 * currWindowSize.getGAME_BORDER(), 
+				currWindowSize.getWINDOW_HEIGHT()  - 2 * currWindowSize.getGAME_BORDER());
+	}
+	
+	private void addButton(JButton button, String label, String actionCommand) {
 		button = new JButton(label) {
-
 			private static final long serialVersionUID = 1L;
 
 			{
@@ -46,10 +52,11 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 				setMaximumSize(getSize());
 			}
 		};
-		button.addActionListener(this);
+		button.addActionListener(this.controller);
 		button.setAlignmentX(CENTER_ALIGNMENT);
 		button.setPreferredSize(new Dimension(256, 48));
 		button.setFocusable(false);
+		button.setActionCommand("inGame" + actionCommand);
 		
 		this.add(Box.createVerticalGlue());
 		this.add(button);
@@ -60,28 +67,7 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 		super.paintComponent(g);
 		
 		g.setColor(new Color(128, 128, 128, 225));
-		g.fillRect(0, 0, 448 - Window.GAME_BORDER * 2, 512 - Window.GAME_BORDER * 2);
-	}
-
-	public void updateGameState(GameState gs) {
-		this.gameState = gs;
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("Continue Game")) {
-			Window.toggleMenu(true);
-		} else if (e.getActionCommand().equals("New Game")) {
-			gameState.getBoard().init();
-			gameState.getScore().reset();
-			Window.toggleMenu(false);
-		}else if (e.getActionCommand().equals("Save Game")) {
-			// SAVE THA GAME MUTHAFUCKAAA
-			SaveLoad.saveToFile(gameState, "SavedGame");
-			
-		} else if(e.getActionCommand().equals("Exit to Main Menu")) {
-				Window.swapView("mainMenu");
-		}
-	}
-	
+		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		g.fillRect(0, 0, currWindowSize.getWINDOW_WIDTH() - currWindowSize.getGAME_BORDER() * 2, currWindowSize.getWINDOW_HEIGHT() - currWindowSize.getGAME_BORDER() * 2);
+	}	
 }

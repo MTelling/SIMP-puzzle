@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-
-
 public class SaveLoad {
 	
 	public static final String FILE_EXT = "BearnaiseSovs";
@@ -19,10 +17,9 @@ public class SaveLoad {
 	
 	public static void saveToFile (Object object, String fileName) {
 		try {
-
-			file 		= new File(fileName + "." + FILE_EXT);
-			f_out 		= new FileOutputStream(file);
-			obj_out 	= new ObjectOutputStream (f_out);
+			file = new File(fileName + "." + FILE_EXT);
+			f_out = new FileOutputStream(file);
+			obj_out = new ObjectOutputStream (f_out);
 			
 			// if file doesn't exists; create it
 			if (!file.exists()) {
@@ -41,10 +38,9 @@ public class SaveLoad {
 	
 	public static Object loadFromFile(String fileName) {
 		try {
-
-			file 		= new File(fileName + "." + FILE_EXT);
-			f_in 		= new FileInputStream(file);
-			obj_in	 	= new ObjectInputStream (f_in);
+			file = new File(fileName + "." + FILE_EXT);
+			f_in = new FileInputStream(file);
+			obj_in = new ObjectInputStream (f_in);
 			
 			// continue only if file exists
 			if (file.exists()) {
@@ -55,7 +51,6 @@ public class SaveLoad {
 			f_out.close();
 			
 			return null;
-			
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

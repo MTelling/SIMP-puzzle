@@ -8,18 +8,13 @@ import javax.swing.JPanel;
 
 public class Window extends JFrame {
 	
-	private static final long serialVersionUID = 1L;
-	public static final int GAME_BORDER = 24;
-	public static final int BOARD_SIZE = 400;
-	public static final int BOARD_BORDER_SIZE = 4;
-	public static final int TOP_CONTROLS_SIZE = 48;
-	public static final int LABEL_TEXT_SIZE = 16;
-	public static final int WINDOW_WIDTH = BOARD_SIZE + 2 * GAME_BORDER;
-	public static final int WINDOW_HEIGHT = GAME_BORDER + BOARD_SIZE + TOP_CONTROLS_SIZE;
-	
+	private static final long serialVersionUID = 1L;	
+	private static Settings settings;
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
 	private static MainMenuPanel mainMenuPanel;
+	private static SettingsPanel settingsPanel;
+	private static ImageCropPanel imageCropPanel;
 	private static GamePanel gamePanel;
 	private static InGameMenuPanel inGameMenuPanel;
 	
@@ -29,48 +24,65 @@ public class Window extends JFrame {
 		@SuppressWarnings("unused")
 		Window game = new Window();
 	}
-	
 
-	
+	private JLayeredPane puzzlePane;
+
 	public Window() {
 		super("N-Puzzle Game");
 		
+		//Initialize the model.
+		settings = new Settings();
+		Board board = new Board();
+		board.init();
+		Score score = new Score();	
+		GameState gs = new GameState(board, score);
+				
 		//Create CardLayout
 		cardPanel = new JPanel();
 		this.getContentPane().add(cardPanel);
 		cardLayout = new CardLayout();
 		cardPanel.setLayout(cardLayout);
-		cardPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+		cardPanel.setPreferredSize(settings.getCurrWindowSize().getDimension());
 		
-		//Initialize the different panels
-		Board board = new Board(4);
-		board.init();
-		Score score = new Score();
-		GameState gs = new GameState(board, score);
-		
-		mainMenuPanel = new MainMenuPanel(gs);
-		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
-		
-		JLayeredPane puzzlePane = new JLayeredPane();
-		
-
+		//Create Controller
 		gamePanel = new GamePanel(gs);
 		SimpController controller = new SimpController(gamePanel);
-
-
-		gamePanel.addKeyListener(controller);
-		gamePanel.addMouseListener(controller);
-		gamePanel.addMouseMotionListener(controller);
-		inGameMenuPanel = new InGameMenuPanel(gs);
+		
+		//Create mainManuPanel
+		mainMenuPanel = new MainMenuPanel(controller);
+		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
+		
+		//Create settings panel and give it an instance of settings
+		settingsPanel = new SettingsPanel(settings, this);
+		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
+		
+		//Create ImageCropPanel
+		imageCropPanel = new ImageCropPanel(settings);
+		
+		//Create puzzlePane. 
+		puzzlePane = new JLayeredPane();
+		
+		//Create inGameMenuPanel initially not visible
+		inGameMenuPanel = new InGameMenuPanel(controller);
 		inGameMenuPanel.setLayout(new BoxLayout(inGameMenuPanel, BoxLayout.Y_AXIS));
 		inGameMenuPanel.setVisible(false);
+		
+		//Add gamePanel and inGameMenuPanel to puzzlePane
 		puzzlePane.add(gamePanel, new Integer(0), 0);
 		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
+
+		//Add controller to panels
+		gamePanel.addKeyListener(controller);
+		gamePanel.addMouseListener(controller);
+		gamePanel.addMouseMotionListener(controller);		
 		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
+		cardPanel.add(settingsPanel, "settings");
+		cardPanel.add(imageCropPanel, "imageCrop");
 		cardPanel.add(puzzlePane, "puzzle");
 		
+		//Set settings for main window. 
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
@@ -78,33 +90,38 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public static void loadGame(GameState gs) {
+	
+	public void setNewSize(Dimension newDimension) {
+				
+		cardPanel.setPreferredSize(newDimension);
+		inGameMenuPanel.setSize(newDimension);
+		inGameMenuPanel.resetBounds();
+		puzzlePane.setSize(newDimension);
+		gamePanel.setSize(newDimension);
 		
-		mainMenuPanel.updateGameState(gs);
-		inGameMenuPanel.updateGameState(gs);
-		gamePanel.updateGameState(gs);
-		cardLayout.show(cardPanel, "puzzle");
-		gamePanel.requestFocus();
+		this.pack();
+		
+		//Make sure the window stays centered. 
+		this.setLocationRelativeTo(null);
+	}
+	
+	public static Settings getSettings(){
+		return settings;
 	}
 	
 	public static void swapView(String key) {
-		
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
-		} else if(key.equals("mainMenu")) {
-			toggleMenu(false);
-			gamePanel.stopTiming();
+		} else if(key.equals("imageCrop")) {
+			imageCropPanel.init();
 		}
 	}
 	
-	public static void toggleMenu(boolean shouldStartTimer) {
+	public static void toggleMenu() {
 		menuToggle = !menuToggle;
 		inGameMenuPanel.setVisible(menuToggle);
-		if(menuToggle || !(shouldStartTimer)) {
-			gamePanel.stopTiming();
-		} else {
-			gamePanel.startTiming();
-		}
+		//Fixes issue of gamePanel being painted wrong when new game is started. 
+		gamePanel.repaint();
 	}
 }

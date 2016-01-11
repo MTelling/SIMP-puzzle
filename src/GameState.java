@@ -1,95 +1,113 @@
-import java.awt.Point;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Stack;
 
 public class GameState implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Stack<int[][]> undoMoveStack;
-	private Stack<Point> undoEmptyTileStack;
-	private Stack<int[][]> redoMoveStack;
-	private Stack<Point> redoEmptyTileStack;
+	private Stack<Move> undoMoveStack;
+	private Stack<Move> redoMoveStack;
 
 	private Score score;
 	private Board board;
 	
-	//TODO: Bugs if you go all the way to start two times. 
+	//GameState dependant settings
+	private boolean isUsingPictures;
+	private boolean useCornerLabels;
+	private int gameDifficulty;
+	
+	private boolean isGameDone;
+	
 	public GameState (Board board, Score score) {
-		this.undoMoveStack = new Stack<int[][]>();
-		this.undoEmptyTileStack = new Stack<Point>();
-		this.redoMoveStack = new Stack<int[][]>();
-		this.redoEmptyTileStack = new Stack<Point>();
+		this.undoMoveStack = new Stack<Move>();
+		this.redoMoveStack = new Stack<Move>();
 		
 		this.score = score;
 		this.board = board;
-
-	}
-	
-	public Score getScore() {
-		return score;
-	}
-	
-	public Board getBoard() {
-		return board;
-	}
-	
-	public int[][] getCurrentBoard() {
-		return undoMoveStack.peek();
-	}
-	
-	//
-	public void saveCurrentState() {
-		this.undoMoveStack.add(copyOf2DArray(this.board.getTiles()));
-		this.undoEmptyTileStack.add(copyOfPoint(this.board.getEmptyTile()));
 		
-		//TODO: Is it correct to clear redo stack here? 
-		this.redoEmptyTileStack.clear();
+		this.isUsingPictures = Window.getSettings().isPictureOn();
+		this.useCornerLabels = Window.getSettings().isLabelsOn();
+		this.gameDifficulty = Window.getSettings().getDifficulty();
+	}
+	
+	public void saveCurrentMove(Move move) {
+		this.undoMoveStack.push(move);
+				
 		this.redoMoveStack.clear();
 	}
 	
-	//TODO: comment in this.
 	public void undoMove () {
+		Move undoMove = this.undoMoveStack.pop();
+		//Add current tilepositions to redo stack, if you want to redo your undoing :)
+		this.redoMoveStack.push(undoMove);
 		
-		this.redoMoveStack.add(copyOf2DArray(this.board.getTiles()));
-		this.redoEmptyTileStack.add(copyOfPoint(this.board.getEmptyTile()));
+		//Update current tiles to last added move in undoStack.
+		this.board.setToAnimationState(undoMove.reverse());
 		
-		board.setTiles(undoMoveStack.pop());
-		board.setEmptyTile(undoEmptyTileStack.pop());
-		
-		score.addMoves(-1);
-		}
+		//You have undone a move. Let score know last move didn't happen
+		this.score.addMoves(-1);
+	}
 	
 	public void redoMove () {
-		this.undoEmptyTileStack.add(copyOfPoint(this.board.getEmptyTile()));
-		this.undoMoveStack.add(copyOf2DArray(this.board.getTiles()));
+		Move redoMove = this.redoMoveStack.pop();
+		//Add current tilepositions to redo stack, if you want to redo your undoing :)
+		this.undoMoveStack.push(redoMove);
 		
-		board.setTiles(redoMoveStack.pop());
-		board.setEmptyTile(redoEmptyTileStack.pop());
+		//Update current tiles to last added move in undoStack.
+		this.board.setToAnimationState(redoMove);
 		
-		score.addMoves(1);
+		//You have undone a move. Let score know last move didn't happen
+		this.score.addMoves(1);
 	}
 	
 	public boolean canUndo(){
-		return (this.undoMoveStack.size() > 0 && this.score.getMoves() != 0)? true:false;
+		return (this.undoMoveStack.size() > 0 && this.score.getMoves() != 0) ? true : false;
 	}
 	
 	public boolean canRedo(){
-		return this.redoMoveStack.size() > 0? true:false;
+		return this.redoMoveStack.size() > 0 ? true : false;
+	}
+		
+	public void restartGame() {
+		this.board.reset();
+		this.score.reset();
+		
+		this.undoMoveStack.clear();
+		
+		this.isUsingPictures = Window.getSettings().isPictureOn();
+		this.useCornerLabels = Window.getSettings().isLabelsOn();
+		this.gameDifficulty = Window.getSettings().getDifficulty();
+		
+		this.setGameDone(false);
 	}
 	
-	//Method to make a copy of a 2d array without just getting reference to the original array. 
-	private int[][] copyOf2DArray(int[][] array) {
-		int[][] newArray = new int[array.length][];
-		for (int i = 0; i < newArray.length; i++) {
-			newArray[i] = Arrays.copyOf(array[i], array[i].length);
-		}
-		return newArray;
+	/// GETTERS FROM HERE ///
+	
+	public Score getScore() {
+		return this.score;
 	}
 	
-	//Method to make a copy of a point without just getting the reference. 
-	private Point copyOfPoint(Point point) {
-		return new Point(point.x, point.y);
+	public Board getBoard() {
+		return this.board;
 	}
 
+	public boolean isGameDone() {
+		return this.isGameDone;
+	}
+	
+	public boolean isPictureOn() {
+		return this.isUsingPictures;
+	}
+	
+	public boolean isLabelsOn() {
+		return this.useCornerLabels;
+	}
+	
+	public int getDifficulty() {
+		return this.gameDifficulty;
+	}
+
+	public void setGameDone(boolean isGameDone) {
+		this.isGameDone = isGameDone;
+	}
+	
 }
