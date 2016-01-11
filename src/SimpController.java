@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.LinkedList;
 
 import javax.swing.Timer;
 
@@ -23,7 +24,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	}
 	
 	public void initMoveAnimator() {
-		this.moveAnimator = new Timer(gamePanel.getSettings().getRefreshRate(), new MoveAnimator(this));
+		this.moveAnimator = new Timer(Window.getSettings().getRefreshRate(), new MoveAnimator(this));
 	}
 	
 	private void makeMove(Move move) {
@@ -47,7 +48,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			//TODO: Somehow we need to check around here if the game is won. 
 			
 			//Move with or without animation depending on what the setting is in settings. 
-			showMove(gamePanel.getSettings().isAnimationOn());
+			showMove(Window.getSettings().isAnimationOn());
 			
 		}
 	}
@@ -117,13 +118,13 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					//TODO: Should this really start the clock on each time through? 
 					gamePanel.startClock();
 					
-					showMove(gamePanel.getSettings().isAnimationOn());
+					showMove(Window.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
-					showMove(gamePanel.getSettings().isAnimationOn());
+					showMove(Window.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				Window.toggleMenu(false);
@@ -132,7 +133,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				dx = dy = 0;
 				int keyCode = e.getKeyCode();
 				
-				int[] controls = gamePanel.getSettings().getControls();
+				int[] controls = Window.getSettings().getControls();
 				
 				if (keyCode == controls[0]) { //Moves tile to the left
 					dx = -1;
@@ -170,6 +171,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("mainMenuNewGame")) {
 			Window.swapView("puzzle");
+			this.scrambleBoard();
 		} else if (e.getActionCommand().equals("mainMenuLoadGame")) {
 			//Load the game from file
 			Object obj = SaveLoad.loadFromFile("SavedGame");
@@ -186,14 +188,21 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		} else if(e.getActionCommand().equals("inGameContinueGame")) {
 			Window.toggleMenu(true);
 		} else if (e.getActionCommand().equals("inGameNewGame")) {
-			this.gamePanel.getGameState().restartGame();
 			Window.toggleMenu(false);
+			this.gamePanel.getGameState().restartGame();
+			this.scrambleBoard();
 		} else if (e.getActionCommand().equals("inGameSaveGame")) {
 			SaveLoad.saveToFile(this.gamePanel.getGameState(), "SavedGame");
 		} else if(e.getActionCommand().equals("inGameExitToMainMenu")) {
 				Window.swapView("mainMenu");
 		}
-	}	
+	}
+	
+	public void scrambleBoard() {
+		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
+		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this.gamePanel, scramblingSequence));
+		scrambleAnimationTimer.start();
+	}
 	
 	/// SETTERS FROM HERE ///
 	

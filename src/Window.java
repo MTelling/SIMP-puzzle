@@ -17,6 +17,7 @@ public class Window extends JFrame {
 	public static final int WINDOW_WIDTH = BOARD_SIZE + 2 * GAME_BORDER;
 	public static final int WINDOW_HEIGHT = GAME_BORDER + BOARD_SIZE + TOP_CONTROLS_SIZE;
 	
+	private static Settings settings;
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
 	private static MainMenuPanel mainMenuPanel;
@@ -36,11 +37,11 @@ public class Window extends JFrame {
 		super("N-Puzzle Game");
 		
 		//Initialize the model.
-		Settings settings = new Settings();
+		settings = new Settings();
 		Board board = new Board(settings.getTilesPerRowInBoard());
 		board.init();
 		Score score = new Score();	
-		GameState gs = new GameState(board, score, settings);
+		GameState gs = new GameState(board, score);
 				
 		//Create CardLayout
 		cardPanel = new JPanel();
@@ -90,6 +91,10 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 	
+	public static Settings getSettings(){
+		return settings;
+	}
+	
 	public static void loadGame(GameState gs) {
 		gamePanel.updateGameState(gs);
 		cardLayout.show(cardPanel, "puzzle");
@@ -100,9 +105,6 @@ public class Window extends JFrame {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
-			
-			//TODO: THIS SHOULD NOT BE HERE!
-			gamePanel.scrambleBoard();
 		} else if(key.equals("mainMenu")) {
 			toggleMenu(false);
 			gamePanel.stopClock();

@@ -24,7 +24,7 @@ public class MoveSequenceAnimator implements ActionListener{
 			animating = true;
 		}
 		
-		if(gamePanel.getBoard().moveWithAnimation(gamePanel.getSettings().getScrambleAnimationSpeed())) {
+		if(gamePanel.getBoard().moveWithAnimation(Window.getSettings().getScrambleAnimationSpeed())) {
 			gamePanel.repaint();
 			animating = false;
 			moves.remove(0);

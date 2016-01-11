@@ -22,7 +22,7 @@ public class MoveAnimator implements ActionListener {
 			firstTime = false;
 		}
 		
-		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(simpController.getGamePanel().getSettings().getAnimationSpeed());
+		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getAnimationSpeed());
 		
 		if(arrivedAtFinalPosition) {	
 			
