@@ -27,54 +27,33 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	private ButtonGroup labelsToggle;
 	private ButtonGroup windowSizeToggle;
 	
+	private JButton exitButton;
+	private JButton choosePicture;
+	private JButton setBoardSizeButton;
+	private Box labelsToggleContainer; //So you can hide the "show labels in corner of tile" if game type is set to numbers.
+	private JTextField boardSizeChooser;
+	private JSlider fpsSlider;
+	
 	private JRadioButton gameTypeNumbers;
 	private JRadioButton gameTypePicture;
-	
-	
-	private JButton choosePicture;
-	
-	private Box labelsToggleContainer; //So you can hide the "show labels in corner of tile" if game type is set to numbers.
-	
-	private JButton setBoardSizeButton;
-	private JTextField boardSizeChooser;
-	
-	private JSlider fpsSlider;
-
-	private JButton exitButton;
-	
-	private Settings settings;
-
 	private JRadioButton animationOn;
-
 	private JRadioButton animationOff;
-
 	private JRadioButton normalControls;
-
 	private JRadioButton invertedControls;
-
 	private JRadioButton labelsOn;
-
 	private JRadioButton labelsOff;
-
 	private JRadioButton slowAnimation;
-
 	private JRadioButton mediumAnimation;
-
 	private JRadioButton fastAnimation;
-
 	private JRadioButton easyGame;
-
 	private JRadioButton mediumGame;
-
 	private JRadioButton hardGame;
-	
 	private JRadioButton smallWindow;
-
 	private JRadioButton largeWindow;
-
 	private JRadioButton mediumWindow;
 
 	private Window window;
+	private Settings settings;
 
 	
 	public SettingsPanel(Settings settings, Window window) {
