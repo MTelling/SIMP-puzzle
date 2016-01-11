@@ -35,16 +35,16 @@ public class Settings implements Serializable{
 		this.setControlsNormal();
 		
 		//Set difficulty
-		this.setDifficulty(100);
+		this.setDifficulty(19);
 		
 		//Sets tiles per row in the board
 		this.setTilesPerRowInBoard(4);
 		
 		//Set speed for the scrambling animation
-		this.setScrambleAnimationSpeed(difficulty/2 + 10);
+		this.setScrambleAnimationSpeed(difficulty/2 + tilesPerRowInBoard*5);
 		
 		//Set speed for normal move animation
-		this.setAnimationSpeed(5);
+		this.setAnimationSpeed(2);
 		
 		//Turn animation on and off. 
 		this.isAnimationOn = true;
@@ -53,10 +53,10 @@ public class Settings implements Serializable{
 		this.isPictureOn = true;
 		
 		//Turn labels on or off when picture is active.
-		this.isLabelsOn = true;
+		this.isLabelsOn = false;
 		
 		//Set frames per second
-		this.setFramesPerSecond(80);
+		this.setFramesPerSecond(90);
 		
 		//calculate refreshRate for drawing.
 		this.refreshRate = (int)Math.round(1000.0/framesPerSecond);
@@ -128,6 +128,14 @@ public class Settings implements Serializable{
 
 	public boolean isPictureOn() {
 		return this.isPictureOn;
+	}
+	
+	public boolean isControlsNormal() {
+		if (this.controls.equals(NORMAL_CONTROLS)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public int getScrambleAnimationSpeed() {
