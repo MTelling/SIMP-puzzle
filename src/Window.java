@@ -95,6 +95,7 @@ public class Window extends JFrame {
 				
 		cardPanel.setPreferredSize(newDimension);
 		inGameMenuPanel.setSize(newDimension);
+		inGameMenuPanel.resetBounds();
 		puzzlePane.setSize(newDimension);
 		gamePanel.setSize(newDimension);
 		

@@ -344,9 +344,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		}
 	}
 	
-	
-	/// Methods for creating the UI ///
-	
+		
 	/// Methods for creating UI ///
 
 	private void createGameTypeChooser() {

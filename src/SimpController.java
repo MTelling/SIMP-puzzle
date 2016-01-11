@@ -67,6 +67,50 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		}
 	}
 	
+	private void scrambleBoard() {
+		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
+		
+		if (Window.getSettings().isAnimationScramblingOn()) {
+			//Show scramble
+			Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
+			scrambleAnimationTimer.start();
+		} else {//Don't show scramble
+			while (scramblingSequence.size() != 0) {
+				gamePanel.getBoard().setToAnimationState(scramblingSequence.get(0));
+				gamePanel.getBoard().moveWithoutAnimation();
+				scramblingSequence.remove(0);
+			}
+		}
+
+	}
+	
+	//1000 is a 1000milliseconds so the timer will fire each second. 
+		private Timer clock = new Timer(1000, new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
+				gamePanel.getScore().addSeconds(1);
+				gamePanel.repaint();
+				System.out.println(gamePanel.getBoard().toString());
+
+				//TODO: We must agree on where to put this. 
+				if (gamePanel.getGameState().isGameDone()) {
+					gamePanel.getGameState().setGameDone(true);
+					JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
+					stopClock();
+				}
+			}
+		});
+		
+		public void startClock () {
+			clock.start();
+		}
+		
+		public void stopClock() {
+			clock.stop();
+		}
+	
 	/// ALL EVENTS FROM HERE /// 
 
 	@Override
@@ -224,40 +268,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		}
 	}
 	
-
-	private void scrambleBoard() {
-		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
-		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
-		scrambleAnimationTimer.start();
-
-	}
-	
-	//1000 is a 1000milliseconds so the timer will fire each second. 
-		private Timer clock = new Timer(1000, new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
-				gamePanel.getScore().addSeconds(1);
-				gamePanel.repaint();
-				System.out.println(gamePanel.getBoard().toString());
-
-				//TODO: We must agree on where to put this. 
-				if (gamePanel.getGameState().isGameDone()) {
-					gamePanel.getGameState().setGameDone(true);
-					JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
-					stopClock();
-				}
-			}
-		});
-		
-		public void startClock () {
-			clock.start();
-		}
-		
-		public void stopClock() {
-			clock.stop();
-		}
 	
 	/// SETTERS FROM HERE ///
 	

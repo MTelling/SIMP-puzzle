@@ -31,12 +31,16 @@ public class InGameMenuPanel extends JPanel {
 		this.add(Box.createVerticalGlue());
 		
 		//Set boundaries for the ingame menu
+		this.resetBounds();
+		this.setOpaque(false);
+	}
+	
+	public void resetBounds() {
 		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
 		this.setBounds(currWindowSize.getGAME_BORDER(), 
 				currWindowSize.getGAME_BORDER(), 
 				currWindowSize.getWINDOW_WIDTH() - 2 * currWindowSize.getGAME_BORDER(), 
 				currWindowSize.getWINDOW_HEIGHT()  - 2 * currWindowSize.getGAME_BORDER());
-		this.setOpaque(false);
 	}
 	
 	private void addButton(JButton button, String label, String actionCommand) {

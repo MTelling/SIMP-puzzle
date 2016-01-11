@@ -16,6 +16,7 @@ public class Settings implements Serializable{
 	
 	//Move with or without animation
 	private boolean isAnimationOn;
+	private boolean isAnimationScramblingOn;
 		
 	//Set picture to off or on and decides if the picture should be with or without labels. 
 	private boolean isPictureOn;
@@ -35,6 +36,9 @@ public class Settings implements Serializable{
 	private WindowSize CurrWindowSize;
 	
 	public Settings() {
+		
+		//Set animation scrambling on/off
+		this.setAnimationScramblingOn(true);
 		
 		//Set windowsize to Small initally
 		this.setCurrWindowSize(WindowSize.LARGE);
@@ -119,6 +123,10 @@ public class Settings implements Serializable{
 	public void setLabelsOn(boolean isLabelsOn) {
 		this.isLabelsOn = isLabelsOn;
 	}
+
+	public void setAnimationScramblingOn(boolean isAnimationScramblingOn) {
+		this.isAnimationScramblingOn = isAnimationScramblingOn;
+	}
 	
 	public void setGamePicture(String picture) {
 		this.gamePicture = picture;
@@ -181,5 +189,10 @@ public class Settings implements Serializable{
 	public int getTilesPerRowInBoard() {
 		return tilesPerRowInBoard;
 	}
+
+	public boolean isAnimationScramblingOn() {
+		return isAnimationScramblingOn;
+	}
+
 
 }
