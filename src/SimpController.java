@@ -72,7 +72,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void mousePressed(MouseEvent e) {
 		if (!this.isAnimating) {
 			if (!Window.menuToggle) {
-				
 				if (e.getY() > (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 
 						&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
 					if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.MENUBUTTON_SIZE 
@@ -109,6 +108,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (!this.isAnimating) {
+			System.out.println("Muh");
 			//Redo undo if ctrl+z and ctrl+y
 			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
@@ -190,17 +190,20 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		} else if (e.getActionCommand().equals("inGameNewGame")) {
 			Window.toggleMenu(false);
 			this.gamePanel.getGameState().restartGame();
+			this.gamePanel.reset();
 			this.scrambleBoard();
 		} else if (e.getActionCommand().equals("inGameSaveGame")) {
 			SaveLoad.saveToFile(this.gamePanel.getGameState(), "SavedGame");
 		} else if(e.getActionCommand().equals("inGameExitToMainMenu")) {
-				Window.swapView("mainMenu");
+			this.gamePanel.getGameState().restartGame();
+			this.gamePanel.reset();
+			Window.swapView("mainMenu");
 		}
 	}
 	
 	public void scrambleBoard() {
 		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
-		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this.gamePanel, scramblingSequence));
+		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 		scrambleAnimationTimer.start();
 	}
 	

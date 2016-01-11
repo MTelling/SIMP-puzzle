@@ -36,12 +36,9 @@ public class GamePanel extends JPanel {
 	private int[] stringWidths; //Saves width of strings depending how many characters are in. 
 	private int stringHeight;
 	private boolean firstPaint;
-	private boolean animationInProgress;
 	private BufferedImage[] picList;
 	
 	public GamePanel(GameState gs) {
-		
-		this.animationInProgress = false;
 		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		this.setOpaque(true);
 		
@@ -282,14 +279,6 @@ public class GamePanel extends JPanel {
 	//Helper method to retrieve score from gameState
 	public Score getScore() {
 		return this.gameState.getScore();
-	}
-	
-	public boolean isAnimating() {
-		return this.animationInProgress;
-	}
-	
-	public void setAnimationInProgress(boolean animationInProgress) {
-		this.animationInProgress = animationInProgress;
 	}
 	
 }

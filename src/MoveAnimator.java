@@ -10,7 +10,7 @@ public class MoveAnimator implements ActionListener {
 	
 	public MoveAnimator(SimpController simpController) {
 		this.simpController = simpController;
-		this.firstTime = false;
+		this.firstTime = true;
 	}
 	
 	//This function will be called every time the timer ticks.
@@ -25,16 +25,15 @@ public class MoveAnimator implements ActionListener {
 		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getAnimationSpeed());
 		
 		if(arrivedAtFinalPosition) {	
-			
-			simpController.getGamePanel().repaint();
-			
-			//Tell the controller that the animation is done, and reset for next time the timer is called. 
-			simpController.setAnimating(false);
-			firstTime = true;
-			
 			//Ask the timer to stop ticking, because the tile should now be in the correct place. 
 			((Timer)(e.getSource())).stop();
 			
+			//Tell the controller that the animation is done, and reset for next time the timer is called. 
+			simpController.setAnimating(false);
+			
+			firstTime = true;
+			
+			simpController.getGamePanel().repaint();
 		} else {
 			simpController.getGamePanel().repaint();
 		}

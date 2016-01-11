@@ -71,11 +71,8 @@ public class GameState implements Serializable {
 		this.setGameDone(false);
 	}
 	
-
-	
 	/// GETTERS FROM HERE ///
 	
-
 	public Score getScore() {
 		return this.score;
 	}
