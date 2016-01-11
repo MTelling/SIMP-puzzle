@@ -29,15 +29,18 @@ public class Settings implements Serializable{
 	private int difficulty;
 	private int tilesPerRowInBoard;
 	
-
+	private WindowSize CurrWindowSize;
 	
 	public Settings() {
+		
+		//Set windowsize to Small initally
+		this.setCurrWindowSize(WindowSize.LARGE);
 		
 		//Set settings to Normal or inverted. 
 		this.setControlsNormal();
 		
 		//Set difficulty
-		this.setDifficulty(Difficulty.MEDIUM.getValue());
+		this.setDifficulty(Difficulty.EASY.getValue());
 		
 		//Sets tiles per row in the board
 		this.setTilesPerRowInBoard(3);
@@ -46,13 +49,13 @@ public class Settings implements Serializable{
 		this.setScrambleAnimationSpeed(difficulty/2 + tilesPerRowInBoard*5);
 		
 		//Set speed for normal move animation
-		this.setAnimationSpeed(AnimationSpeed.MEDIUM.getValue());
+		this.setAnimationSpeed(AnimationSpeed.FAST.getValue());
 		
 		//Turn animation on and off. 
 		this.isAnimationOn = true;
 		
 		//Turn pictures on or off.
-		this.isPictureOn = false;
+		this.isPictureOn = true;
 		
 		//Turn labels on or off when picture is active.
 		this.isLabelsOn = true;
@@ -69,7 +72,11 @@ public class Settings implements Serializable{
 	public void setControlsNormal() {
 		this.controls = NORMAL_CONTROLS;
 	}
-	
+
+	public void setCurrWindowSize(WindowSize currWindowSize) {
+		CurrWindowSize = currWindowSize;
+	}
+
 	public void setControlsInverted() {
 		this.controls = INVERTED_CONTROLS;
 	}
@@ -108,6 +115,10 @@ public class Settings implements Serializable{
 	}
 	
 	/// GETTERS FROM HERE /////
+	
+	public WindowSize getCurrWindowSize() {
+		return CurrWindowSize;
+	}
 	
 	public int getFramesPerSecond() {
 		return framesPerSecond;

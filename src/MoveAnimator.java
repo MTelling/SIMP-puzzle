@@ -34,7 +34,13 @@ public class MoveAnimator implements ActionListener {
 			firstTime = true;
 			
 			simpController.getGamePanel().repaint();
-		} else {
+			
+			//After each move, check if the game is won. 
+			if (simpController.getGamePanel().getBoard().isGameOver()) {
+				simpController.getGamePanel().getGameState().setGameDone(true);
+			}
+			
+		} else { //Repaint on each time through - no matter what. 
 			simpController.getGamePanel().repaint();
 		}
 	}

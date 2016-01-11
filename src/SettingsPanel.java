@@ -1,15 +1,11 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.NumberFormat;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -17,8 +13,6 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 
 
 public class SettingsPanel extends JPanel implements ActionListener, ChangeListener{
@@ -73,10 +67,19 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	private JRadioButton mediumGame;
 
 	private JRadioButton hardGame;
+	
+	private JRadioButton smallWindow;
+
+	private JRadioButton largeWindow;
+
+	private JRadioButton mediumWindow;
+
+	private Window window;
 
 	
-	public SettingsPanel(Settings settings) {
+	public SettingsPanel(Settings settings, Window window) {
 		this.settings = settings;
+		this.window = window;
 		
 		this.add(Box.createVerticalGlue());
 		
@@ -210,6 +213,21 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				Window.swapView("mainMenu");
 				break;
 				
+			
+			//Change size of window
+			case "smallWindow":
+				settings.setCurrWindowSize(WindowSize.SMALL);
+				window.setNewSize(settings.getCurrWindowSize().getDimension());
+				break;
+			case "mediumWindow":
+				settings.setCurrWindowSize(WindowSize.MEDIUM);
+				window.setNewSize(settings.getCurrWindowSize().getDimension());
+				break;
+			case "largeWindow":
+				settings.setCurrWindowSize(WindowSize.LARGE);
+				window.setNewSize(settings.getCurrWindowSize().getDimension());
+				break;
+				
 			default: break;
 		}
 		
@@ -243,6 +261,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		loadLabelsSetting();
 		loadAnimationSpeed();
 		loadAnimationSetting();
+		loadWindowSize();
 	}
 	
 	private void loadDifficultySetting() {
@@ -252,6 +271,16 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 			mediumGame.setSelected(true);
 		} else {
 			hardGame.setSelected(true);
+		}
+	}
+	
+	private void loadWindowSize() {
+		if (settings.getCurrWindowSize() == WindowSize.SMALL) {
+			smallWindow.setSelected(true);
+		} else if (settings.getCurrWindowSize() == WindowSize.MEDIUM) {
+			mediumWindow.setSelected(true);
+		} else {
+			largeWindow.setSelected(true);
 		}
 	}
 	
@@ -523,22 +552,29 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	
 	private void createWindowSizeChooser() {
 		JLabel windowSizeLabel = new JLabel("Window size: ");
-		JRadioButton small = new JRadioButton("Small");
-		small.setSelected(true);
-		JRadioButton medium = new JRadioButton("Medium");
-		JRadioButton large = new JRadioButton("Large");
+		smallWindow = new JRadioButton("Small");
+		smallWindow.setActionCommand("smallWindow");
+		mediumWindow = new JRadioButton("Medium");
+		mediumWindow.setActionCommand("mediumWindow");
+		largeWindow = new JRadioButton("Large");
+		largeWindow.setActionCommand("largeWindow");
+		
+		//Connect to controls
+		smallWindow.addActionListener(this);
+		mediumWindow.addActionListener(this);
+		largeWindow.addActionListener(this);
 		
 		windowSizeToggle = new ButtonGroup();
-		windowSizeToggle.add(small);
-		windowSizeToggle.add(medium);
-		windowSizeToggle.add(large);
+		windowSizeToggle.add(smallWindow);
+		windowSizeToggle.add(mediumWindow);
+		windowSizeToggle.add(largeWindow);
 		
 		
 		Box windowSizeContainer = new Box(BoxLayout.LINE_AXIS);
 		windowSizeContainer.add(windowSizeLabel);
-		windowSizeContainer.add(small);
-		windowSizeContainer.add(medium);
-		windowSizeContainer.add(large);
+		windowSizeContainer.add(smallWindow);
+		windowSizeContainer.add(mediumWindow);
+		windowSizeContainer.add(largeWindow);
 		
 		this.add(windowSizeContainer);
 		

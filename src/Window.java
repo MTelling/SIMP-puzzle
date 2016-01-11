@@ -8,15 +8,7 @@ import javax.swing.JPanel;
 
 public class Window extends JFrame {
 	
-	private static final long serialVersionUID = 1L;
-	public static final int GAME_BORDER = 24;
-	public static final int BOARD_SIZE = 400;
-	public static final int BOARD_BORDER_SIZE = 4;
-	public static final int TOP_CONTROLS_SIZE = 48;
-	public static final int LABEL_TEXT_SIZE = 16;
-	public static final int WINDOW_WIDTH = BOARD_SIZE + 2 * GAME_BORDER;
-	public static final int WINDOW_HEIGHT = GAME_BORDER + BOARD_SIZE + TOP_CONTROLS_SIZE;
-	
+	private static final long serialVersionUID = 1L;	
 	private static Settings settings;
 	private static CardLayout cardLayout;
 	private static JPanel cardPanel;
@@ -31,6 +23,8 @@ public class Window extends JFrame {
 		@SuppressWarnings("unused")
 		Window game = new Window();
 	}
+
+	private JLayeredPane puzzlePane;
 
 	public Window() {
 		super("N-Puzzle Game");
@@ -47,7 +41,7 @@ public class Window extends JFrame {
 		this.getContentPane().add(cardPanel);
 		cardLayout = new CardLayout();
 		cardPanel.setLayout(cardLayout);
-		cardPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+		cardPanel.setPreferredSize(settings.getCurrWindowSize().getDimension());
 		
 		//Create Controller
 		gamePanel = new GamePanel(gs);
@@ -58,11 +52,11 @@ public class Window extends JFrame {
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
 		
 		//Create settings panel and give it an instance of settings
-		settingsPanel = new SettingsPanel(settings);
+		settingsPanel = new SettingsPanel(settings, this);
 		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
 		
 		//Create puzzlePane. 
-		JLayeredPane puzzlePane = new JLayeredPane();
+		puzzlePane = new JLayeredPane();
 		
 		//Create inGameMenuPanel initially not visible
 		inGameMenuPanel = new InGameMenuPanel(controller);
@@ -89,6 +83,20 @@ public class Window extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+	
+	
+	public void setNewSize(Dimension newDimension) {
+				
+		cardPanel.setPreferredSize(newDimension);
+		inGameMenuPanel.setSize(newDimension);
+		puzzlePane.setSize(newDimension);
+		gamePanel.setSize(newDimension);
+		
+		this.pack();
+		
+		//Make sure the window stays centered. 
+		this.setLocationRelativeTo(null);
 	}
 	
 	public static Settings getSettings(){

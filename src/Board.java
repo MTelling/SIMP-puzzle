@@ -22,7 +22,7 @@ public class Board implements Serializable {
 				&& Window.getSettings().getTilesPerRowInBoard() <= MAX_BOARDSIZE) {
 			this.tilesPerRow = Window.getSettings().getTilesPerRowInBoard();
 			this.tiles = new Tile[tilesPerRow][tilesPerRow];
-			this.tileSize = (Window.WINDOW_WIDTH - Window.GAME_BORDER * 2 - Window.BOARD_BORDER_SIZE * 2) / tilesPerRow;
+			this.tileSize = (Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH() - Window.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 - Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
 		} else {
 			throw new IllegalArgumentException("Invalid board size");
 		}
@@ -38,7 +38,7 @@ public class Board implements Serializable {
 		// Make a new, solved board.
 		this.tilesPerRow = Window.getSettings().getTilesPerRowInBoard();
 		this.tiles = new Tile[tilesPerRow][tilesPerRow];
-		this.tileSize = (Window.WINDOW_WIDTH - Window.GAME_BORDER * 2 - Window.BOARD_BORDER_SIZE * 2) / tilesPerRow;
+		this.tileSize = (Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH() - Window.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 - Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
 		this.makeSolvedBoard();		
 	}
 	
@@ -50,8 +50,8 @@ public class Board implements Serializable {
 		for(int y = 0; y < this.tilesPerRow; y++) {
 			for(int x = 0; x < this.tilesPerRow; x++) {
 				//create all tiles in board. 
-					int xCoord = Window.GAME_BORDER + Window.BOARD_BORDER_SIZE + (x * this.tileSize);
-					int yCoord =  Window.WINDOW_HEIGHT - Window.GAME_BORDER - ((this.tilesPerRow - y) * (this.tileSize)) - Window.BOARD_BORDER_SIZE;
+					int xCoord = Window.getSettings().getCurrWindowSize().getGAME_BORDER() + Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() + (x * this.tileSize);
+					int yCoord =  Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT() - Window.getSettings().getCurrWindowSize().getGAME_BORDER() - ((this.tilesPerRow - y) * (this.tileSize)) - Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE();
 					this.tiles[x][y] = new Tile(tileCount, xCoord, yCoord);
 					tileCount++;
 			}
