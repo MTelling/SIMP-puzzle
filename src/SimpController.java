@@ -109,7 +109,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (!this.isAnimating) {
-			System.out.println("Muh");
 			//Redo undo if ctrl+z and ctrl+y
 			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
@@ -176,6 +175,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("mainMenuNewGame")) {
 			Window.swapView("puzzle");
+			gamePanel.getGameState().restartGame();
 			this.scrambleBoard();
 		} else if (e.getActionCommand().equals("mainMenuLoadGame")) {
 			//Load the game from file
@@ -209,7 +209,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		}
 	}
 	
-	public void scrambleBoard() {
+	private void scrambleBoard() {
 		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
 		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 		scrambleAnimationTimer.start();
