@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class SimpController implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
@@ -33,7 +34,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		if (gamePanel.getBoard().isMoveValid(move)) {
 			//Start time if it's the first move in the game, or if it's the first new move after load game. 
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
-				gamePanel.startClock();
+				this.startClock();
 			}
 			
 			//Before making the move, save current game stat to gameState. 
@@ -76,7 +77,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 						&& e.getY() < (Window.TOP_CONTROLS_SIZE - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
 					if (e.getX() > Window.WINDOW_WIDTH-Window.GAME_BORDER-GamePanel.MENUBUTTON_SIZE 
 							&& e.getX() < Window.WINDOW_WIDTH - Window.GAME_BORDER) {
-						Window.toggleMenu(false);
+						Window.toggleMenu();
 					}
 				} else {
 					int xPos = (e.getX() - Window.GAME_BORDER) / (int)gamePanel.getBoard().getTileSize();
@@ -116,7 +117,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					gamePanel.getGameState().undoMove();
 					
 					//TODO: Should this really start the clock on each time through? 
-					gamePanel.startClock();
+					this.startClock();
 					
 					showMove(Window.getSettings().isAnimationOn());
 				}
@@ -127,7 +128,11 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					showMove(Window.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				Window.toggleMenu(false);
+				if(!Window.menuToggle)
+					this.stopClock();
+				else
+					this.startClock();
+				Window.toggleMenu();
 			} else if(!Window.menuToggle) {
 				int dx, dy;
 				dx = dy = 0;
@@ -186,9 +191,11 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		} else if(e.getActionCommand().equals("mainMenuExitGame")) {
 			System.exit(0);
 		} else if(e.getActionCommand().equals("inGameContinueGame")) {
-			Window.toggleMenu(true);
+			Window.toggleMenu();
+			this.startClock();
 		} else if (e.getActionCommand().equals("inGameNewGame")) {
-			Window.toggleMenu(false);
+			this.stopClock();
+			Window.toggleMenu();
 			this.gamePanel.getGameState().restartGame();
 			this.gamePanel.reset();
 			this.scrambleBoard();
@@ -197,6 +204,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		} else if(e.getActionCommand().equals("inGameExitToMainMenu")) {
 			this.gamePanel.getGameState().restartGame();
 			this.gamePanel.reset();
+			this.stopClock();
 			Window.swapView("mainMenu");
 		}
 	}
@@ -206,6 +214,33 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 		scrambleAnimationTimer.start();
 	}
+	
+	//1000 is a 1000milliseconds so the timer will fire each second. 
+		private Timer clock = new Timer(1000, new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
+				//TODO: THIS ASKS THE MODEL TO DO STUFF
+				gamePanel.getScore().addSeconds(1);
+				gamePanel.repaint();
+				
+				//TODO: We must agree on where to put this. 
+				if (gamePanel.getGameState().isGameDone()) {
+					gamePanel.getGameState().setGameDone(true);
+					JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
+					stopClock();
+				}
+			}
+		});
+		
+		public void startClock () {
+			clock.start();
+		}
+		
+		public void stopClock() {
+			clock.stop();
+		}
 	
 	/// SETTERS FROM HERE ///
 	

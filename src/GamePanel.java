@@ -61,35 +61,6 @@ public class GamePanel extends JPanel {
 		
 	}
 	
-	//1000 is a 1000milliseconds so the timer will fire each second. 
-	private Timer clock = new Timer(1000, new ActionListener(){
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
-			//TODO: THIS ASKS THE MODEL TO DO STUFF
-			getScore().addSeconds(1);
-			repaint();
-			
-			//TODO: We must agree on where to put this. 
-			if (gameState.isGameDone()) {
-				gameState.setGameDone(true);
-				JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
-				stopClock();
-			}
-		}
-	});
-	
-	public void startClock () {
-		clock.start();
-	}
-	
-	public void stopClock() {
-		clock.stop();
-	}
-	
-
-	
 	//TODO: THIS ASKS THE MODEL TO DO STUFF
 	public void checkIfGameIsOver() {
 		if (this.getBoard().isGameOver()){
