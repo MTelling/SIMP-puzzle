@@ -32,7 +32,6 @@ public class Window extends JFrame {
 		Window game = new Window();
 	}
 
-	
 	public Window() {
 		super("N-Puzzle Game");
 		
@@ -94,12 +93,6 @@ public class Window extends JFrame {
 	
 	public static Settings getSettings(){
 		return settings;
-	}
-	
-	public static void loadGame(GameState gs) {
-		gamePanel.updateGameState(gs);
-		cardLayout.show(cardPanel, "puzzle");
-		gamePanel.requestFocus();
 	}
 	
 	public static void swapView(String key) {
