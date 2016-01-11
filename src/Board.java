@@ -15,7 +15,7 @@ public class Board implements Serializable {
 	private Point nextEmptyTile;
 	private int tileSize;
 	
-	public Board() {
+	public Board() {	
 		//Check if boardsize is within allowed range
 		if(Window.getSettings().getTilesPerRowInBoard() >= MIN_BOARDSIZE 
 				&& Window.getSettings().getTilesPerRowInBoard() <= MAX_BOARDSIZE) {
@@ -36,6 +36,9 @@ public class Board implements Serializable {
 	public void reset() {
 		// Make a new, solved board.
 		this.tilesPerRow = Window.getSettings().getTilesPerRowInBoard();
+		this.tiles = new Tile[tilesPerRow][tilesPerRow];
+		this.tileSize = (Window.WINDOW_WIDTH - Window.GAME_BORDER * 2 - Window.BOARD_BORDER_SIZE * 2) / tilesPerRow;
+
 		this.makeSolvedBoard();		
 	}
 	

@@ -1,17 +1,27 @@
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.NumberFormat;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 
 
-public class SettingsPanel extends JPanel {
+public class SettingsPanel extends JPanel implements ActionListener, ChangeListener{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -104,7 +114,124 @@ public class SettingsPanel extends JPanel {
 		this.add(Box.createVerticalGlue());
 
 		this.loadSettings();
+		
 	}
+	
+	/// ActionListener from here ///
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String actionCommand = e.getActionCommand();
+		switch (actionCommand) {
+
+			//animation on or off
+			case "animationOn": 
+				settings.setAnimationOn(true); 
+				break;
+			case "animationOff": 
+				settings.setAnimationOn(false); 
+				break;
+	
+			//Game type picture or numbers
+			case "gameTypeNumbers": 
+				settings.setPictureOn(false); 
+				loadGameTypeSetting(); 
+				break;
+			case "gameTypePicture": 
+				settings.setPictureOn(true); 
+				loadGameTypeSetting(); 
+				break;
+	
+			//Set labels in corners on or off
+			case "labelsOn":
+				settings.setLabelsOn(true);
+				break;
+			case "labelsOff":
+				settings.setLabelsOn(false);
+				break;
+			
+			//Set controls to normal/inverted
+			case "normalControls":
+				settings.setControlsNormal();
+				break;
+			case "invertedControls":
+				settings.setControlsInverted();
+				break;
+	
+			
+			//Set board size
+			case "setBoardSize": 
+				//Regular expression to remove everything but digits from the string.
+				String newBoardSize = boardSizeChooser.getText().replaceAll("[^0-9]+", "");
+
+				//Try to convert to int. If it doesn't succeed set back to original num.
+				//Should only happen if the field doesn't contain any integers at all. 
+				try {
+					int boardSize = Integer.parseInt(newBoardSize);
+	
+					//Check if it's a valid boardSize and set it or revert to the one before. 
+					if (boardSize >= 3 && boardSize <= 100) {
+						settings.setTilesPerRowInBoard(boardSize);
+						boardSizeChooser.setText(newBoardSize);
+					} else {
+						boardSizeChooser.setText("" + settings.getTilesPerRowInBoard());
+					}
+				} catch (Exception exc){
+					boardSizeChooser.setText("" + settings.getTilesPerRowInBoard());
+				}
+			
+			//Set animation speed
+			case "slowAnimation":
+				settings.setAnimationSpeed(AnimationSpeed.SLOW.getValue());
+				break;
+			case "mediumAnimation":
+				settings.setAnimationSpeed(AnimationSpeed.MEDIUM.getValue());
+				break;
+			case "fastAnimation":
+				settings.setAnimationSpeed(AnimationSpeed.FAST.getValue());
+				break;
+				
+			//Set difficulty
+			case "easyGame":
+				settings.setDifficulty(Difficulty.EASY.getValue());
+				break;
+			case "mediumGame":
+				settings.setDifficulty(Difficulty.MEDIUM.getValue());
+				break;
+			case "hardGame":
+				settings.setDifficulty(Difficulty.HARD.getValue());
+				break;
+				
+			//Close settings window
+			case "Close settings":
+				
+				//TODO: Should do something different depending on where it's coming from. 
+				Window.swapView("mainMenu");
+				break;
+				
+			default: break;
+		}
+		
+	}
+	
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		
+		Object source = e.getSource();
+		
+		//Set fps when the slider is moved. 
+		if (source instanceof JSlider) {
+			if(!fpsSlider.getValueIsAdjusting() && fpsSlider.getValue() != settings.getFramesPerSecond()) {
+				settings.setFramesPerSecond(fpsSlider.getValue());
+			}
+		}
+		
+	}
+	
+
+	
+	/// Methods to set values to what they are in settings ///
 	
 	//Set all settings to what they are in settings class.
 	public void loadSettings() {
@@ -118,12 +245,10 @@ public class SettingsPanel extends JPanel {
 		loadAnimationSetting();
 	}
 	
-	/// Methods to set values to what they are in settings ///
-	
 	private void loadDifficultySetting() {
-		if (settings.getDifficulty() < 5) {
+		if (settings.getDifficulty() == Difficulty.EASY.getValue()) {
 			easyGame.setSelected(true);
-		} else if (settings.getDifficulty() < 20) {
+		} else if (settings.getDifficulty() == Difficulty.MEDIUM.getValue()) {
 			mediumGame.setSelected(true);
 		} else {
 			hardGame.setSelected(true);
@@ -165,7 +290,7 @@ public class SettingsPanel extends JPanel {
 	}
 	
 	private void loadBoardSizeSetting() {
-		boardSizeChooser.setText(""+settings.getTilesPerRowInBoard());
+		boardSizeChooser.setText("" + settings.getTilesPerRowInBoard());
 	}
 	
 	private void loadLabelsSetting() {
@@ -177,9 +302,9 @@ public class SettingsPanel extends JPanel {
 	}
 	
 	private void loadAnimationSpeed() {
-		if (settings.getAnimationSpeed() <= 2) {
+		if (settings.getAnimationSpeed() == AnimationSpeed.SLOW.getValue()) {
 			slowAnimation.setSelected(true);
-		} else if (settings.getAnimationSpeed() < 6) {
+		} else if (settings.getAnimationSpeed() == AnimationSpeed.MEDIUM.getValue()) {
 			mediumAnimation.setSelected(true);
 		} else {
 			fastAnimation.setSelected(true);
@@ -188,16 +313,25 @@ public class SettingsPanel extends JPanel {
 	
 	
 	/// Methods for creating the UI ///
+	
+	/// Methods for creating UI ///
+
 	private void createGameTypeChooser() {
 		
 		JLabel gameTypeLabel = new JLabel("Game Type: ");
 		gameTypeNumbers = new JRadioButton("Numbers");
-		gameTypeNumbers.setSelected(true);
+		gameTypeNumbers.setActionCommand("gameTypeNumbers");
 		gameTypePicture = new JRadioButton("Picture");
+		gameTypePicture.setActionCommand("gameTypePicture");
+		
+		//Connect to controls
+		gameTypeNumbers.addActionListener(this);
+		gameTypePicture.addActionListener(this);
 		
 		gameTypeToggle = new ButtonGroup();
 		gameTypeToggle.add(gameTypeNumbers);
 		gameTypeToggle.add(gameTypePicture);
+		
 		
 		Box gameTypeContainer = new Box(BoxLayout.LINE_AXIS);
 		gameTypeContainer.add(gameTypeLabel);
@@ -213,9 +347,17 @@ public class SettingsPanel extends JPanel {
 	private void createDifficultyChooser() {
 		JLabel difficultyLabel = new JLabel("Difficulty: ");
 		easyGame = new JRadioButton("Easy");
-		easyGame.setSelected(true);
+		easyGame.setActionCommand("easyGame");
 		mediumGame = new JRadioButton("Medium");
+		mediumGame.setActionCommand("mediumGame");
 		hardGame = new JRadioButton("EXTREME");
+		hardGame.setActionCommand("hardGame");
+		
+		//Connect to controls
+		easyGame.addActionListener(this);
+		mediumGame.addActionListener(this);
+		hardGame.addActionListener(this);
+
 		
 		difficultyToggle = new ButtonGroup();
 		difficultyToggle.add(easyGame);
@@ -236,13 +378,17 @@ public class SettingsPanel extends JPanel {
 	private void createAnimationToggle() {
 		JLabel animationLabel = new JLabel("Animation on/off: ");
 		animationOn = new JRadioButton("On");
-		animationOn.setSelected(true);
+		animationOn.setActionCommand("animationOn");
 		animationOff = new JRadioButton("Off");
+		animationOff.setActionCommand("animationOff");
+		
+		//Connect to control
+		animationOn.addActionListener(this);
+		animationOff.addActionListener(this);
 		
 		animationToggle = new ButtonGroup();
 		animationToggle.add(animationOn);
 		animationToggle.add(animationOff);
-		
 		
 		Box animationToggleContainer = new Box(BoxLayout.LINE_AXIS);
 		animationToggleContainer.add(animationLabel);
@@ -255,12 +401,13 @@ public class SettingsPanel extends JPanel {
 	private void createBoardSizeChooser() {
 		JLabel boardSizeLabel = new JLabel("Board size: ");
 		boardSizeChooser = new JTextField();
-		boardSizeChooser.setText("4");
 		boardSizeChooser.setPreferredSize(new Dimension(40, boardSizeChooser.getPreferredSize().height));
 		boardSizeChooser.setMaximumSize(boardSizeChooser.getPreferredSize());
 		boardSizeChooser.setHorizontalAlignment(JTextField.CENTER);
 		
 		setBoardSizeButton = new JButton("Set size");
+		setBoardSizeButton.setActionCommand("setBoardSize");
+		setBoardSizeButton.addActionListener(this);
 		
 		Box boardSizeChooserContainer = new Box(BoxLayout.LINE_AXIS);
 		boardSizeChooserContainer.add(boardSizeLabel);
@@ -282,6 +429,9 @@ public class SettingsPanel extends JPanel {
 	    fpsSlider.setPaintTicks(true);
 	    fpsSlider.setPaintLabels(true);
 	    
+	    //Connect to control
+	    fpsSlider.addChangeListener(this);
+	    
 	    Box fpsContainer = new Box(BoxLayout.LINE_AXIS);
 		fpsContainer.add(fpsLabel);
 		fpsContainer.add(fpsSlider);
@@ -293,8 +443,13 @@ public class SettingsPanel extends JPanel {
 	private void createControlsChooser() {
 		JLabel controlsLabel = new JLabel("Controls: ");
 		normalControls = new JRadioButton("Normal");
-		normalControls.setSelected(true);
+		normalControls.setActionCommand("normalControls");
 		invertedControls = new JRadioButton("Inverted");
+		invertedControls.setActionCommand("invertedControls");
+		
+		//Connect to control
+		normalControls.addActionListener(this);
+		invertedControls.addActionListener(this);
 		
 		controlsToggle = new ButtonGroup();
 		controlsToggle.add(normalControls);
@@ -311,9 +466,16 @@ public class SettingsPanel extends JPanel {
 	private void createAnimationSpeedChooser() {
 		JLabel animationSpeedLabel = new JLabel("Animation speed: ");
 		slowAnimation = new JRadioButton("Slow");
-		slowAnimation.setSelected(true);
+		slowAnimation.setActionCommand("slowAnimation");
 		mediumAnimation = new JRadioButton("Medium");
+		mediumAnimation.setActionCommand("mediumAnimation");
 		fastAnimation = new JRadioButton("Fast");
+		fastAnimation.setActionCommand("fastAnimation");
+		
+		//Connect to controls
+		slowAnimation.addActionListener(this);
+		mediumAnimation.addActionListener(this);
+		fastAnimation.addActionListener(this);
 		
 		animationSpeedToggle = new ButtonGroup();
 		animationSpeedToggle.add(slowAnimation);
@@ -333,8 +495,13 @@ public class SettingsPanel extends JPanel {
 		
 		JLabel labelsOnLabel = new JLabel("Numbers in corner of tiles: ");
 		labelsOn = new JRadioButton("On");
-		labelsOn.setSelected(true);
+		labelsOn.setActionCommand("labelsOn");
 		labelsOff = new JRadioButton("Off");
+		labelsOff.setActionCommand("labelsOff");
+		
+		//Connect to controls
+		labelsOn.addActionListener(this);
+		labelsOff.addActionListener(this);
 		
 		labelsToggle = new ButtonGroup();
 		labelsToggle.add(labelsOn);
@@ -387,11 +554,18 @@ public class SettingsPanel extends JPanel {
 				setMaximumSize(getSize());
 			}
 		};
-		//TODO: CONNECT button.addActionListener(this);
+		button.addActionListener(this);
 		button.setAlignmentX(CENTER_ALIGNMENT);
 		button.setPreferredSize(new Dimension(256, 48));
+		button.setActionCommand(button.getName());
 		
 		this.add(Box.createVerticalGlue());
 		this.add(button);
 	}
+
+
+
+
+
+
 }

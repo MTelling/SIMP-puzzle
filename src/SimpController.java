@@ -180,6 +180,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("mainMenuNewGame")) {
 			Window.swapView("puzzle");
+			gamePanel.getGameState().restartGame();
+			gamePanel.reset();
 			this.scrambleBoard();
 		} else if (e.getActionCommand().equals("mainMenuLoadGame")) {
 			//Load the game from file
@@ -209,12 +211,14 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			this.gamePanel.getGameState().restartGame();
 			this.gamePanel.reset();
 			this.stopClock();
+			Window.toggleMenu();
 			Window.swapView("mainMenu");
 		}
 	}
 	
-	public void scrambleBoard() {
-		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(this.gamePanel.getGameState().getDifficulty());
+
+	private void scrambleBoard() {
+		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
 		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 		scrambleAnimationTimer.start();
 	}
