@@ -40,22 +40,22 @@ public class Settings implements Serializable{
 		this.setDifficulty(Difficulty.MEDIUM.getValue());
 		
 		//Sets tiles per row in the board
-		this.setTilesPerRowInBoard(4);
+		this.setTilesPerRowInBoard(3);
 		
 		//Set speed for the scrambling animation
 		this.setScrambleAnimationSpeed(difficulty/2 + tilesPerRowInBoard*5);
 		
 		//Set speed for normal move animation
-		this.setAnimationSpeed(AnimationSpeed.SLOW.getValue());
+		this.setAnimationSpeed(AnimationSpeed.MEDIUM.getValue());
 		
 		//Turn animation on and off. 
 		this.isAnimationOn = true;
 		
 		//Turn pictures on or off.
-		this.isPictureOn = true;
+		this.isPictureOn = false;
 		
 		//Turn labels on or off when picture is active.
-		this.isLabelsOn = false;
+		this.isLabelsOn = true;
 		
 		//Set frames per second
 		this.setFramesPerSecond(90);

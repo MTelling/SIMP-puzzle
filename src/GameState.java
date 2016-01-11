@@ -12,6 +12,7 @@ public class GameState implements Serializable {
 	
 	//GameState dependant settings
 	private boolean isUsingPictures;
+	private boolean useCornerLabels;
 	private int gameDifficulty;
 	
 	private boolean isGameDone;
@@ -24,6 +25,7 @@ public class GameState implements Serializable {
 		this.board = board;
 		
 		this.isUsingPictures = Window.getSettings().isPictureOn();
+		this.useCornerLabels = Window.getSettings().isLabelsOn();
 		this.gameDifficulty = Window.getSettings().getDifficulty();
 	}
 	
@@ -83,6 +85,18 @@ public class GameState implements Serializable {
 
 	public boolean isGameDone() {
 		return this.isGameDone;
+	}
+	
+	public boolean isPictureOn() {
+		return this.isUsingPictures;
+	}
+	
+	public boolean isLabelsOn() {
+		return this.useCornerLabels;
+	}
+	
+	public int getDifficulty() {
+		return this.gameDifficulty;
 	}
 
 	public void setGameDone(boolean isGameDone) {

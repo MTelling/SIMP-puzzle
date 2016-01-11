@@ -32,13 +32,12 @@ public class Window extends JFrame {
 		Window game = new Window();
 	}
 
-	
 	public Window() {
 		super("N-Puzzle Game");
 		
 		//Initialize the model.
 		settings = new Settings();
-		Board board = new Board(settings.getTilesPerRowInBoard());
+		Board board = new Board();
 		board.init();
 		Score score = new Score();	
 		GameState gs = new GameState(board, score);
@@ -96,18 +95,10 @@ public class Window extends JFrame {
 		return settings;
 	}
 	
-	public static void loadGame(GameState gs) {
-		gamePanel.updateGameState(gs);
-		cardLayout.show(cardPanel, "puzzle");
-		gamePanel.requestFocus();
-	}
-	
 	public static void swapView(String key) {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
-		} else if(key.equals("mainMenu")) {
-			toggleMenu();
 		}
 	}
 	

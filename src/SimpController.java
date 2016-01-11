@@ -115,8 +115,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
 					
-					//TODO: Should this really start the clock on each time through? 
-					this.startClock();
+					if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
+						this.startClock();
+					}
 					
 					showMove(Window.getSettings().isAnimationOn());
 				}
@@ -124,6 +125,11 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
+					
+					if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
+						this.startClock();
+					}
+					
 					showMove(Window.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -133,8 +139,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					this.startClock();
 				Window.toggleMenu();
 			} else if(!Window.menuToggle) {
-				int dx, dy;
-				dx = dy = 0;
+				int dx = 0, dy = 0;
 				int keyCode = e.getKeyCode();
 				
 				int[] controls = Window.getSettings().getControls();
@@ -176,14 +181,15 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		if(e.getActionCommand().equals("mainMenuNewGame")) {
 			Window.swapView("puzzle");
 			gamePanel.getGameState().restartGame();
+			gamePanel.reset();
 			this.scrambleBoard();
 		} else if (e.getActionCommand().equals("mainMenuLoadGame")) {
 			//Load the game from file
 			Object obj = SaveLoad.loadFromFile("SavedGame");
 			if(obj instanceof GameState) {
-				//gameState = (GameState) obj;
-				Window.loadGame( (GameState) obj);
+				this.gamePanel.updateGameState((GameState) obj);
 				this.gamePanel.getScore().setNewMoves(0);
+				this.gamePanel.reset();
 				Window.swapView("puzzle");
 			}
 		} else if(e.getActionCommand().equals("mainMenuSettings")) {
@@ -205,10 +211,12 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			this.gamePanel.getGameState().restartGame();
 			this.gamePanel.reset();
 			this.stopClock();
+			Window.toggleMenu();
 			Window.swapView("mainMenu");
 		}
 	}
 	
+
 	private void scrambleBoard() {
 		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().makeRandomValidMoves(Window.getSettings().getDifficulty());
 		Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
@@ -221,7 +229,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
-				//TODO: THIS ASKS THE MODEL TO DO STUFF
 				gamePanel.getScore().addSeconds(1);
 				gamePanel.repaint();
 				
