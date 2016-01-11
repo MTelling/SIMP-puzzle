@@ -49,33 +49,33 @@ public class Window extends JFrame {
 		cardPanel.setLayout(cardLayout);
 		cardPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
-		//Create mainManuPanel
-		mainMenuPanel = new MainMenuPanel(gs);
-		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
-		
-
-		settingsPanel = new SettingsPanel();
-		//Create puzzlePane. 
-		JLayeredPane puzzlePane = new JLayeredPane();
-
-		//create gamePanel and its controller
+		//Create Controller
 		gamePanel = new GamePanel(gs);
 		SimpController controller = new SimpController(gamePanel);
-
-		//Add controller to gamePanel
-		gamePanel.addKeyListener(controller);
-		gamePanel.addMouseListener(controller);
-		gamePanel.addMouseMotionListener(controller);
+		
+		//Create mainManuPanel
+		mainMenuPanel = new MainMenuPanel(controller);
+		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
+		
+		//Create settingsPanel
+		settingsPanel = new SettingsPanel();
+		
+		//Create puzzlePane. 
+		JLayeredPane puzzlePane = new JLayeredPane();
 		
 		//Create inGameMenuPanel initially not visible
-		inGameMenuPanel = new InGameMenuPanel(gs);
+		inGameMenuPanel = new InGameMenuPanel(controller);
 		inGameMenuPanel.setLayout(new BoxLayout(inGameMenuPanel, BoxLayout.Y_AXIS));
 		inGameMenuPanel.setVisible(false);
 		
 		//Add gamePanel and inGameMenuPanel to puzzlePane
 		puzzlePane.add(gamePanel, new Integer(0), 0);
 		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
-		
+
+		//Add controller to panels
+		gamePanel.addKeyListener(controller);
+		gamePanel.addMouseListener(controller);
+		gamePanel.addMouseMotionListener(controller);		
 		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
@@ -91,8 +91,6 @@ public class Window extends JFrame {
 	}
 	
 	public static void loadGame(GameState gs) {
-		mainMenuPanel.updateGameState(gs);
-		inGameMenuPanel.updateGameState(gs);
 		gamePanel.updateGameState(gs);
 		cardLayout.show(cardPanel, "puzzle");
 		gamePanel.requestFocus();

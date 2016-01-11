@@ -1,18 +1,15 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class InGameMenuPanel extends JPanel implements ActionListener {
-
+public class InGameMenuPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-
-	private GameState gameState;
+	
+	SimpController controller;
 	
 	private JButton btnContinueGame;
 	private JButton btnNewGame;
@@ -21,24 +18,25 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 	private JButton btnSettings;
 	private JButton btnQuitGame;
 	
-	public InGameMenuPanel(GameState gs) {
-		this.gameState = gs;
+	public InGameMenuPanel(SimpController controller) {
+		this.controller = controller;
 		
-		this.addButton(btnContinueGame, "Continue Game");
-		this.addButton(btnNewGame, "New Game");
-		this.addButton(btnSaveGame, "Save Game");
-		this.addButton(btnHighScore, "Highscores");
-		this.addButton(btnSettings, "Settings");
-		this.addButton(btnQuitGame, "Exit to Main Menu");
+		//Create Buttons
+		this.addButton(btnContinueGame, "Continue Game", "ContinueGame");
+		this.addButton(btnNewGame, "New Game", "NewGame");
+		this.addButton(btnSaveGame, "Save Game", "SaveGame");
+		this.addButton(btnHighScore, "Highscores", "Highscores");
+		this.addButton(btnSettings, "Settings", "Settings");
+		this.addButton(btnQuitGame, "Exit to Main Menu", "ExitToMainMenu");
 		this.add(Box.createVerticalGlue());
 		
+		//Set boundaries for the ingame menu
 		this.setBounds(Window.GAME_BORDER, Window.GAME_BORDER, Window.WINDOW_WIDTH - 2 * Window.GAME_BORDER, Window.WINDOW_HEIGHT  - 2 * Window.GAME_BORDER);
 		this.setOpaque(false);
 	}
 	
-	private void addButton(JButton button, String label) {
+	private void addButton(JButton button, String label, String actionCommand) {
 		button = new JButton(label) {
-
 			private static final long serialVersionUID = 1L;
 
 			{
@@ -46,10 +44,11 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 				setMaximumSize(getSize());
 			}
 		};
-		button.addActionListener(this);
+		button.addActionListener(this.controller);
 		button.setAlignmentX(CENTER_ALIGNMENT);
 		button.setPreferredSize(new Dimension(256, 48));
 		button.setFocusable(false);
+		button.setActionCommand("inGame" + actionCommand);
 		
 		this.add(Box.createVerticalGlue());
 		this.add(button);
@@ -61,26 +60,5 @@ public class InGameMenuPanel extends JPanel implements ActionListener {
 		
 		g.setColor(new Color(128, 128, 128, 225));
 		g.fillRect(0, 0, 448 - Window.GAME_BORDER * 2, 512 - Window.GAME_BORDER * 2);
-	}
-
-	public void updateGameState(GameState gs) {
-		this.gameState = gs;
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("Continue Game")) {
-			Window.toggleMenu(true);
-		} else if (e.getActionCommand().equals("New Game")) {
-			gameState.restartGame();
-			Window.toggleMenu(false);
-		}else if (e.getActionCommand().equals("Save Game")) {
-			// SAVE THA GAME MUTHAFUCKAAA
-			SaveLoad.saveToFile(gameState, "SavedGame");
-			
-		} else if(e.getActionCommand().equals("Exit to Main Menu")) {
-				Window.swapView("mainMenu");
-		}
-	}
-	
+	}	
 }

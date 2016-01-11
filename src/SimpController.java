@@ -1,4 +1,6 @@
 import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -7,7 +9,7 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.Timer;
 
-public class SimpController implements KeyListener, MouseListener, MouseMotionListener {
+public class SimpController implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
 	private GamePanel gamePanel;
 	private boolean isAnimating;
@@ -164,6 +166,35 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 		}
 	}
 	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getActionCommand().equals("mainMenuNewGame")) {
+			Window.swapView("puzzle");
+		} else if (e.getActionCommand().equals("mainMenuLoadGame")) {
+			//Load the game from file
+			Object obj = SaveLoad.loadFromFile("SavedGame");
+			if(obj instanceof GameState) {
+				//gameState = (GameState) obj;
+				Window.loadGame( (GameState) obj);
+				this.gamePanel.getScore().setNewMoves(0);
+				Window.swapView("puzzle");
+			}
+		} else if(e.getActionCommand().equals("mainMenuSettings")) {
+			Window.swapView("settings");
+		} else if(e.getActionCommand().equals("mainMenuExitGame")) {
+			System.exit(0);
+		} else if(e.getActionCommand().equals("inGameContinueGame")) {
+			Window.toggleMenu(true);
+		} else if (e.getActionCommand().equals("inGameNewGame")) {
+			this.gamePanel.getGameState().restartGame();
+			Window.toggleMenu(false);
+		} else if (e.getActionCommand().equals("inGameSaveGame")) {
+			SaveLoad.saveToFile(this.gamePanel.getGameState(), "SavedGame");
+		} else if(e.getActionCommand().equals("inGameExitToMainMenu")) {
+				Window.swapView("mainMenu");
+		}
+	}	
+	
 	/// SETTERS FROM HERE ///
 	
 	public void setAnimating(boolean isAnimating) {
@@ -175,7 +206,6 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 	public GamePanel getGamePanel() {
 		return this.gamePanel;
 	}
-	
 	
 	/// UNUSUED FROM HERE ///
 	
@@ -198,6 +228,6 @@ public class SimpController implements KeyListener, MouseListener, MouseMotionLi
 	public void keyPressed(KeyEvent e) {}
 	
 	@Override
-	public void keyTyped(KeyEvent e) {}	
+	public void keyTyped(KeyEvent e) {}
 
 }
