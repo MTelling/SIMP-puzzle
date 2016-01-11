@@ -11,14 +11,14 @@ import javax.swing.JOptionPane;
 
 public class ImageHandler {	
     
-    public static BufferedImage[] getTilePics(int boardSize, int tileSize, String fileName) throws IOException {
+    public static BufferedImage[] getTilePics(int tilesPerRow, int tileSize, String fileName) throws IOException {
 
 		BufferedImage mainPic = ImageIO.read(new File(fileName));
-		BufferedImage[] tilePics = new BufferedImage[(int) Math.pow(boardSize, 2)];
-    	for(int y = 0; y < boardSize; y++) {
-    		for(int x = 0; x < boardSize; x++) {
+		BufferedImage[] tilePics = new BufferedImage[(int) Math.pow(tilesPerRow, 2)];
+    	for(int y = 0; y < tilesPerRow; y++) {
+    		for(int x = 0; x < tilesPerRow; x++) {
     			
-    			tilePics[y*boardSize + x] = mainPic.getSubimage(
+    			tilePics[y*tilesPerRow + x] = mainPic.getSubimage(
     					x * tileSize, 	// x coordinates
     					y * tileSize, 	// y coordinates
     					tileSize, 		// width
