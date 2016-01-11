@@ -32,7 +32,7 @@ public class ImageHandler {
     
     public static String cropAndSave (BufferedImage buffPic, int x, int y) {
     	Random rand = new Random();
-    	int size = Window.BOARD_SIZE;
+    	int size = Window.getSettings().getCurrWindowSize().getBOARD_SIZE();
     	
     	try {
     		File file = new File("resources/pics/" + Integer.toString(rand.nextInt(999999999)) + ".jpg");

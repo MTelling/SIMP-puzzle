@@ -112,6 +112,8 @@ public class Window extends JFrame {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
+		} else if(key.equals("imageCrop")) {
+			imageCropPanel.init();
 		}
 	}
 	
