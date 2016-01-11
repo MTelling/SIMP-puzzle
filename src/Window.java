@@ -5,6 +5,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 public class Window extends JFrame {
 	
@@ -29,6 +30,13 @@ public class Window extends JFrame {
 
 	public Window() {
 		super("N-Puzzle Game");
+		
+		//Set look to system default
+		try { 
+		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
 		
 		//Initialize the model.
 		settings = new Settings();

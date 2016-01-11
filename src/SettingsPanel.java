@@ -431,13 +431,13 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	private void createFramesPerSecondChooser() {
 		JLabel fpsLabel = new JLabel("FPS: ");
 		fpsSlider = new JSlider(JSlider.HORIZONTAL, 30, 120, 60);
-		fpsSlider.setPreferredSize(new Dimension(150, 37));
-		fpsSlider.setMaximumSize(fpsSlider.getPreferredSize());
 		fpsSlider.setMinorTickSpacing(30);
 		fpsSlider.setMajorTickSpacing(30);
 		fpsSlider.setSnapToTicks(true);
 	    fpsSlider.setPaintTicks(true);
 	    fpsSlider.setPaintLabels(true);
+	    fpsSlider.setPreferredSize(new Dimension(150, (int)fpsSlider.getPreferredSize().getHeight()));
+		fpsSlider.setMaximumSize(fpsSlider.getPreferredSize());
 	    
 	    //Connect to control
 	    fpsSlider.addChangeListener(this);

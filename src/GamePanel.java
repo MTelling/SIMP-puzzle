@@ -12,7 +12,8 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
 
-	public static final int MENUBUTTON_SIZE = Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE() - Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE()/4;
+	public static final int MENUBUTTON_SIZE = Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE() 
+			- Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE()/4;
 	public static final String RESOURCE_PATH = "resources/";
 	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
  	private static final long serialVersionUID = 1L;
@@ -35,7 +36,10 @@ public class GamePanel extends JPanel {
 	private boolean firstPaint;
 	private BufferedImage[] picList;
 	
+	private WindowSize currWindowSize;
+	
 	public GamePanel(GameState gs) {
+		
 		this.setBounds(0, 0, Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT());
 		this.setOpaque(true);
 		
@@ -50,12 +54,16 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void reset() {
+		
+		this.currWindowSize = Window.getSettings().getCurrWindowSize();
+		this.labelTextSize = getGameState().getBoard().getTileSize()/4;
+		
 		this.firstPaint = true;
 		
 		this.loadImages();
 		
 		this.repaint();
-		this.labelTextSize = getGameState().getBoard().getTileSize()/4;
+		
 		
 	}
 	
@@ -64,7 +72,6 @@ public class GamePanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g.create();
-		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
 
 		//Set font. Has to be done on each repaint, because it defaults it otherwise. 
 		g2d.setFont(new Font("Sans Serif", Font.PLAIN, currWindowSize.getCONTROLS_TEXT_SIZE()));
@@ -97,7 +104,6 @@ public class GamePanel extends JPanel {
 		
 		//Calculate width of strings with 1 digit to 4 digits. 
 		if (this.firstPaint) {
-			System.out.println("Got here");
 			this.stringWidths = calcStringWidths(g2d);
 			this.stringHeight = g2d.getFontMetrics().getHeight();
 			this.firstPaint = false;
