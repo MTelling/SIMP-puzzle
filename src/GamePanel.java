@@ -182,9 +182,9 @@ public class GamePanel extends JPanel {
 		try {
 			//If picture is set to on in settings, get the picture. Otherwise just get a plain image. 
 			if (this.gameState.isPictureOn()) {
-				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
+				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), Window.getSettings().getGamePicture());
 			} else {
-				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic", "jpg");
+				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic.jpg");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

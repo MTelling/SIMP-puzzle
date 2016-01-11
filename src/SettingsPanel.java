@@ -1,15 +1,11 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.NumberFormat;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -17,8 +13,6 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 
 
 public class SettingsPanel extends JPanel implements ActionListener, ChangeListener{
@@ -201,6 +195,10 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				break;
 			case "hardGame":
 				settings.setDifficulty(Difficulty.HARD.getValue());
+				break;
+				
+			case "chooseNewPicture":
+				Window.swapView("imageCrop");
 				break;
 				
 			//Close settings window
@@ -517,6 +515,8 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	
 	private void createPictureChooser() {
 		choosePicture = new JButton("Choose new picture");
+		choosePicture.setActionCommand("chooseNewPicture");
+		choosePicture.addActionListener(this);
 		choosePicture.setAlignmentX(CENTER_ALIGNMENT);
 		this.add(choosePicture);
 	}

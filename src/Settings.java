@@ -1,5 +1,10 @@
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+
+import javax.imageio.ImageIO;
 
 public class Settings implements Serializable{
 	
@@ -21,6 +26,9 @@ public class Settings implements Serializable{
 	private boolean isPictureOn;
 	private boolean isLabelsOn;
 	
+	//Picture to use as tiles if isPictureOn = true
+	private String gamePicture;
+	
 	//Animation speeds
 	private int scrambleAnimationSpeed;
 	private int animationSpeed;
@@ -28,8 +36,6 @@ public class Settings implements Serializable{
 	//Board difficulty
 	private int difficulty;
 	private int tilesPerRowInBoard;
-	
-
 	
 	public Settings() {
 		
@@ -56,6 +62,9 @@ public class Settings implements Serializable{
 		
 		//Turn labels on or off when picture is active.
 		this.isLabelsOn = true;
+		
+		//Set the picture path to use as tiles
+		this.gamePicture = "resources/pics/testor.png";
 		
 		//Set frames per second
 		this.setFramesPerSecond(90);
@@ -107,6 +116,10 @@ public class Settings implements Serializable{
 		this.isLabelsOn = isLabelsOn;
 	}
 	
+	public void setGamePicture(String picture) {
+		this.gamePicture = picture;
+	}
+	
 	/// GETTERS FROM HERE /////
 	
 	public int getFramesPerSecond() {
@@ -131,6 +144,10 @@ public class Settings implements Serializable{
 
 	public boolean isPictureOn() {
 		return this.isPictureOn;
+	}
+	
+	public String getGamePicture() {
+		return this.gamePicture;
 	}
 	
 	public boolean isControlsNormal() {

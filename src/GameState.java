@@ -74,7 +74,7 @@ public class GameState implements Serializable {
 		this.undoMoveStack.clear();
 		
 		this.isUsingPictures = Window.getSettings().isPictureOn();
-		this.useConerLabels = Window.getSettings().isLabelsOn();
+		this.useCornerLabels = Window.getSettings().isLabelsOn();
 		this.gameDifficulty = Window.getSettings().getDifficulty();
 		
 		this.setGameDone(false);

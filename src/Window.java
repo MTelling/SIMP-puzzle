@@ -85,6 +85,7 @@ public class Window extends JFrame {
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
 		cardPanel.add(settingsPanel, "settings");
+		cardPanel.add(imageCropPanel, "imageCrop");
 		cardPanel.add(puzzlePane, "puzzle");
 		
 		//Set settings for main window. 

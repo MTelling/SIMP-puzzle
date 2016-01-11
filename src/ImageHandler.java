@@ -11,9 +11,9 @@ import javax.swing.JOptionPane;
 
 public class ImageHandler {	
     
-    public static BufferedImage[] getTilePics(int boardSize, int tileSize, String fileName, String fileExt) throws IOException {
+    public static BufferedImage[] getTilePics(int boardSize, int tileSize, String fileName) throws IOException {
 
-		BufferedImage mainPic = ImageIO.read(new File(fileName + "." + fileExt));
+		BufferedImage mainPic = ImageIO.read(new File(fileName));
 		BufferedImage[] tilePics = new BufferedImage[(int) Math.pow(boardSize, 2)];
     	for(int y = 0; y < boardSize; y++) {
     		for(int x = 0; x < boardSize; x++) {
@@ -30,21 +30,22 @@ public class ImageHandler {
 
     }
     
-    public static void cropAndSave (BufferedImage buffPic, int x, int y, int size) {
-    	    	
+    public static String cropAndSave (BufferedImage buffPic, int x, int y) {
     	Random rand = new Random();
+    	int size = Window.BOARD_SIZE;
     	
     	try {
-    		File file = new File("resources/pics/" + Integer.toString(rand.nextInt(999999999)));
+    		File file = new File("resources/pics/" + Integer.toString(rand.nextInt(999999999)) + ".jpg");
     		if(!file.exists()) {
     			ImageIO.write(buffPic.getSubimage(x, y, size, size), "jpg", file);
-    		}else{
-    			cropAndSave(buffPic, x, y, size);
+    			return file.getName();
+    		} else {
+    			cropAndSave(buffPic, x, y);
     		}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
     }
     
     public static BufferedImage loadPicture () {
