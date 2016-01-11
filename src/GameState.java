@@ -70,6 +70,13 @@ public class GameState implements Serializable {
 	public void restartGame() {
 		this.board.reset();
 		this.score.reset();
+		
+		this.undoMoveStack.clear();
+		
+		this.isUsingPictures = Window.getSettings().isPictureOn();
+		this.useCornerLabels = Window.getSettings().isLabelsOn();
+		this.gameDifficulty = Window.getSettings().getDifficulty();
+		
 		this.setGameDone(false);
 	}
 	

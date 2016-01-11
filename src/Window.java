@@ -14,6 +14,7 @@ public class Window extends JFrame {
 	private static JPanel cardPanel;
 	private static MainMenuPanel mainMenuPanel;
 	private static SettingsPanel settingsPanel;
+	private static ImageCropPanel imageCropPanel;
 	private static GamePanel gamePanel;
 	private static InGameMenuPanel inGameMenuPanel;
 	
@@ -54,6 +55,9 @@ public class Window extends JFrame {
 		//Create settings panel and give it an instance of settings
 		settingsPanel = new SettingsPanel(settings, this);
 		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
+		
+		//Create ImageCropPanel
+		imageCropPanel = new ImageCropPanel(settings);
 		
 		//Create puzzlePane. 
 		puzzlePane = new JLayeredPane();
