@@ -109,15 +109,15 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (!this.isAnimating) {
-			System.out.println("Muh");
 			//Redo undo if ctrl+z and ctrl+y
 			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
 					
-					//TODO: Should this really start the clock on each time through? 
-					this.startClock();
+					if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
+						this.startClock();
+					}
 					
 					showMove(Window.getSettings().isAnimationOn());
 				}
@@ -125,6 +125,11 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
+					
+					if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
+						this.startClock();
+					}
+					
 					showMove(Window.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -221,7 +226,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
-				//TODO: THIS ASKS THE MODEL TO DO STUFF
 				gamePanel.getScore().addSeconds(1);
 				gamePanel.repaint();
 				
