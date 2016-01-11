@@ -53,8 +53,10 @@ public class Window extends JFrame {
 		mainMenuPanel = new MainMenuPanel(gs);
 		mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
 		
-
-		settingsPanel = new SettingsPanel();
+		//Create settings panel and give it an instance of settings
+		settingsPanel = new SettingsPanel(settings);
+		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
+		
 		//Create puzzlePane. 
 		JLayeredPane puzzlePane = new JLayeredPane();
 

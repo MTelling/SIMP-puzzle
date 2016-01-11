@@ -64,6 +64,7 @@ public class Board implements Serializable {
 		
 		 LinkedList<Move> scrambleMoves = new LinkedList<>();
 		 Random rand = new Random();
+		 howMany *= this.getTilesPerRow();
 		 
 		 //Move x, then y, then x etc. Was x moved last?
 		 boolean justMovedX = false;
