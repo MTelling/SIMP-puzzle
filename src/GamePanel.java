@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -37,12 +36,9 @@ public class GamePanel extends JPanel {
 	private int[] stringWidths; //Saves width of strings depending how many characters are in. 
 	private int stringHeight;
 	private boolean firstPaint;
-	private boolean animationInProgress;
 	private BufferedImage[] picList;
 	
 	public GamePanel(GameState gs) {
-		
-		this.animationInProgress = false;
 		this.setBounds(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		this.setOpaque(true);
 		
@@ -63,13 +59,6 @@ public class GamePanel extends JPanel {
 		
 		this.repaint();
 		
-	}
-	
-	public void scrambleBoard() {
-		//TODO: THIS ASKS THE MODEL TO DO STUFF. Move it out and refactor. 
-		LinkedList<Move> scramblingSequence = getBoard().makeRandomValidMoves(this.getSettings().getDifficulty());
-		Timer scrambleAnimationTimer = new Timer(getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
-		scrambleAnimationTimer.start();
 	}
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -189,7 +178,7 @@ public class GamePanel extends JPanel {
 					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, tileSize, this.getBoard().getTileSize(), null);
 					
 					//Draws text on image
-					if(this.getSettings().isPictureOn()) {
+					if(Window.getSettings().isPictureOn()) {
 
 						//Draw border around unfinished picture
 						if (!this.gameState.isGameDone()){
@@ -198,7 +187,7 @@ public class GamePanel extends JPanel {
 						} 
 						
 						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
-						if (this.getSettings().isLabelsOn()) {
+						if (Window.getSettings().isLabelsOn()) {
 							//TODO: How can we decide the size of this more appropriately? 
 							//		Also the size of the text on the tile should be calculated.. 
 							this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, tileSize/3);
@@ -225,7 +214,7 @@ public class GamePanel extends JPanel {
 		//Create list of tileImages
 		try {
 			//If picture is set to on in settings, get the picture. Otherwise just get a plain image. 
-			if (this.getSettings().isPictureOn()) {
+			if (Window.getSettings().isPictureOn()) {
 				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/test", "jpg");
 			} else {
 				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic", "jpg");
@@ -271,7 +260,6 @@ public class GamePanel extends JPanel {
 		int width = fontMetrics.stringWidth(str);
 		return width;
 	}
-
 	
 	///// GETTERS FROM HERE //////
 	
@@ -292,19 +280,5 @@ public class GamePanel extends JPanel {
 	public Score getScore() {
 		return this.gameState.getScore();
 	}
-	
-	public Settings getSettings() {
-		return this.gameState.getSettings();
-	}
-	
-	public boolean isAnimating() {
-		return this.animationInProgress;
-	}
-	
-	public void setAnimationInProgress(boolean animationInProgress) {
-		this.animationInProgress = animationInProgress;
-	}
-	
-	
 	
 }

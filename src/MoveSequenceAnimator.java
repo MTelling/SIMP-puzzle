@@ -8,34 +8,34 @@ public class MoveSequenceAnimator implements ActionListener{
 
 	private boolean animating;
 	private LinkedList<Move> moves;
-	private GamePanel gamePanel;
+	private SimpController controller;
 	
-	public MoveSequenceAnimator(GamePanel gamePanel, LinkedList<Move> moves) {
+	public MoveSequenceAnimator(SimpController controller, LinkedList<Move> moves) {
 		this.animating = false;
-		this.gamePanel = gamePanel;
+		this.controller = controller;
 		this.moves = moves;
-		gamePanel.setAnimationInProgress(true);
+		this.controller.setAnimating(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (!animating) {
-			gamePanel.getBoard().setToAnimationState(moves.get(0));
+			this.controller.getGamePanel().getBoard().setToAnimationState(moves.get(0));
 			animating = true;
 		}
 		
-		if(gamePanel.getBoard().moveWithAnimation(gamePanel.getSettings().getScrambleAnimationSpeed())) {
-			gamePanel.repaint();
+		if(this.controller.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getScrambleAnimationSpeed())) {
+			this.controller.getGamePanel().repaint();
 			animating = false;
 			moves.remove(0);
 		} else {
-			gamePanel.repaint();
+			this.controller.getGamePanel().repaint();
 		}
 		
 		//If there are no more moves, stop animating. 
 		if (moves.size() < 1) {
 			((Timer)(e.getSource())).stop();
-			gamePanel.setAnimationInProgress(false);
+			this.controller.setAnimating(false);
 		}
 	}
 

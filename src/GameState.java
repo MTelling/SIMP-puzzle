@@ -8,18 +8,23 @@ public class GameState implements Serializable {
 	private Stack<Move> redoMoveStack;
 
 	private Score score;
-	private Board board;	
-	private Settings settings;
+	private Board board;
+	
+	//GameState dependant settings
+	private boolean isUsingPictures;
+	private int gameDifficulty;
 	
 	private boolean isGameDone;
 	
-	public GameState (Board board, Score score, Settings settings) {
+	public GameState (Board board, Score score) {
 		this.undoMoveStack = new Stack<Move>();
 		this.redoMoveStack = new Stack<Move>();
 		
 		this.score = score;
 		this.board = board;
-		this.settings = settings;
+		
+		this.isUsingPictures = Window.getSettings().isPictureOn();
+		this.gameDifficulty = Window.getSettings().getDifficulty();
 	}
 	
 	public void saveCurrentMove(Move move) {
@@ -66,21 +71,14 @@ public class GameState implements Serializable {
 		this.setGameDone(false);
 	}
 	
-
-	
 	/// GETTERS FROM HERE ///
 	
-
 	public Score getScore() {
 		return this.score;
 	}
 	
 	public Board getBoard() {
 		return this.board;
-	}
-	
-	public Settings getSettings() {
-		return this.settings;
 	}
 
 	public boolean isGameDone() {
