@@ -45,11 +45,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			
 			//Add a move to scoreModel.
 			gamePanel.getScore().addMoves(1);			
-			
-			System.out.println(gamePanel.getBoard().toString());
+						
 			//Move with or without animation depending on what the setting is in settings. 
 			showMove(Window.getSettings().isAnimationOn());
-			this.isAnimating = true;
 		
 		}
 	}
