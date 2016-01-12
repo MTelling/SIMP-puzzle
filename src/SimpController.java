@@ -57,18 +57,15 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 		this.setAnimating(true);
 
-		if (shouldAnimate) {
+		if (shouldAnimate) { //asks the moveAnimator to animate the move. 
 			this.moveAnimator.start();	
 		} else {
 			//Just sets the board to the new default state and then repaints. 
 			gamePanel.getBoard().moveWithoutAnimation();
 			
-			//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
 			gamePanel.repaint();
 
 			this.setAnimating(false);
-
-
 		}
 	}
 	

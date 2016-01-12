@@ -47,7 +47,6 @@ public class Board implements Serializable {
 		this.makeSolvedBoard();		
 	}
 	
-	
 	//Helper method to init a solvable board
 	//Aligns the tiles, to make a solved board.
 	private void  makeSolvedBoard() {
@@ -67,7 +66,6 @@ public class Board implements Serializable {
 		this.currEmptyTile = new Point(this.tilesPerRow - 1 , this.tilesPerRow - 1);
 		this.nextEmptyTile = new Point(this.tilesPerRow - 1 , this.tilesPerRow - 1);	
 	}
-	
 	
 	/// Methods for randomizer ///
 	private void moveEmptyTo(Point target, Point emptyTile, LinkedList<Move> moveSequence) {
@@ -128,7 +126,7 @@ public class Board implements Serializable {
 	 }
 	}
 
-
+	//Returns a list of movements required to randomize the current board. 
 	public LinkedList<Move> getRandomizingMoveSequence() {
 		LinkedList<Move> moveSequence = new LinkedList<Move>();
 		Point empty = ObjectCopy.point(currEmptyTile);
@@ -252,7 +250,6 @@ public class Board implements Serializable {
 		currEmptyTile = ObjectCopy.point(nextEmptyTile);
 	}
 	
-	
 	//Check if the game is won.
 	//TODO: Should we allow a gamemode with a set time to win the game?
 	public boolean isGameOver(){	
@@ -278,7 +275,7 @@ public class Board implements Serializable {
 		return isMoveValid(move, this.currEmptyTile);
 	}
 	
-	//Method to determine if a move can be made from an empty tile in a given board size. 
+	//Method to determine if a move can be made from a given empty tile in a given board size. 
 	private boolean isMoveValid(Move move, Point emptyTile) {
 		boolean shouldMove = false;
 		if (move.dx == -1) { //Right arrow

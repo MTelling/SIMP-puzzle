@@ -19,13 +19,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 
 	private static final long serialVersionUID = 1L;
 	
-	private ButtonGroup gameTypeToggle;
-	private ButtonGroup difficultyToggle;
-	private ButtonGroup animationToggle;
-	private ButtonGroup controlsToggle;
-	private ButtonGroup animationSpeedToggle;
-	private ButtonGroup labelsToggle;
-	private ButtonGroup windowSizeToggle;
 	
 	private JButton exitButton;
 	private JButton choosePicture;
@@ -231,6 +224,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		
 	}
 	
+	//This listens to the fps slider.
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		
@@ -244,7 +238,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		}
 		
 	}
-	
 
 	
 	/// Methods to set values to what they are in settings ///
@@ -267,7 +260,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		if (settings.isAnimationScramblingOn()) {
 			scrambleAnimationOn.setSelected(true);
 		} else {
-			scrambleAnimationOff.setSelected(false);
+			scrambleAnimationOff.setSelected(true);
 		}
 	}
 	
@@ -348,61 +341,44 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	
 		
 	/// Methods for creating UI ///
+	
+	private Box containerForRadioButtons(JRadioButton[] radioButtons, String labelText) {
+		ButtonGroup buttonGroup = new ButtonGroup();
+		Box container = new Box(BoxLayout.LINE_AXIS);
+		container.add(new JLabel(labelText));
+		for (JRadioButton button: radioButtons) {
+			//Add to container
+			container.add(button);
+			
+			//Add to its button group.
+			buttonGroup.add(button);
+			
+			//Add actionListener to radioButton
+			button.addActionListener(this);
+		}
+	
+		return container;
+	}
 
 	private void createScrambleAnimationChooser() {
-		JLabel scrambleAnimationLabel = new JLabel("Show scramble animation: ");
 		scrambleAnimationOn = new JRadioButton("On");
 		scrambleAnimationOn.setActionCommand("scrambleAnimationOn");
 		scrambleAnimationOff = new JRadioButton("Off");
 		scrambleAnimationOff.setActionCommand("scrambleAnimationOff");
 		
-		//Connect to controls
-		scrambleAnimationOn.addActionListener(this);
-		scrambleAnimationOff.addActionListener(this);
-
-		ButtonGroup scrambleAnimationToggle = new ButtonGroup();
-		scrambleAnimationToggle.add(scrambleAnimationOn);
-		scrambleAnimationToggle.add(scrambleAnimationOff);
-		
-		
-		Box scrambleAnimationContainer = new Box(BoxLayout.LINE_AXIS);
-		scrambleAnimationContainer.add(scrambleAnimationLabel);
-		scrambleAnimationContainer.add(scrambleAnimationOn);
-		scrambleAnimationContainer.add(scrambleAnimationOff);
-		
-		this.add(scrambleAnimationContainer);
+		this.add(containerForRadioButtons(new JRadioButton[] {scrambleAnimationOn, scrambleAnimationOff}, "Show scramble animation: "));
 	}
 	
 	private void createGameTypeChooser() {
-		
-		JLabel gameTypeLabel = new JLabel("Game Type: ");
 		gameTypeNumbers = new JRadioButton("Numbers");
 		gameTypeNumbers.setActionCommand("gameTypeNumbers");
 		gameTypePicture = new JRadioButton("Picture");
 		gameTypePicture.setActionCommand("gameTypePicture");
 		
-		//Connect to controls
-		gameTypeNumbers.addActionListener(this);
-		gameTypePicture.addActionListener(this);
-		
-		gameTypeToggle = new ButtonGroup();
-		gameTypeToggle.add(gameTypeNumbers);
-		gameTypeToggle.add(gameTypePicture);
-		
-		
-		Box gameTypeContainer = new Box(BoxLayout.LINE_AXIS);
-		gameTypeContainer.add(gameTypeLabel);
-		gameTypeContainer.add(gameTypeNumbers);
-		gameTypeContainer.add(gameTypePicture);
-		
-		this.add(gameTypeContainer);
-		
-		
-		
+		this.add(containerForRadioButtons(new JRadioButton[] {gameTypeNumbers, gameTypePicture}, "Game Type: "));	
 	}
 	
 	private void createDifficultyChooser() {
-		JLabel difficultyLabel = new JLabel("Difficulty: ");
 		easyGame = new JRadioButton("Easy");
 		easyGame.setActionCommand("easyGame");
 		mediumGame = new JRadioButton("Medium");
@@ -410,51 +386,90 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		hardGame = new JRadioButton("EXTREME");
 		hardGame.setActionCommand("hardGame");
 		
-		//Connect to controls
-		easyGame.addActionListener(this);
-		mediumGame.addActionListener(this);
-		hardGame.addActionListener(this);
-
-		
-		difficultyToggle = new ButtonGroup();
-		difficultyToggle.add(easyGame);
-		difficultyToggle.add(mediumGame);
-		difficultyToggle.add(hardGame);
-		
-		
-		Box difficultyContainer = new Box(BoxLayout.LINE_AXIS);
-		difficultyContainer.add(difficultyLabel);
-		difficultyContainer.add(easyGame);
-		difficultyContainer.add(mediumGame);
-		difficultyContainer.add(hardGame);
-		
-		this.add(difficultyContainer);
+		this.add(containerForRadioButtons(new JRadioButton[]{easyGame,mediumGame,hardGame}, "Difficulty: "));
 		
 	}
 	
 	private void createAnimationToggle() {
-		JLabel animationLabel = new JLabel("Animation on/off: ");
 		animationOn = new JRadioButton("On");
 		animationOn.setActionCommand("animationOn");
 		animationOff = new JRadioButton("Off");
 		animationOff.setActionCommand("animationOff");
 		
-		//Connect to control
-		animationOn.addActionListener(this);
-		animationOff.addActionListener(this);
-		
-		animationToggle = new ButtonGroup();
-		animationToggle.add(animationOn);
-		animationToggle.add(animationOff);
-		
-		Box animationToggleContainer = new Box(BoxLayout.LINE_AXIS);
-		animationToggleContainer.add(animationLabel);
-		animationToggleContainer.add(animationOn);
-		animationToggleContainer.add(animationOff);
-		
-		this.add(animationToggleContainer);
+		this.add(containerForRadioButtons(new JRadioButton[] {animationOn, animationOff}, "Show move animation: "));
+
 	}
 	
+	private void createControlsChooser() {
+		normalControls = new JRadioButton("Normal");
+		normalControls.setActionCommand("normalControls");
+		invertedControls = new JRadioButton("Inverted");
+		invertedControls.setActionCommand("invertedControls");
+		
+		this.add(containerForRadioButtons(new JRadioButton[] {normalControls, invertedControls}, "Controls: "));	
+	}
+	
+	private void createAnimationSpeedChooser() {
+		slowAnimation = new JRadioButton("Slow");
+		slowAnimation.setActionCommand("slowAnimation");
+		mediumAnimation = new JRadioButton("Medium");
+		mediumAnimation.setActionCommand("mediumAnimation");
+		fastAnimation = new JRadioButton("Fast");
+		fastAnimation.setActionCommand("fastAnimation");
+		
+		this.add(containerForRadioButtons(new JRadioButton[] {slowAnimation, mediumAnimation, fastAnimation}, "Animation speed: "));
+	}
+	
+	private void createLabelsOnPictureChooser() {
+		labelsOn = new JRadioButton("On");
+		labelsOn.setActionCommand("labelsOn");
+		labelsOff = new JRadioButton("Off");
+		labelsOff.setActionCommand("labelsOff");
+		
+		//This should be usable from outside this scope.
+		labelsToggleContainer = containerForRadioButtons(new JRadioButton[] {labelsOn, labelsOff}, "Number in corner of tiles: ");
+		
+		this.add(labelsToggleContainer);
+	}
+	
+	private void createPictureChooser() {
+		choosePicture = new JButton("Choose new picture");
+		choosePicture.setActionCommand("chooseNewPicture");
+		choosePicture.addActionListener(this);
+		choosePicture.setAlignmentX(CENTER_ALIGNMENT);
+		this.add(choosePicture);
+	}
+	
+	private void createWindowSizeChooser() {
+		smallWindow = new JRadioButton("Small");
+		smallWindow.setActionCommand("smallWindow");
+		mediumWindow = new JRadioButton("Medium");
+		mediumWindow.setActionCommand("mediumWindow");
+		largeWindow = new JRadioButton("Large");
+		largeWindow.setActionCommand("largeWindow");
+		
+		this.add(containerForRadioButtons(new JRadioButton[] {smallWindow, mediumWindow, largeWindow}, "Window size: "));
+	}
+	
+	private void addButton(JButton button, String label) {
+		button = new JButton(label) {
+
+			private static final long serialVersionUID = 1L;
+
+			{
+				setSize(256, 48);
+				setMaximumSize(getSize());
+			}
+		};
+		button.addActionListener(this);
+		button.setAlignmentX(CENTER_ALIGNMENT);
+		button.setPreferredSize(new Dimension(256, 48));
+		button.setActionCommand(button.getName());
+		
+		this.add(Box.createVerticalGlue());
+		this.add(button);
+	}
+
 	private void createBoardSizeChooser() {
 		JLabel boardSizeLabel = new JLabel("Board size: ");
 		boardSizeChooser = new JTextField();
@@ -470,9 +485,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		boardSizeChooserContainer.add(boardSizeLabel);
 		boardSizeChooserContainer.add(boardSizeChooser);
 		boardSizeChooserContainer.add(setBoardSizeButton);
-
-		
-		this.add(boardSizeChooserContainer);
 	}
 	
 	private void createFramesPerSecondChooser() {
@@ -496,142 +508,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		
 		this.add(fpsContainer);
 	}
-	
-	private void createControlsChooser() {
-		JLabel controlsLabel = new JLabel("Controls: ");
-		normalControls = new JRadioButton("Normal");
-		normalControls.setActionCommand("normalControls");
-		invertedControls = new JRadioButton("Inverted");
-		invertedControls.setActionCommand("invertedControls");
-		
-		//Connect to control
-		normalControls.addActionListener(this);
-		invertedControls.addActionListener(this);
-		
-		controlsToggle = new ButtonGroup();
-		controlsToggle.add(normalControls);
-		controlsToggle.add(invertedControls);
-		
-		Box controlsToggleContainer = new Box(BoxLayout.LINE_AXIS);
-		controlsToggleContainer.add(controlsLabel);
-		controlsToggleContainer.add(normalControls);
-		controlsToggleContainer.add(invertedControls);
-		
-		this.add(controlsToggleContainer);
-	}
-	
-	private void createAnimationSpeedChooser() {
-		JLabel animationSpeedLabel = new JLabel("Animation speed: ");
-		slowAnimation = new JRadioButton("Slow");
-		slowAnimation.setActionCommand("slowAnimation");
-		mediumAnimation = new JRadioButton("Medium");
-		mediumAnimation.setActionCommand("mediumAnimation");
-		fastAnimation = new JRadioButton("Fast");
-		fastAnimation.setActionCommand("fastAnimation");
-		
-		//Connect to controls
-		slowAnimation.addActionListener(this);
-		mediumAnimation.addActionListener(this);
-		fastAnimation.addActionListener(this);
-		
-		animationSpeedToggle = new ButtonGroup();
-		animationSpeedToggle.add(slowAnimation);
-		animationSpeedToggle.add(mediumAnimation);
-		animationSpeedToggle.add(fastAnimation);
-		
-		Box controlsToggleContainer = new Box(BoxLayout.LINE_AXIS);
-		controlsToggleContainer.add(animationSpeedLabel);
-		controlsToggleContainer.add(slowAnimation);
-		controlsToggleContainer.add(mediumAnimation);
-		controlsToggleContainer.add(fastAnimation);
-		
-		this.add(controlsToggleContainer);
-	}
-	
-	private void createLabelsOnPictureChooser() {
-		
-		JLabel labelsOnLabel = new JLabel("Numbers in corner of tiles: ");
-		labelsOn = new JRadioButton("On");
-		labelsOn.setActionCommand("labelsOn");
-		labelsOff = new JRadioButton("Off");
-		labelsOff.setActionCommand("labelsOff");
-		
-		//Connect to controls
-		labelsOn.addActionListener(this);
-		labelsOff.addActionListener(this);
-		
-		labelsToggle = new ButtonGroup();
-		labelsToggle.add(labelsOn);
-		labelsToggle.add(labelsOff);
-		
-		labelsToggleContainer = new Box(BoxLayout.LINE_AXIS);
-		labelsToggleContainer.add(labelsOnLabel);
-		labelsToggleContainer.add(labelsOn);
-		labelsToggleContainer.add(labelsOff);
-		
-		this.add(labelsToggleContainer);
-	}
-	
-	private void createPictureChooser() {
-		choosePicture = new JButton("Choose new picture");
-		choosePicture.setActionCommand("chooseNewPicture");
-		choosePicture.addActionListener(this);
-		choosePicture.setAlignmentX(CENTER_ALIGNMENT);
-		this.add(choosePicture);
-	}
-	
-	private void createWindowSizeChooser() {
-		JLabel windowSizeLabel = new JLabel("Window size: ");
-		smallWindow = new JRadioButton("Small");
-		smallWindow.setActionCommand("smallWindow");
-		mediumWindow = new JRadioButton("Medium");
-		mediumWindow.setActionCommand("mediumWindow");
-		largeWindow = new JRadioButton("Large");
-		largeWindow.setActionCommand("largeWindow");
-		
-		//Connect to controls
-		smallWindow.addActionListener(this);
-		mediumWindow.addActionListener(this);
-		largeWindow.addActionListener(this);
-		
-		windowSizeToggle = new ButtonGroup();
-		windowSizeToggle.add(smallWindow);
-		windowSizeToggle.add(mediumWindow);
-		windowSizeToggle.add(largeWindow);
-		
-		
-		Box windowSizeContainer = new Box(BoxLayout.LINE_AXIS);
-		windowSizeContainer.add(windowSizeLabel);
-		windowSizeContainer.add(smallWindow);
-		windowSizeContainer.add(mediumWindow);
-		windowSizeContainer.add(largeWindow);
-		
-		this.add(windowSizeContainer);
-		
-	}
-	
-	private void addButton(JButton button, String label) {
-		button = new JButton(label) {
-
-			private static final long serialVersionUID = 1L;
-
-			{
-				setSize(256, 48);
-				setMaximumSize(getSize());
-			}
-		};
-		button.addActionListener(this);
-		button.setAlignmentX(CENTER_ALIGNMENT);
-		button.setPreferredSize(new Dimension(256, 48));
-		button.setActionCommand(button.getName());
-		
-		this.add(Box.createVerticalGlue());
-		this.add(button);
-	}
-
-
-
-
 
 
 }
