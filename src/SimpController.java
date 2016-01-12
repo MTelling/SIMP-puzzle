@@ -36,7 +36,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 				this.startClock();
 			}
-		
+			this.setAnimating(true);
 			//Before making the move, save current game stat to gameState. 
 			gamePanel.getGameState().saveCurrentMove(move);
 			
@@ -62,6 +62,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			
 			//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
 			gamePanel.repaint();
+			
+			this.setAnimating(false);
 		}
 	}
 	

@@ -6,21 +6,14 @@ import javax.swing.Timer;
 public class MoveAnimator implements ActionListener {
 	
 	private SimpController simpController;
-	private boolean firstTime;
 	
 	public MoveAnimator(SimpController simpController) {
 		this.simpController = simpController;
-		this.firstTime = true;
 	}
 	
 	//This function will be called every time the timer ticks.
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (firstTime) {
-			//First time through tell the controller that a move is being animated. 
-			simpController.setAnimating(true);
-			firstTime = false;
-		}
 		
 		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getAnimationSpeed());
 		
@@ -30,9 +23,7 @@ public class MoveAnimator implements ActionListener {
 			
 			//Tell the controller that the animation is done, and reset for next time the timer is called. 
 			simpController.setAnimating(false);
-			
-			firstTime = true;
-			
+						
 			simpController.getGamePanel().repaint();
 			
 			//After each move, check if the game is won. 
