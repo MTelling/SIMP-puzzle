@@ -485,6 +485,8 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		boardSizeChooserContainer.add(boardSizeLabel);
 		boardSizeChooserContainer.add(boardSizeChooser);
 		boardSizeChooserContainer.add(setBoardSizeButton);
+		
+		this.add(boardSizeChooserContainer);
 	}
 	
 	private void createFramesPerSecondChooser() {
