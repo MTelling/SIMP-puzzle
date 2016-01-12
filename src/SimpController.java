@@ -54,7 +54,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	
 	//Shows a move. Animated or not. 
 	private void showMove(boolean shouldAnimate) {
-		System.out.println("Got here");
 		this.setAnimating(true);
 
 		if (shouldAnimate) {
