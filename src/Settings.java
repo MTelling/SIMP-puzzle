@@ -54,13 +54,13 @@ public class Settings implements Serializable{
 		this.setDifficulty(Difficulty.EASY.getValue());
 		
 		//Sets tiles per row in the board
-		this.setTilesPerRowInBoard(3);
+		this.setTilesPerRowInBoard(5);
 		
 		//Set speed for the scrambling animation
 		this.setScrambleAnimationSpeed(2); //Lower is faster
 		
 		//Set speed for normal move animation
-		this.setAnimationSpeed(AnimationSpeed.MEDIUM.getValue());
+		this.setAnimationSpeed(AnimationSpeed.FAST.getValue());
 		
 		//Turn animation on and off. 
 		this.isAnimationOn = true;
@@ -75,7 +75,7 @@ public class Settings implements Serializable{
 		this.gamePicture = "resources/pics/testor.png";
 		
 		//Set frames per second
-		this.setFramesPerSecond(90);
+		this.setFramesPerSecond(120);
 		
 		//calculate refreshRate for drawing.
 		this.refreshRate = (int)Math.round(1000.0/framesPerSecond);

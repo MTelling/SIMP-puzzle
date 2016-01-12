@@ -83,6 +83,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				scramblingSequence.remove(0);
 			}
 		}
+		
 
 	}
 	
@@ -203,7 +204,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				
 				//Try to make the move. 
 				makeMove(new Move(dx, dy));
-			}
+			} 
 		}
 	}
 	
@@ -270,6 +271,10 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			Window.swapView("mainMenu");
 		} else if (e.getActionCommand().equals("inGameSolveGame")) {
 			System.out.println("solving game");
+			System.out.println("Got here");
+			LinkedList<Move> solveSequence = gamePanel.getBoard().solveUpperAndLeft();
+			Timer scrambleAnimationTimer = new Timer(50, new MoveSequenceAnimator(this, solveSequence));
+			scrambleAnimationTimer.start();
 		}
 	}
 	

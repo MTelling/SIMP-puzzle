@@ -3,6 +3,8 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Random;
 
+import com.sun.prism.impl.Disposer.Target;
+
 public class Board implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -219,9 +221,149 @@ public class Board implements Serializable {
 	}
 	
 	
+	//Method to solve upper and left columns of board
+	public LinkedList<Move> solveUpperAndLeft() {
+		int i = 0;
+		LinkedList<Move> moveSequence = new LinkedList<Move>();
+		Tile[][] ourTiles = ObjectCopy.tile2D(this.tiles);
+		
+		while (true){
+			
+			
+			
+			//fix top
+			for(int x = 0; x < tilesPerRow - 2; x++){
+				
+				String str = "";
+				for (int g = 0; g < ourTiles.length; g++) {
+					for (int j = 0; j < ourTiles[g].length; j++) {
+						str += ourTiles[j][g].getNumber() + " ";
+					}
+					str += "\n";
+				}
+				System.out.println(str);
+				
+				int tileNumToFetch = tilesPerRow*i + x + 1;
+				Point current = new Point(0,0);
+				Point empty = new Point(0,0);
+				for (int tmpY = 0; tmpY<tilesPerRow; tmpY++) {
+					for (int tmpX = 0; tmpX < tilesPerRow; tmpX++) {
+						if (ourTiles[tmpX][tmpY].getNumber() == tileNumToFetch) {
+							System.out.println("looking for " + ourTiles[tmpX][tmpY].getNumber());
+							System.out.println("got here with tmpX: " + tmpX + " and tmpY: " + tmpY);
+							current = new Point(tmpX, tmpY);
+						} else if (ourTiles[tmpX][tmpY].getNumber() == tilesPerRow * tilesPerRow) {
+							empty = new Point(tmpX,tmpY);
+						}
+					}
+				}
+				if (ourTiles[i+x][i].getNumber() != tileNumToFetch) {
+					tileNotInTargetRow(new Point(i+x,i), current, empty, moveSequence, ourTiles);
+				}
+				
+				//find tile with tileNumToFetch
+			}
+			break;
+		}
+		
+		System.out.println(moveSequence);
+		return moveSequence;
+	}
+	
+	private void tileInTargetRow(Point target, Point current, Point emptyTile, LinkedList<Move> moveSequence, Tile[][] tiles) {
+		int targetLeftOrRightOfCurr = (current.x - target.x) / Math.abs(current.x - target.x);
+
+		
+		while (current.x != target.x) {
+			if (((emptyTile.x > current.x && targetLeftOrRightOfCurr == -1) 
+					|| (emptyTile.x < current.x && targetLeftOrRightOfCurr == 1)) 
+					&& emptyTile.y == current.y) {
+				makeMove(moveSequence, new Move(0, 1), emptyTile, current, tiles);
+			}
+			
+			while(emptyTile.x != current.x - targetLeftOrRightOfCurr) {
+				makeMove(moveSequence, new Move((current.x - emptyTile.x)/Math.abs(current.x - emptyTile.x), 0), emptyTile, current, tiles);
+			}
+			
+			while(emptyTile.y != current.y) {
+				makeMove(moveSequence, new Move(0,((emptyTile.y - current.y) / Math.abs(emptyTile.y - current.y))), emptyTile, current, tiles);
+			}
+			
+			makeMove(moveSequence, new Move(-targetLeftOrRightOfCurr, 0), emptyTile, current, tiles);
+		}
+	}
+	
+	private void tileNotInTargetRow(Point target, Point current, Point emptyTile, LinkedList<Move> moveSequence, Tile[][] tiles) {
+		if (target.y == current.y){
+			tileInTargetRow(new Point(target.x + 1, current.y), current, emptyTile, moveSequence, tiles);
+		}
+		while (!current.equals(target) ||  target.y != current.y) {
+			if (emptyTile.y == target.y + 1 && emptyTile.x == target.x - 1) {
+				makeMove(moveSequence, new Move(0, 1), emptyTile, current, tiles);
+			} else if (emptyTile.y == current.y && emptyTile.x < current.x){
+				makeMove(moveSequence, new Move(1, 0), emptyTile, current, tiles);
+			}
+			
+			while(emptyTile.y > current.y && emptyTile.x != current.x + 1) {
+				
+				makeMove(moveSequence, new Move((current.x - emptyTile.x)/Math.abs(current.x - emptyTile.x), 0), emptyTile, current, tiles);
+				
+			}
+			
+			while(emptyTile.y != current.y -1) {
+				if (emptyTile.y == current.y) {
+					makeMove(moveSequence, new Move(0, -1) , emptyTile, current, tiles);
+				} else {
+					makeMove(moveSequence, new Move(0, (current.y - emptyTile.y) / Math.abs(current.y - emptyTile.y)) , emptyTile, current, tiles);
+				}
+			}
+			
+			while(emptyTile.x != current.x) {
+				makeMove(moveSequence, new Move((current.x - emptyTile.x)/Math.abs(current.x - emptyTile.x), 0), emptyTile, current, tiles);
+			}
+			
+			if (emptyTile.y == current.y - 1) {
+				makeMove(moveSequence, new Move(0, 1), emptyTile, current, tiles);
+			}
+		}
+		
+		if (target.y == current.y && target.x != current.x) {
+			tileNotInTargetRow(target, current, emptyTile, moveSequence, tiles);
+		}
+		
+	}
+	
+	private void makeMove(LinkedList<Move> moveSequence, Move move, Point emptyTile, Point current, Tile[][] tiles) {
+		System.out.println("x: " + move.dx + " y: " + move.dy);
+		int tmpTileNum = tiles[emptyTile.x][emptyTile.y].getNumber();
+		tiles[emptyTile.x][emptyTile.y].setNumber(tiles[emptyTile.x + move.dx][emptyTile.y + move.dy].getNumber());
+		tiles[emptyTile.x + move.dx][emptyTile.y + move.dy].setNumber(tmpTileNum);
+		
+		emptyTile.translate(move.dx, move.dy);
+		
+		String str = "";
+		for (int g = 0; g < tiles.length; g++) {
+			for (int j = 0; j < tiles[g].length; j++) {
+				str += tiles[j][g].getNumber() + " ";
+			}
+			str += "\n";
+		}
+		System.out.println(str);
+		
+		if (current.equals(emptyTile)) {
+			Move reverse = move.reverse();
+			current.translate(reverse.dx, reverse.dy);
+		}
+		
+		moveSequence.add(move);
+	}
+	
+	
+	
+	
 	/// Getters from here ///
 	
-	public Point getCurrEmptyTile() {
+ 	public Point getCurrEmptyTile() {
 		return this.currEmptyTile;
 	}
 	
