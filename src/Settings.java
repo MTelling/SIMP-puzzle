@@ -118,7 +118,8 @@ public class Settings implements Serializable{
 	}
 	
 	public void setScrambleAnimationSpeed(int movesPerAnimation) {
-		this.scrambleAnimationSpeed = (getCurrWindowSize().getBOARD_SIZE() / getTilesPerRowInBoard()) / movesPerAnimation;
+		//TODO: Fix this
+		this.scrambleAnimationSpeed = 2;
 	}
 	
 	public void setAnimationSpeed(int animationSpeed) {

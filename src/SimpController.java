@@ -54,6 +54,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	
 	//Shows a move. Animated or not. 
 	private void showMove(boolean shouldAnimate) {
+
 		this.setAnimating(true);
 
 		if (shouldAnimate) {
@@ -66,6 +67,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.repaint();
 
 			this.setAnimating(false);
+
 
 		}
 	}
