@@ -35,7 +35,7 @@ public class Settings implements Serializable{
 		this.setControlsNormal();
 		
 		//Set difficulty
-		this.setDifficulty(100);
+		this.setDifficulty(20);
 		
 		//Sets tiles per row in the board
 		this.setTilesPerRowInBoard(4);

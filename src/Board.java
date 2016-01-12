@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Random;
 
 public class Board implements Serializable {
@@ -298,60 +298,58 @@ public class Board implements Serializable {
 		
 		return integers;
 	}
+	
+	//Helper method to "Make a move"
+	public Node makeTheMove(Point emptyPos, Move move, List<Integer> tiles, Node current) {
+		
+		int emptyPosNum = this.tilesPerRow * emptyPos.y + emptyPos.x;
+	//	Point nextEmpty = current.getEmpty();
+		emptyPos.translate(move.dx, move.dy);
+		int nextEmptyPosNum = this.tilesPerRow * emptyPos.y + emptyPos.x;
+		
+		// Save current number
+		int tempNext = tiles.get(this.tilesPerRow * emptyPos.y + emptyPos.x);
+		
+		// Make a move
+		tiles.set(emptyPosNum, tiles.get(nextEmptyPosNum));
+		tiles.set(nextEmptyPosNum, this.tilesPerRow * this.tilesPerRow);
+
+		// Put a new Node in queue, with that move
+		Node tempNode = new Node(current.getMoves() + 1, current, tiles, move, emptyPos);
+
+		// Reverse the move and be ready for the next move
+		tiles.set(nextEmptyPosNum, tempNext);
+		emptyPos.translate(-move.dx, -move.dy);
+		
+		return tempNode;
+	}
 
 	public LinkedList<Move> Solve (Tile[][] currTiles, Point emptyTile) {
 
-		
 		List<Integer> tiles = makeListFromTileArray(currTiles);
-		
 		
 		Point empty = emptyTile;
 		
-		PriorityQueue<Node> queue = new PriorityQueue<Node>();
-		Queue<Node> visited = new LinkedList<Node>();
-		
+		PriorityQueue<Node> queue = new PriorityQueue<Node>();		
 		
 		Node first = new Node(0 , null , tiles, null, empty);
 		
 		queue.add(first);
 
 		while(queue.peek() != null) {
+
 			// Get node with highest priority
 			Node current = queue.poll();
-			
 
 			tiles = current.getBoard();
 
-			
-			
 			// Check if we have a goal board yet.
 			if(current.getManhattan() != 0) {
 
 				for( Move move : legalMoves(current.getEmpty()) ) {
 					
 					if(!(current.getLastMove() != null && current.getLastMove().reverse().equals(move))) {
-					
-						Point nextEmpty = ObjectCopy.point(current.getEmpty());
-						nextEmpty.translate(move.dx, move.dy);
-						
-						// Save current numbers
-						int temp = tiles.get(this.tilesPerRow * current.getEmpty().y + current.getEmpty().x);
-						
-						int tempNext = tiles.get(this.tilesPerRow * nextEmpty.y + nextEmpty.x);
-						
-						// Make a move
-						tiles.set(this.tilesPerRow * current.getEmpty().y + current.getEmpty().x, tiles.get(this.tilesPerRow * nextEmpty.y + nextEmpty.x));
-						tiles.set(this.tilesPerRow * nextEmpty.y + nextEmpty.x, this.tilesPerRow * this.tilesPerRow);
-			
-						// Put a new Node in queue, with that move
-						Node tempNode = new Node(current.getMoves() + 1, current, tiles, move, nextEmpty);
-						
-						queue.add(tempNode);
-
-						// Reverse the move and be ready for the next move
-						tiles.set(this.tilesPerRow * nextEmpty.y + nextEmpty.x, tempNext);
-						tiles.set(this.tilesPerRow * current.getEmpty().y + current.getEmpty().x, temp);
-						
+						queue.add(makeTheMove(current.getEmpty(), move, tiles, current));
 					}
 				}
 			} else {

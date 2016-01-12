@@ -1,5 +1,4 @@
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Node implements Comparable<Node>, Cloneable {
@@ -89,8 +88,8 @@ public class Node implements Comparable<Node>, Cloneable {
 		int sum = 0;
 		int hamming = 0;
 		int count = 1;
-		int[] xRow = new int[size + 1];
-		int[][] yRows = new int[size + 1][size + 1];
+		int[] xRow = new int[size];
+		int[][] yRows = new int[size][size];
 		//Go through the board.
 		for(int y = 0; y < size; y++) {
 				
@@ -118,15 +117,22 @@ public class Node implements Comparable<Node>, Cloneable {
 						hamming++;
 					}
 					
-					if(containsHigher(xRow, currentNumber)
-							|| containsHigher(yRows[x], currentNumber)) {
+					if(x == size - 1){
+						if(containsHigher(xRow, currentNumber)) {
+							sum += 2;
+						}
+					}
+					
+					if(containsHigher(yRows[x], currentNumber)) {
 						sum += 2;
 					}
 					
-					sum += xDistance + yDistance;
+				//	sum += (xDistance + yDistance) * ((x*x) + (y*y));
+					sum += (xDistance + yDistance);
 				}
 				count++;
 			}
+			
 		}
 		this.hamming = hamming;
 		return sum;
