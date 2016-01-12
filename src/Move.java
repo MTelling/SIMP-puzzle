@@ -17,6 +17,11 @@ public class Move implements Serializable, Cloneable {
 		return new Move (this.dx, this.dy);
 	}
 	
+	
+	public boolean equals(Move other) {
+		return (this.dx == other.dx && this.dy == other.dy);
+	}
+	
 	//Returns the reverse of the move. 
 	public Move reverse() {
 		return new Move(-this.dx, -this.dy);

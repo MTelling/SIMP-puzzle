@@ -1,5 +1,7 @@
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ObjectCopy {
 	public static int[][] array2D(int[][] array) {
@@ -8,6 +10,12 @@ public class ObjectCopy {
 			newArray[i] = Arrays.copyOf(array[i], array[i].length);
 		}
 		return newArray;
+	}
+	
+	public static List<Integer> cloneList(List<Integer> list) {
+	    List<Integer> clone = new ArrayList<Integer>(list.size());
+	    for(Integer item: list) clone.add(item);
+	    return clone;
 	}
 	
 	public static Tile[][] tile2D(Tile[][] tiles) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
@@ -285,78 +286,80 @@ public class Board implements Serializable {
 		return moves;
 	}
 	
-	
+	//Helper method to make tiles[][] into a simple integer list
+	public List<Integer> makeListFromTileArray(Tile[][] array) {
+		List<Integer> integers = new ArrayList<Integer>();
+		
+		for(int y = 0; y < this.tilesPerRow; y++) {
+			for(int x = 0; x < this.tilesPerRow; x++) {
+				integers.add(array[x][y].getNumber());
+			}
+		}
+		
+		return integers;
+	}
 
 	public LinkedList<Move> Solve (Tile[][] currTiles, Point emptyTile) {
 
 		
+		List<Integer> tiles = makeListFromTileArray(currTiles);
 		
 		
-		Tile[][] board = ObjectCopy.tile2D(currTiles);
-		Point empty = ObjectCopy.point(emptyTile);
+		Point empty = emptyTile;
+		
 		PriorityQueue<Node> queue = new PriorityQueue<Node>();
+		Queue<Node> visited = new LinkedList<Node>();
 		
 		
-		Node first = new Node(0 , null , ObjectCopy.tile2D(board), null, empty);
-		
+		Node first = new Node(0 , null , tiles, null, empty);
 		
 		queue.add(first);
 
 		while(queue.peek() != null) {
-			//System.out.println(queue.size());
 			// Get node with highest priority
 			Node current = queue.poll();
+			
 
-			board = current.getBoard();
+			tiles = current.getBoard();
 
 			
-			//System.out.println(current.getManhattan());
-	//		current.getManhattenDistanceInArray();
-
-//			for(int y = 0; y < board.length; y++) {
-//				for(int x = 0; x < board.length; x++) {
-//					// Don't save distance for the empty tile!
-//					System.out.print(board[x][y].getNumber() + " ");
-//				}
-//				System.out.println();
-//			}
-//			System.out.println();
 			
 			// Check if we have a goal board yet.
 			if(current.getManhattan() != 0) {
 
 				for( Move move : legalMoves(current.getEmpty()) ) {
-			//		System.out.println(current.getManhattan());
 					
-					Point nextEmpty = ObjectCopy.point(current.getEmpty());
-					nextEmpty.translate(move.dx, move.dy);
+					if(!(current.getLastMove() != null && current.getLastMove().reverse().equals(move))) {
 					
-					// Save current numbers
-					int temp = board[current.getEmpty().x][current.getEmpty().y].getNumber();
-					
-					int tempNext = board[nextEmpty.x][nextEmpty.y].getNumber();
-					
-					// Make a move
-					board[current.getEmpty().x][current.getEmpty().y].setNumber(board[nextEmpty.x][nextEmpty.y].getNumber());
-					board[nextEmpty.x][nextEmpty.y].setNumber(tilesPerRow * tilesPerRow);
-		
-					// Put a new Node in queue, with that move
-					Node tempNode = new Node(current.getMoves() + 1, current, board, move, nextEmpty);
-					
-					if(tempNode.getLastMove().reverse() != current.getLastMove()) {
+						Point nextEmpty = ObjectCopy.point(current.getEmpty());
+						nextEmpty.translate(move.dx, move.dy);
+						
+						// Save current numbers
+						int temp = tiles.get(this.tilesPerRow * current.getEmpty().y + current.getEmpty().x);
+						
+						int tempNext = tiles.get(this.tilesPerRow * nextEmpty.y + nextEmpty.x);
+						
+						// Make a move
+						tiles.set(this.tilesPerRow * current.getEmpty().y + current.getEmpty().x, tiles.get(this.tilesPerRow * nextEmpty.y + nextEmpty.x));
+						tiles.set(this.tilesPerRow * nextEmpty.y + nextEmpty.x, this.tilesPerRow * this.tilesPerRow);
+			
+						// Put a new Node in queue, with that move
+						Node tempNode = new Node(current.getMoves() + 1, current, tiles, move, nextEmpty);
+						
 						queue.add(tempNode);
-					}
-					
 
-					// Reverse the move and be ready for the next move
-					board[nextEmpty.x][nextEmpty.y].setNumber(tempNext);
-					board[current.getEmpty().x][current.getEmpty().y].setNumber(temp);
+						// Reverse the move and be ready for the next move
+						tiles.set(this.tilesPerRow * nextEmpty.y + nextEmpty.x, tempNext);
+						tiles.set(this.tilesPerRow * current.getEmpty().y + current.getEmpty().x, temp);
+						
+					}
 				}
 			} else {
 
 				LinkedList<Move> result = backtrackMoves(current);
 				Collections.reverse(result);
 				System.out.println(result.size());
+				
 				return result;
 			}
 		}

@@ -1,19 +1,20 @@
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Node implements Comparable<Node>, Cloneable {
 	private int moves;
 	private Node prevNode;
 	private int manhattan;
-	private Tile[][] currBoard;
+	private List<Integer> currBoard;
 	private Move moveMade;
 	private Point empty;
 	private int hamming;
 
-	public Node(int moves, Node prevNode, Tile[][] currBoard, Move moveMade, Point empty) {
+	public Node(int moves, Node prevNode, List<Integer> currBoard, Move moveMade, Point empty) {
 		this.moves = moves;
 		this.prevNode = prevNode;
-		this.currBoard = ObjectCopy.tile2D(currBoard);
+		this.currBoard = ObjectCopy.cloneList(currBoard);
 		this.manhattan = getManhattanDistance(this.currBoard);
 		this.moveMade = moveMade;
 		this.empty = ObjectCopy.point(empty);
@@ -23,7 +24,7 @@ public class Node implements Comparable<Node>, Cloneable {
 		return new Node(this.moves, this.prevNode, this.currBoard, this.moveMade, this.empty);
 	}
 	
-	public Tile[][] getBoard() {
+	public List<Integer> getBoard() {
 		return currBoard;
 	}
 	
@@ -83,8 +84,8 @@ public class Node implements Comparable<Node>, Cloneable {
 	}
 
 	//Helper method to get manhattan distance for a given board
-	public int getManhattanDistance(Tile[][] currentTiles) {
-		int size = currBoard.length;
+	public int getManhattanDistance(List<Integer> currentTiles) {
+		int size = (int) Math.sqrt(currBoard.size());
 		int sum = 0;
 		int hamming = 0;
 		int count = 1;
@@ -95,29 +96,30 @@ public class Node implements Comparable<Node>, Cloneable {
 				
 			
 			for(int x = 0; x < size; x++) {
+				int currentNumber = currentTiles.get(size * y + x);
 				// Don't save distance for the empty tile!
-				if(currentTiles[x][y].getNumber() != (size * size)){
+				if(currentTiles.get(size * y + x) != (size * size)){
 
 					
-					int targetX = (currBoard[x][y].getNumber() - 1) % size;
-					int targetY = (currBoard[x][y].getNumber() - 1) / size;
+					int targetX = (currentNumber - 1) % size;
+					int targetY = (currentNumber - 1) / size;
 					int xDistance = Math.abs(x - targetX);
 					int yDistance = Math.abs(y - targetY);
 					
 					if(targetY == y) {
-						xRow[x]= currentTiles[x][y].getNumber();
+						xRow[x]= currentNumber;
 					}
 					if(targetX == x) {
-						yRows[x][y] = currentTiles[x][y].getNumber();
+						yRows[x][y] = currentNumber;
 					}
 					
 					
-					if(currentTiles[x][y].getNumber() != count) {
+					if(currentNumber != count) {
 						hamming++;
 					}
 					
-					if(containsHigher(xRow, currentTiles[x][y].getNumber())
-							|| containsHigher(yRows[x], currentTiles[x][y].getNumber())) {
+					if(containsHigher(xRow, currentNumber)
+							|| containsHigher(yRows[x], currentNumber)) {
 						sum += 2;
 					}
 					
