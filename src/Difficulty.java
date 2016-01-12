@@ -1,6 +1,6 @@
 
 public enum Difficulty {
-	EASY(2), MEDIUM(6), HARD(12);
+	EASY(1), MEDIUM(2), HARD(3);
 	private final int VALUE;
 	
 	private Difficulty(int value) {
