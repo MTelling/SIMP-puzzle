@@ -90,7 +90,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
 				gamePanel.getScore().addSeconds(1);
 				gamePanel.repaint();
-				System.out.println(gamePanel.getBoard().toString());
 
 				//TODO: We must agree on where to put this. 
 				if (gamePanel.getGameState().isGameDone()) {
