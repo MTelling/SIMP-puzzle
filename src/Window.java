@@ -40,6 +40,7 @@ public class Window extends JFrame {
 		
 		//Initialize the model.
 		settings = new Settings();
+		settings.init();
 		Board board = new Board();
 		board.init();
 		Score score = new Score();	
@@ -96,6 +97,8 @@ public class Window extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+		
+		
 	}
 	
 	

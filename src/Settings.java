@@ -33,15 +33,19 @@ public class Settings implements Serializable{
 	private int difficulty;
 	private int tilesPerRowInBoard;
 	
+	
 	private WindowSize CurrWindowSize;
 	
 	public Settings() {
-		
+		//Set windowsize to medium initally
+		this.setCurrWindowSize(WindowSize.MEDIUM);
+	}
+	
+	//Init method because some of these functions depend on the WindowSize enum to be initialized, 
+	//and it isn't before this element is constructed. 
+	public void init() {
 		//Set animation scrambling on/off
 		this.setAnimationScramblingOn(true);
-		
-		//Set windowsize to Small initally
-		this.setCurrWindowSize(WindowSize.LARGE);
 		
 		//Set settings to Normal or inverted. 
 		this.setControlsNormal();
@@ -53,10 +57,10 @@ public class Settings implements Serializable{
 		this.setTilesPerRowInBoard(3);
 		
 		//Set speed for the scrambling animation
-		this.setScrambleAnimationSpeed(difficulty/2 + tilesPerRowInBoard*5);
+		this.setScrambleAnimationSpeed(2); //Lower is faster
 		
 		//Set speed for normal move animation
-		this.setAnimationSpeed(AnimationSpeed.FAST.getValue());
+		this.setAnimationSpeed(AnimationSpeed.MEDIUM.getValue());
 		
 		//Turn animation on and off. 
 		this.isAnimationOn = true;
@@ -91,8 +95,8 @@ public class Settings implements Serializable{
 		this.controls = INVERTED_CONTROLS;
 	}
 	
-	public void setScrambleAnimationSpeed(int scrambleAnimationSpeed) {
-		this.scrambleAnimationSpeed = scrambleAnimationSpeed;
+	public void setScrambleAnimationSpeed(int movesPerAnimation) {
+		this.scrambleAnimationSpeed = (getCurrWindowSize().getBOARD_SIZE() / getTilesPerRowInBoard()) / movesPerAnimation;
 	}
 	
 	public void setAnimationSpeed(int animationSpeed) {

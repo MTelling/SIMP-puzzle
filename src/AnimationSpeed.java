@@ -1,13 +1,13 @@
 
 public enum AnimationSpeed {
-	SLOW(2), MEDIUM(5), FAST(9);
-	private final int VALUE;
+	SLOW(60), MEDIUM(20), FAST(10);
+	private final int stepsPerMove;
 	
-	private AnimationSpeed(int value) {
-		this.VALUE = value;
+	private AnimationSpeed(int stepsPerMove) {
+		this.stepsPerMove = stepsPerMove;
 	}
 	
 	public int getValue() {
-		return this.VALUE;
+		return (Window.getSettings().getCurrWindowSize().getBOARD_SIZE() / Window.getSettings().getTilesPerRowInBoard()) / this.stepsPerMove;
 	}
 }

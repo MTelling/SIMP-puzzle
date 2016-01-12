@@ -37,7 +37,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 				this.startClock();
 			}
-			this.setAnimating(true);
 			//Before making the move, save current game stat to gameState. 
 			gamePanel.getGameState().saveCurrentMove(move);
 			
@@ -55,6 +54,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	
 	//Shows a move. Animated or not. 
 	private void showMove(boolean shouldAnimate) {
+		this.setAnimating(true);
+
 		if (shouldAnimate) {
 			this.moveAnimator.start();	
 		} else {
@@ -155,7 +156,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void keyReleased(KeyEvent e) {
 		if (!this.isAnimating) {
 			//Redo undo if ctrl+z and ctrl+y
-			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle) {
+			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle && !gamePanel.getGameState().isGameDone()) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
@@ -166,7 +167,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					
 					showMove(Window.getSettings().isAnimationOn());
 				}
-			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle) {
+			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle && !gamePanel.getGameState().isGameDone()) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
@@ -267,6 +268,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			this.stopClock();
 			Window.toggleMenu();
 			Window.swapView("mainMenu");
+		} else if (e.getActionCommand().equals("inGameSolveGame")) {
+			System.out.println("solving game");
 		}
 	}
 	

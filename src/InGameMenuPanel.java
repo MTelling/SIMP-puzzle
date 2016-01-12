@@ -15,7 +15,7 @@ public class InGameMenuPanel extends JPanel {
 	private JButton btnNewGame;
 	private JButton btnSaveGame;
 	private JButton btnHighScore;
-	private JButton btnSettings;
+	private JButton btnSolver;
 	private JButton btnQuitGame;
 	
 	public InGameMenuPanel(SimpController controller) {
@@ -25,8 +25,8 @@ public class InGameMenuPanel extends JPanel {
 		this.addButton(btnContinueGame, "Continue Game", "ContinueGame");
 		this.addButton(btnNewGame, "New Game", "NewGame");
 		this.addButton(btnSaveGame, "Save Game", "SaveGame");
+		this.addButton(btnSolver, "Solve Game", "SolveGame");
 		this.addButton(btnHighScore, "Highscores", "Highscores");
-		this.addButton(btnSettings, "Settings", "Settings");
 		this.addButton(btnQuitGame, "Exit to Main Menu", "ExitToMainMenu");
 		this.add(Box.createVerticalGlue());
 		
