@@ -40,7 +40,7 @@ public class Window extends JFrame {
 		
 		//Initialize the model.
 		settings = new Settings();
-		settings.init();
+		settings.loadSettings();
 		Board board = new Board();
 		board.init();
 		Score score = new Score();	
