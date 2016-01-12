@@ -190,11 +190,11 @@ public class GamePanel extends JPanel {
 						if (!this.gameState.isGameDone()){
 							g2d.setColor(Color.BLACK);
 							g2d.drawRect(xCoord, yCoord, tileWidth, tileHeight);
-						} 
-						
-						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
-						if (this.gameState.isLabelsOn()) {
-							this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, tileSize/3);
+							
+							//Draw labels on unfinished picture
+							if (this.gameState.isLabelsOn()) {
+								this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, tileSize/3);
+							}
 						} 
 						
 					} else { //No picture is showing, just draw label in center. 

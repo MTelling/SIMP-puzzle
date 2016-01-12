@@ -51,6 +51,8 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	private JRadioButton smallWindow;
 	private JRadioButton largeWindow;
 	private JRadioButton mediumWindow;
+	private JRadioButton scrambleAnimationOn;
+	private JRadioButton scrambleAnimationOff;
 
 	private Window window;
 	private Settings settings;
@@ -59,6 +61,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	public SettingsPanel(Settings settings, Window window) {
 		this.settings = settings;
 		this.window = window;
+		
 		
 		this.add(Box.createVerticalGlue());
 		
@@ -78,6 +81,9 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		this.add(Box.createVerticalGlue());
 		
 		createAnimationSpeedChooser();
+		this.add(Box.createVerticalGlue());
+		
+		createScrambleAnimationChooser();
 		this.add(Box.createVerticalGlue());
 		
 		createWindowSizeChooser();
@@ -211,6 +217,15 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				window.setNewSize(settings.getCurrWindowSize().getDimension());
 				break;
 				
+			
+			//Set animation scramble to on or off. 
+			case "scrambleAnimationOn": 
+				settings.setAnimationScramblingOn(true);
+				break;
+			case "scrambleAnimationOff":
+				settings.setAnimationScramblingOn(false);
+				break;
+				
 			default: break;
 		}
 		
@@ -245,6 +260,15 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		loadAnimationSpeed();
 		loadAnimationSetting();
 		loadWindowSize();
+		loadAnimationScrambleSetting();
+	}
+	
+	private void loadAnimationScrambleSetting() {
+		if (settings.isAnimationScramblingOn()) {
+			scrambleAnimationOn.setSelected(true);
+		} else {
+			scrambleAnimationOff.setSelected(false);
+		}
 	}
 	
 	private void loadDifficultySetting() {
@@ -326,6 +350,30 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		
 	/// Methods for creating UI ///
 
+	private void createScrambleAnimationChooser() {
+		JLabel scrambleAnimationLabel = new JLabel("Show scramble animation: ");
+		scrambleAnimationOn = new JRadioButton("On");
+		scrambleAnimationOn.setActionCommand("scrambleAnimationOn");
+		scrambleAnimationOff = new JRadioButton("Off");
+		scrambleAnimationOff.setActionCommand("scrambleAnimationOff");
+		
+		//Connect to controls
+		scrambleAnimationOn.addActionListener(this);
+		scrambleAnimationOff.addActionListener(this);
+
+		ButtonGroup scrambleAnimationToggle = new ButtonGroup();
+		scrambleAnimationToggle.add(scrambleAnimationOn);
+		scrambleAnimationToggle.add(scrambleAnimationOff);
+		
+		
+		Box scrambleAnimationContainer = new Box(BoxLayout.LINE_AXIS);
+		scrambleAnimationContainer.add(scrambleAnimationLabel);
+		scrambleAnimationContainer.add(scrambleAnimationOn);
+		scrambleAnimationContainer.add(scrambleAnimationOff);
+		
+		this.add(scrambleAnimationContainer);
+	}
+	
 	private void createGameTypeChooser() {
 		
 		JLabel gameTypeLabel = new JLabel("Game Type: ");

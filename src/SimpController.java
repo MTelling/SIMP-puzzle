@@ -30,8 +30,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	
 	private void makeMove(Move move) {
 		//Before making a move, check if a move should be made. 
-		//If it should be made saveGameState to the current board and then make the move. 
-		if (gamePanel.getBoard().isMoveValid(move)) {
+		//If it should be made saveGameState to the current board and then make the move.
+		//Also never allow  a move if the game is won. 
+		if (gamePanel.getBoard().isMoveValid(move) && !gamePanel.getGameState().isGameDone()) {
 			//Start time if it's the first move in the game, or if it's the first new move after load game. 
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 				this.startClock();
@@ -179,7 +180,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				if(!Window.menuToggle)
 					this.stopClock();
-				else
+				else if (!gamePanel.getGameState().isGameDone())
 					this.startClock();
 				Window.toggleMenu();
 			} else if(!Window.menuToggle) {
@@ -249,7 +250,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			System.exit(0);
 		} else if(e.getActionCommand().equals("inGameContinueGame")) {
 			Window.toggleMenu();
-			this.startClock();
+			if (!gamePanel.getGameState().isGameDone()) {
+				this.startClock();
+			}
 		} else if (e.getActionCommand().equals("inGameNewGame")) {
 			this.stopClock();
 			Window.toggleMenu();
