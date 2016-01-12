@@ -295,7 +295,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		if (settings.isPictureOn()) {
 			gameTypePicture.setSelected(true);
 			
-			//TODO: Maybe this should be in the actionlistener? 
 			choosePicture.setVisible(true);
 			labelsToggleContainer.setVisible(true);
 		} else {
