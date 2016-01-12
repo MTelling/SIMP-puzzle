@@ -35,10 +35,10 @@ public class Settings implements Serializable{
 		this.setControlsNormal();
 		
 		//Set difficulty
-		this.setDifficulty(19);
+		this.setDifficulty(10);
 		
 		//Sets tiles per row in the board
-		this.setTilesPerRowInBoard(3);
+		this.setTilesPerRowInBoard(4);
 		
 		//Set speed for the scrambling animation
 		this.setScrambleAnimationSpeed(difficulty/2 + tilesPerRowInBoard*5);

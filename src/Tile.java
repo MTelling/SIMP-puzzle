@@ -19,6 +19,10 @@ public class Tile implements Serializable, Cloneable {
 		this.yCoord += dy;
 	}
 	
+	public Tile clone() {
+		return new Tile(this.number, this.xCoord, this.yCoord);
+	}
+	
 	/// SETTERS FROM HERE ///
 	
 	public void setCoords (int xCoord, int yCoord) {

@@ -128,6 +128,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					showMove(Window.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				
 				if(!Window.menuToggle)
 					this.stopClock();
 				else
@@ -153,7 +154,12 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				
 				//Try to make the move. 
 				makeMove(new Move(dx, dy));
-			}
+			} 
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_S) {
+			System.out.println("Got here");
+			solveBoard();
 		}
 	}
 	
@@ -207,6 +213,13 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			this.stopClock();
 			Window.swapView("mainMenu");
 		}
+	}
+	
+	public void solveBoard() {
+		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().Solve(this.gamePanel.getBoard().getTiles(), this.gamePanel.getBoard().getCurrEmptyTile());
+		System.out.println(scramblingSequence);
+		Timer scrambleAnimationTimer = new Timer(50, new MoveSequenceAnimator(this, scramblingSequence));
+		scrambleAnimationTimer.start();
 	}
 	
 	public void scrambleBoard() {

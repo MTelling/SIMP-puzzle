@@ -1,6 +1,11 @@
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
 
 public class Board implements Serializable {
@@ -169,9 +174,8 @@ public class Board implements Serializable {
 	
 	//Goes from animationState to defaultState
 	private void setToDefaultState() {
-		int tmpTileNum = this.tiles[currEmptyTile.x][currEmptyTile.y].getNumber();
 		this.tiles[currEmptyTile.x][currEmptyTile.y].setNumber(this.tiles[nextEmptyTile.x][nextEmptyTile.y].getNumber());
-		this.tiles[nextEmptyTile.x][nextEmptyTile.y].setNumber(tmpTileNum);
+		this.tiles[nextEmptyTile.x][nextEmptyTile.y].setNumber((int) Math.pow(tilesPerRow, 2));
 		
 		currEmptyTile = ObjectCopy.point(nextEmptyTile);
 	}
@@ -242,6 +246,121 @@ public class Board implements Serializable {
 		}
 		
 		return str;
+	}
+	
+	
+	
+	/////////////////// AI FROM HERE :D :D /////////////////////////
+	
+	
+
+	// Helper method to get valid moves
+	public ArrayList<Move> legalMoves (Point emptyTile) {
+		ArrayList<Move> moves = new ArrayList<Move>();
+		if (emptyTile.x > 0) {
+			moves.add(new Move(-1 , 0));
+		} 
+		if (emptyTile.x < this.tilesPerRow - 1) {
+			moves.add(new Move(1 , 0));
+		} 
+		if (emptyTile.y > 0) { //Down arrow
+			moves.add(new Move(0 , -1));
+		} 
+		if (emptyTile.y < this.tilesPerRow - 1) {
+			moves.add(new Move(0 , 1));
+		}
+		return moves;
+	}
+
+	// Helper method to backtrack moves
+	public LinkedList<Move> backtrackMoves(Node node) {
+		LinkedList<Move> moves = new LinkedList<Move>();
+		Node current = node.clone();
+		if(current.getLastMove() != null) {
+			moves.add(current.getLastMove());
+		}
+		if(current.getPrevNode() != null) {
+			moves.addAll(backtrackMoves(current.getPrevNode()));
+		} 
+		return moves;
+	}
+	
+	
+
+	public LinkedList<Move> Solve (Tile[][] currTiles, Point emptyTile) {
+
+		
+		
+		
+		Tile[][] board = ObjectCopy.tile2D(currTiles);
+		Point empty = ObjectCopy.point(emptyTile);
+		PriorityQueue<Node> queue = new PriorityQueue<Node>();
+		
+		
+		Node first = new Node(0 , null , ObjectCopy.tile2D(board), null, empty);
+		
+		
+		queue.add(first);
+
+		while(queue.peek() != null) {
+			//System.out.println(queue.size());
+			// Get node with highest priority
+			Node current = queue.poll();
+
+			board = current.getBoard();
+
+			
+			//System.out.println(current.getManhattan());
+	//		current.getManhattenDistanceInArray();
+
+//			for(int y = 0; y < board.length; y++) {
+//				for(int x = 0; x < board.length; x++) {
+//					// Don't save distance for the empty tile!
+//					System.out.print(board[x][y].getNumber() + " ");
+//				}
+//				System.out.println();
+//			}
+//			System.out.println();
+			
+			// Check if we have a goal board yet.
+			if(current.getManhattan() != 0) {
+
+				for( Move move : legalMoves(current.getEmpty()) ) {
+			//		System.out.println(current.getManhattan());
+					
+					Point nextEmpty = ObjectCopy.point(current.getEmpty());
+					nextEmpty.translate(move.dx, move.dy);
+					
+					// Save current numbers
+					int temp = board[current.getEmpty().x][current.getEmpty().y].getNumber();
+					
+					int tempNext = board[nextEmpty.x][nextEmpty.y].getNumber();
+					
+					// Make a move
+					board[current.getEmpty().x][current.getEmpty().y].setNumber(board[nextEmpty.x][nextEmpty.y].getNumber());
+					board[nextEmpty.x][nextEmpty.y].setNumber(tilesPerRow * tilesPerRow);
+		
+					// Put a new Node in queue, with that move
+					Node tempNode = new Node(current.getMoves() + 1, current, board, move, nextEmpty);
+					
+					if(tempNode.getLastMove().reverse() != current.getLastMove()) {
+						queue.add(tempNode);
+					}
+					
+
+					// Reverse the move and be ready for the next move
+					board[nextEmpty.x][nextEmpty.y].setNumber(tempNext);
+					board[current.getEmpty().x][current.getEmpty().y].setNumber(temp);
+				}
+			} else {
+
+				LinkedList<Move> result = backtrackMoves(current);
+				Collections.reverse(result);
+				System.out.println(result.size());
+				return result;
+			}
+		}
+		return null;
 	}
 	
 }
