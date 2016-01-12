@@ -1,5 +1,7 @@
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 public class Settings implements Serializable{
 	
@@ -37,48 +39,68 @@ public class Settings implements Serializable{
 	private WindowSize CurrWindowSize;
 	
 	public Settings() {
-		//Set windowsize to medium initally
 		this.setCurrWindowSize(WindowSize.MEDIUM);
 	}
 	
-	//Init method because some of these functions depend on the WindowSize enum to be initialized, 
-	//and it isn't before this element is constructed. 
-	public void init() {
-		//Set animation scrambling on/off
-		this.setAnimationScramblingOn(true);
+	public void loadSettings() {
+		Preferences settings = Preferences.userNodeForPackage(this.getClass());
+		try {
+			settings.sync();
+		} catch (BackingStoreException e) {
+			System.out.println("Error: Settings Sync Failed");
+		}
 		
-		//Set settings to Normal or inverted. 
-		this.setControlsNormal();
+		this.setCurrWindowSize(WindowSize.getWindowSizeFromOrdinal(settings.getInt("currWindowSize", 1)));
 		
-		//Set difficulty
-		this.setDifficulty(Difficulty.EASY.getValue());
+		this.setDifficulty(settings.getInt("gameDifficulty", Difficulty.EASY.getValue()));
+		this.setTilesPerRowInBoard(settings.getInt("tilesPerRowInBoard", 3));
 		
-		//Sets tiles per row in the board
-		this.setTilesPerRowInBoard(3);
+		if(settings.getBoolean("useNormalControls", true)) {
+			this.setControlsNormal();
+		} else {
+			this.setControlsInverted();
+		}
 		
-		//Set speed for the scrambling animation
-		this.setScrambleAnimationSpeed(2); //Lower is faster
+		this.setFramesPerSecond(settings.getInt("framesPerSecond", 90));
+		this.refreshRate = settings.getInt("refreshRate", (int)Math.round(1000.0/framesPerSecond));
 		
-		//Set speed for normal move animation
-		this.setAnimationSpeed(AnimationSpeed.MEDIUM.getValue());
+		this.setAnimationOn(settings.getBoolean("animateMoves", true));
+		this.setAnimationSpeed(settings.getInt("animationSpeed", AnimationSpeed.MEDIUM.getValue()));
+		this.setAnimationScramblingOn(settings.getBoolean("animateBoardScramble", true));
+		this.setScrambleAnimationSpeed(settings.getInt("scrambleAnimationSpeed", 2));
 		
-		//Turn animation on and off. 
-		this.isAnimationOn = true;
+		this.setPictureOn(settings.getBoolean("usePictureAsTiles", false));
+		this.setGamePicture(settings.get("picturePath", "resources/pics/test.jpg"));
+		this.setLabelsOn(settings.getBoolean("useCornerLabels", false));
+	}
+	
+	public void saveSettings() {
+		Preferences settings = Preferences.userNodeForPackage(this.getClass());
 		
-		//Turn pictures on or off.
-		this.isPictureOn = true;
+		settings.putBoolean("useNormalControls", this.controls.equals(NORMAL_CONTROLS) ? true : false);
 		
-		//Turn labels on or off when picture is active.
-		this.isLabelsOn = true;
+		settings.putInt("framesPerSecond", this.framesPerSecond);
+		settings.putInt("refreshRate", this.refreshRate);
 		
-		//Set the picture path to use as tiles
-		this.gamePicture = "resources/pics/testor.png";
+		settings.putBoolean("animateMoves", this.isAnimationOn);
+		settings.putInt("moveAnimationSpeed", this.animationSpeed);
+		settings.putBoolean("animateBoardScramble", this.isAnimationScramblingOn);
+		settings.putInt("scrambleAnimationSpeed", this.scrambleAnimationSpeed);
 		
-		//Set frames per second
-		this.setFramesPerSecond(90);
+		settings.putBoolean("usePictureAsTiles", this.isPictureOn);
+		settings.put("picturePath", this.gamePicture);
+		settings.putBoolean("useCornerLabels", this.isLabelsOn);
 		
-		//calculate refreshRate for drawing.
-		this.refreshRate = (int)Math.round(1000.0/framesPerSecond);
+		settings.putInt("gameDifficulty", this.difficulty);
+		settings.putInt("tilesPerRowInBoard", this.tilesPerRowInBoard);
+		
+		settings.putInt("currWindowSize", this.CurrWindowSize.ordinal());
+		
+		try {
+			settings.flush();
+		} catch (BackingStoreException e) {
+			System.out.println("Error: Could not save settings");
+		}
 	}
 	
 	/// SETTERS FROM HERE ///

@@ -197,7 +197,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				
 			//Close settings window
 			case "Close settings":
-				
+				settings.saveSettings();
 				//TODO: Should do something different depending on where it's coming from. 
 				Window.swapView("mainMenu");
 				break;

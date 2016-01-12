@@ -22,6 +22,19 @@ public enum WindowSize {
 		WINDOW_WIDTH = BOARD_SIZE + 2 * GAME_BORDER;
 		WINDOW_HEIGHT = GAME_BORDER + BOARD_SIZE + TOP_CONTROLS_SIZE;
 	}
+	
+	public static WindowSize getWindowSizeFromOrdinal(int ordinal) {
+		switch(ordinal) {
+		case 0:
+			return WindowSize.SMALL;
+		case 1:
+			return WindowSize.MEDIUM;
+		case 2:
+			return WindowSize.LARGE;
+		default:
+			return null;
+		}
+	}
 
 	public int getGAME_BORDER() {
 		return GAME_BORDER;
