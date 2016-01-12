@@ -8,6 +8,7 @@ public enum AnimationSpeed {
 	}
 	
 	public int getValue() {
-		return (Window.getSettings().getCurrWindowSize().getBOARD_SIZE() / Window.getSettings().getTilesPerRowInBoard()) / this.stepsPerMove;
+		int speed = (Window.getSettings().getCurrWindowSize().getBOARD_SIZE() / Window.getSettings().getTilesPerRowInBoard()) / this.stepsPerMove;
+		return (speed == 0) ? 1 : speed;
 	}
 }

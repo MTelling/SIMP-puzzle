@@ -54,6 +54,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	
 	//Shows a move. Animated or not. 
 	private void showMove(boolean shouldAnimate) {
+		System.out.println("Got here");
 		this.setAnimating(true);
 
 		if (shouldAnimate) {
@@ -64,8 +65,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			
 			//TODO: There should probably be a method in gamePanel that is called instead of repaint. Depending on where we choose to put the check for game won. 
 			gamePanel.repaint();
-			
+
 			this.setAnimating(false);
+
 		}
 	}
 	
@@ -198,7 +200,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					dy = -1;
 				} else if (keyCode == controls[3]) { //Moves tile down
 					dy = 1;
-				} else {
+				} else {//Don't make any move
+					
 				}
 				
 				//Try to make the move. 

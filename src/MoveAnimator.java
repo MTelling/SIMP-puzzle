@@ -23,9 +23,9 @@ public class MoveAnimator implements ActionListener {
 			
 			//Tell the controller that the animation is done, and reset for next time the timer is called. 
 			simpController.setAnimating(false);
-						
+
 			simpController.getGamePanel().repaint();
-			
+
 			//After each move, check if the game is won. 
 			if (simpController.getGamePanel().getBoard().isGameOver()) {
 				simpController.getGamePanel().getGameState().setGameDone(true);
