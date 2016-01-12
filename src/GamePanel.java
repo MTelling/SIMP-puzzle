@@ -35,6 +35,7 @@ public class GamePanel extends JPanel {
 	private int labelTextSize;
 	private boolean firstPaint;
 	private BufferedImage[] picList;
+	private int tilesNeededToBeLarger;
 	
 	private WindowSize currWindowSize;
 	
@@ -86,6 +87,8 @@ public class GamePanel extends JPanel {
 		//It only saves a bit cpu, but we think it's worth it. 
 		if (this.firstPaint) {
 			calcItemPositions(g2d, currWindowSize.getWINDOW_WIDTH(), currWindowSize.getTOP_CONTROLS_SIZE(), gameBorder);
+			//Determine how many tiles need to have an extra pixel. 
+			tilesNeededToBeLarger = (currWindowSize.getBOARD_SIZE() - currWindowSize.getBOARD_BORDER_SIZE()*2) % this.getBoard().getTilesPerRow();
 		}
 		
 		//Draw everything above the board.
@@ -151,34 +154,34 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void drawBoard(Graphics2D g2d, int tileSize) {
-		int plusx = 0, plusy = 0;
-		int tilesNeededToBeLarger = (currWindowSize.getBOARD_SIZE() - currWindowSize.getBOARD_BORDER_SIZE()*2) % this.getBoard().getTilesPerRow();
+		int extraX = 0, extraY = 0;
 		
 		Tile[][] tiles = this.getBoard().getTiles();
 		for(int y = 0; y < this.getBoard().getTilesPerRow(); y++) {
-			plusx = 0;
-			int thisYSize = tileSize;
-			if (plusy < tilesNeededToBeLarger) {
-				thisYSize++;
+			extraX = 0;
+			int tileHeight = tileSize;
+			//Determine if the tile should have an extra pixel in the height. 
+			if (extraY < tilesNeededToBeLarger) {
+				tileHeight++;
 			}
 			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
 				//Draw all tiles except for the empty one.
 				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2)) {
 				
 					//Get x and y position
-					int xCoord = tiles[x][y].getX() + plusx;
-					int yCoord = tiles[x][y].getY() - (tilesNeededToBeLarger - plusy);
+					int xCoord = tiles[x][y].getX() + extraX;
+					int yCoord = tiles[x][y].getY() - (tilesNeededToBeLarger - extraY);
 					
-					int thisSize = tileSize;
-					if (plusx < tilesNeededToBeLarger) {
-						plusx++;
-						thisSize += 1;
-
+					//Determine if the tile should have an extra pixel in width. 
+					int tileWidth = tileSize;
+					if (extraX < tilesNeededToBeLarger) {
+						extraX++;
+						tileWidth++;
 					}
 					
 					//Draws tile at x and y pos with image gotten from ressources. 
 					
-					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, thisSize, thisYSize, null);
+					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, tileWidth, tileHeight, null);
 					
 					//Draws text on image
 					if(this.gameState.isPictureOn()) {
@@ -186,13 +189,11 @@ public class GamePanel extends JPanel {
 						//Draw border around unfinished picture
 						if (!this.gameState.isGameDone()){
 							g2d.setColor(Color.BLACK);
-							g2d.drawRect(xCoord, yCoord, thisSize, thisYSize);
+							g2d.drawRect(xCoord, yCoord, tileWidth, tileHeight);
 						} 
 						
 						//If a picture is showing and labels is on the label should be printed in the upper left corner. 
 						if (this.gameState.isLabelsOn()) {
-							//TODO: How can we decide the size of this more appropriately? 
-							//		Also the size of the text on the tile should be calculated.. 
 							this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, tileSize/3);
 						} 
 						
@@ -202,8 +203,8 @@ public class GamePanel extends JPanel {
 					
 				}
 			}
-			if (plusy < tilesNeededToBeLarger) {
-				plusy++;
+			if (extraY < tilesNeededToBeLarger) {
+				extraY++;
 			}
 			
 		}
