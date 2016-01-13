@@ -166,7 +166,7 @@ public class GamePanel extends JPanel {
 			}
 			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
 				//Draw all tiles except for the empty one.
-				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2)) {
+				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2) || this.gameState.isGameDone()) {
 				
 					//Get x and y position
 					int xCoord = tiles[x][y].getX() + extraX;
