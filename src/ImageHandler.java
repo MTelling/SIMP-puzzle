@@ -48,33 +48,21 @@ public class ImageHandler {
 		return null;
     }
     
-    public static BufferedImage loadPicture () {
-    	      
+    public static String loadPicture () {
     	//Create a filedialog for the user to choose a picture.
     	FileDialog fileDialog = new FileDialog(new Frame(), "Choose a picture", FileDialog.LOAD);
-    	fileDialog.setDirectory(null);
-    	fileDialog.setFile("*.jpg;*.jpeg;*.gif;*.png");
+    	fileDialog.setDirectory("resources/pics");
+    	fileDialog.setFile("*.jpg;*.jpeg;*.png");
+    	fileDialog.setFilenameFilter((File dir, String name) -> name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png"));
     	fileDialog.setVisible(true);
     	
-		String infoMessage = "Something terrible happened!\n"
-				+" I must urge you to try again.\n"
-				+" Please though, do something different next time.\n";
-    	
-		try {
     	// Get the chosen file
-    	File theImage = new File(fileDialog.getFile());
+    	File theImage = new File(fileDialog.getDirectory() + fileDialog.getFile());
     	
-    	if(theImage.exists()) {
-				return ImageIO.read(theImage);
-
-
-    	} else {
-    		JOptionPane.showMessageDialog(null, infoMessage, "Sorry bro, can't do it", JOptionPane.INFORMATION_MESSAGE);
-    		
-    		return loadPicture();
-    	}
-		} catch (Exception e) {
-	 		JOptionPane.showMessageDialog(null, infoMessage, "Sorry bro, can't do it", JOptionPane.INFORMATION_MESSAGE);
+	    if(theImage.exists()) {
+			return theImage.getAbsolutePath();
+		} else {
+	 		JOptionPane.showMessageDialog(null, "Error: Can't load image ", "Image Load Failed", JOptionPane.ERROR_MESSAGE);
 		} 
 		
 		return null;

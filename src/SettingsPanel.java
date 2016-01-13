@@ -1,13 +1,18 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -186,7 +191,24 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				break;
 				
 			case "chooseNewPicture":
-				Window.swapView("imageCrop");
+				String imagePath = ImageHandler.loadPicture();
+				if(imagePath != null) {
+					BufferedImage image = null;
+					try {
+						image = ImageIO.read(new File(imagePath));
+					} catch (IOException e1) { }
+					
+					int boardSize = settings.getCurrWindowSize().getBOARD_SIZE();
+					if(image != null && (image.getWidth() == boardSize && image.getHeight() == boardSize)) {
+						settings.setGamePicture(imagePath);
+					} else if(image != null && (image.getWidth() > boardSize && image.getHeight() >= boardSize)
+							|| (image.getWidth() >= boardSize && image.getHeight() > boardSize)){
+						Window.swapView("imageCrop");
+						ImageCropPanel.setImageToCrop(image);
+					} else {
+						JOptionPane.showMessageDialog(null, "Image is too small for the current window size", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
 				break;
 				
 			//Close settings window

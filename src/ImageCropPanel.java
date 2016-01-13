@@ -19,7 +19,7 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 	
 	private Settings settings;
 	private WindowSize currWindowSize;
-	private BufferedImage image;
+	private static BufferedImage image;
 	private int sx1, sy1, sx2, sy2;
 	private int mouseStartX, mouseStartY;
 	
@@ -47,11 +47,15 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 		sy2 = this.currWindowSize.getBOARD_SIZE();
 	}
 	
+	public static void setImageToCrop(BufferedImage imageToCrop) {
+		image = imageToCrop;
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.drawImage(this.image, this.currWindowSize.getGAME_BORDER(), this.currWindowSize.getTOP_CONTROLS_SIZE(), this.currWindowSize.getBOARD_SIZE() + this.currWindowSize.getGAME_BORDER(), this.currWindowSize.getBOARD_SIZE() + this.currWindowSize.getTOP_CONTROLS_SIZE(), sx1, sy1, sx2, sy2, null);
+		g2d.drawImage(image, this.currWindowSize.getGAME_BORDER(), this.currWindowSize.getTOP_CONTROLS_SIZE(), this.currWindowSize.getBOARD_SIZE() + this.currWindowSize.getGAME_BORDER(), this.currWindowSize.getBOARD_SIZE() + this.currWindowSize.getTOP_CONTROLS_SIZE(), sx1, sy1, sx2, sy2, null);
 		g2d.drawRect(this.currWindowSize.getGAME_BORDER(), this.currWindowSize.getTOP_CONTROLS_SIZE(), this.currWindowSize.getBOARD_SIZE(), this.currWindowSize.getBOARD_SIZE());
 	}
 
@@ -83,7 +87,7 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 			if(e.getY() > this.currWindowSize.getTOP_CONTROLS_SIZE() && e.getY() < this.currWindowSize.getTOP_CONTROLS_SIZE() + this.currWindowSize.getBOARD_SIZE()) {
 				this.sx1 += this.mouseStartX - e.getX();
 				this.sx1 = Math.max(this.sx1, 0);
-				if(this.sx2 + this.currWindowSize.getBOARD_SIZE() + this.sx1 <= this.image.getWidth()) {
+				if(this.sx2 + this.currWindowSize.getBOARD_SIZE() + this.sx1 <= image.getWidth()) {
 					this.sx2 = this.sx1 + this.currWindowSize.getBOARD_SIZE();
 				} else {
 					this.sx1 = this.sx2 - this.currWindowSize.getBOARD_SIZE();
@@ -91,11 +95,14 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 				
 				this.sy1 += this.mouseStartY - e.getY();
 				this.sy1 = Math.max(this.sy1, 0);
-				if(this.sy2 + this.currWindowSize.getBOARD_SIZE() + this.sy1 <= this.image.getHeight()) {
+				if(this.sy2 + this.currWindowSize.getBOARD_SIZE() + this.sy1 <= image.getHeight()) {
 					this.sy2 = this.sy1 + this.currWindowSize.getBOARD_SIZE();
 				} else {
 					this.sy1 = this.sy2 - this.currWindowSize.getBOARD_SIZE();
 				}
+				
+				mouseStartX = e.getX();
+				mouseStartY = e.getY();
 				
 				this.repaint();
 			}
@@ -107,7 +114,7 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		settings.setGamePicture("resources/pics/" + ImageHandler.cropAndSave(this.image, this.sx1, this.sx2));
+		settings.setGamePicture("resources/pics/" + ImageHandler.cropAndSave(image, this.sx1, this.sx2));
 		Window.swapView("settings");
 	}
 }

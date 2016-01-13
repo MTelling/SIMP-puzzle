@@ -93,30 +93,30 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	}
 	
 	//1000 is a 1000milliseconds so the timer will fire each second. 
-		private Timer clock = new Timer(1000, new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
-				gamePanel.getScore().addSeconds(1);
-				gamePanel.repaint();
-
-				//TODO: We must agree on where to put this. 
-				if (gamePanel.getGameState().isGameDone()) {
-					gamePanel.getGameState().setGameDone(true);
-					JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
-					stopClock();
-				}
+	private Timer clock = new Timer(1000, new ActionListener(){
+	
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// call the updateSeconds functions which adds a second to the scoreModel and updates the labeltext. 
+			gamePanel.getScore().addSeconds(1);
+			gamePanel.repaint();
+			
+			//TODO: We must agree on where to put this. 
+			if (gamePanel.getGameState().isGameDone()) {
+				gamePanel.getGameState().setGameDone(true);
+				JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
+				stopClock();
 			}
-		});
-		
-		public void startClock () {
-			clock.start();
 		}
-		
-		public void stopClock() {
-			clock.stop();
-		}
+	});
+	
+	public void startClock () {
+		clock.start();
+	}
+	
+	public void stopClock() {
+		clock.stop();
+	}
 	
 	/// ALL EVENTS FROM HERE /// 
 
