@@ -18,6 +18,9 @@ public class Window extends JFrame {
 	private static ImageCropPanel imageCropPanel;
 	private static GamePanel gamePanel;
 	private static InGameMenuPanel inGameMenuPanel;
+	private static HighscorePanel highscorePanel;
+	private JLayeredPane puzzlePane;
+
 	
 	public static boolean menuToggle;
 	
@@ -26,7 +29,6 @@ public class Window extends JFrame {
 		Window game = new Window();
 	}
 
-	private JLayeredPane puzzlePane;
 
 	public Window() {
 		super("N-Puzzle Game");
@@ -39,8 +41,13 @@ public class Window extends JFrame {
 		}
 		
 		//Initialize the model.
+		
+		
 		settings = new Settings();
 		settings.loadSettings();
+		Highscore easyHighscore = new Highscore("easy");
+		Highscore mediumHighscore = new Highscore("medium");
+		Highscore hardHighscore = new Highscore("hard");
 		Board board = new Board();
 		board.init();
 		Score score = new Score();	
@@ -54,7 +61,7 @@ public class Window extends JFrame {
 		cardPanel.setPreferredSize(settings.getCurrWindowSize().getDimension());
 		
 		//Create Controller
-		gamePanel = new GamePanel(gs);
+		gamePanel = new GamePanel(gs, new Highscore[]{easyHighscore, mediumHighscore, hardHighscore});
 		SimpController controller = new SimpController(gamePanel);
 		
 		//Create mainManuPanel
@@ -79,15 +86,20 @@ public class Window extends JFrame {
 		//Add gamePanel and inGameMenuPanel to puzzlePane
 		puzzlePane.add(gamePanel, new Integer(0), 0);
 		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
+		
+		//Create highscorePanel
+		highscorePanel = new HighscorePanel(easyHighscore, mediumHighscore, hardHighscore);
 
 		//Add controller to panels
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
 		gamePanel.addMouseMotionListener(controller);		
 		
+		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
 		cardPanel.add(settingsPanel, "settings");
+		cardPanel.add(highscorePanel, "highscore");
 		cardPanel.add(imageCropPanel, "imageCrop");
 		cardPanel.add(puzzlePane, "puzzle");
 		
@@ -109,6 +121,7 @@ public class Window extends JFrame {
 		inGameMenuPanel.resetBounds();
 		puzzlePane.setSize(newDimension);
 		gamePanel.setSize(newDimension);
+		highscorePanel.resetSize();
 		
 		this.pack();
 		
@@ -121,11 +134,18 @@ public class Window extends JFrame {
 	}
 	
 	public static void swapView(String key) {
+		swapView(key, "mainMenu");
+	}
+	
+	public static void swapView(String key, String origin) {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
 		} else if(key.equals("imageCrop")) {
 			imageCropPanel.init();
+		} else if (key.equals("highscore")) {
+			highscorePanel.reset();
+			highscorePanel.setOrigin(origin);
 		}
 	}
 	
