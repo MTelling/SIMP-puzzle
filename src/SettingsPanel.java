@@ -6,6 +6,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -342,19 +343,25 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		
 	/// Methods for creating UI ///
 	
-	private Box containerForRadioButtons(JRadioButton[] radioButtons, String labelText) {
+	private Box containerForComponents(JComponent[] components, String labelText) {
 		ButtonGroup buttonGroup = new ButtonGroup();
 		Box container = new Box(BoxLayout.LINE_AXIS);
 		container.add(new JLabel(labelText));
-		for (JRadioButton button: radioButtons) {
+		for (JComponent component: components) {
 			//Add to container
-			container.add(button);
+			container.add(component);
 			
-			//Add to its button group.
-			buttonGroup.add(button);
-			
-			//Add actionListener to radioButton
-			button.addActionListener(this);
+			if (component instanceof JRadioButton) {
+				//Add to its button group.
+				buttonGroup.add((JRadioButton)component);
+				
+				//Add actionListener to radioButton
+				((JRadioButton)component).addActionListener(this);
+			} else if (component instanceof JButton) {
+				((JButton)component).addActionListener(this);
+			} else if (component instanceof JSlider) {
+				((JSlider)component).addChangeListener(this);
+			}
 		}
 	
 		return container;
@@ -366,7 +373,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		scrambleAnimationOff = new JRadioButton("Off");
 		scrambleAnimationOff.setActionCommand("scrambleAnimationOff");
 		
-		this.add(containerForRadioButtons(new JRadioButton[] {scrambleAnimationOn, scrambleAnimationOff}, "Show scramble animation: "));
+		this.add(containerForComponents(new JRadioButton[] {scrambleAnimationOn, scrambleAnimationOff}, "Show scramble animation: "));
 	}
 	
 	private void createGameTypeChooser() {
@@ -375,7 +382,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		gameTypePicture = new JRadioButton("Picture");
 		gameTypePicture.setActionCommand("gameTypePicture");
 		
-		this.add(containerForRadioButtons(new JRadioButton[] {gameTypeNumbers, gameTypePicture}, "Game Type: "));	
+		this.add(containerForComponents(new JRadioButton[] {gameTypeNumbers, gameTypePicture}, "Game Type: "));	
 	}
 	
 	private void createDifficultyChooser() {
@@ -386,7 +393,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		hardGame = new JRadioButton("EXTREME");
 		hardGame.setActionCommand("hardGame");
 		
-		this.add(containerForRadioButtons(new JRadioButton[]{easyGame,mediumGame,hardGame}, "Difficulty: "));
+		this.add(containerForComponents(new JRadioButton[]{easyGame,mediumGame,hardGame}, "Difficulty: "));
 		
 	}
 	
@@ -396,7 +403,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		animationOff = new JRadioButton("Off");
 		animationOff.setActionCommand("animationOff");
 		
-		this.add(containerForRadioButtons(new JRadioButton[] {animationOn, animationOff}, "Show move animation: "));
+		this.add(containerForComponents(new JRadioButton[] {animationOn, animationOff}, "Show move animation: "));
 
 	}
 	
@@ -406,7 +413,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		invertedControls = new JRadioButton("Inverted");
 		invertedControls.setActionCommand("invertedControls");
 		
-		this.add(containerForRadioButtons(new JRadioButton[] {normalControls, invertedControls}, "Controls: "));	
+		this.add(containerForComponents(new JRadioButton[] {normalControls, invertedControls}, "Controls: "));	
 	}
 	
 	private void createAnimationSpeedChooser() {
@@ -417,7 +424,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		fastAnimation = new JRadioButton("Fast");
 		fastAnimation.setActionCommand("fastAnimation");
 		
-		this.add(containerForRadioButtons(new JRadioButton[] {slowAnimation, mediumAnimation, fastAnimation}, "Animation speed: "));
+		this.add(containerForComponents(new JRadioButton[] {slowAnimation, mediumAnimation, fastAnimation}, "Animation speed: "));
 	}
 	
 	private void createLabelsOnPictureChooser() {
@@ -427,7 +434,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		labelsOff.setActionCommand("labelsOff");
 		
 		//This should be usable from outside this scope.
-		labelsToggleContainer = containerForRadioButtons(new JRadioButton[] {labelsOn, labelsOff}, "Number in corner of tiles: ");
+		labelsToggleContainer = containerForComponents(new JRadioButton[] {labelsOn, labelsOff}, "Number in corner of tiles: ");
 		
 		this.add(labelsToggleContainer);
 	}
@@ -448,7 +455,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		largeWindow = new JRadioButton("Large");
 		largeWindow.setActionCommand("largeWindow");
 		
-		this.add(containerForRadioButtons(new JRadioButton[] {smallWindow, mediumWindow, largeWindow}, "Window size: "));
+		this.add(containerForComponents(new JRadioButton[] {smallWindow, mediumWindow, largeWindow}, "Window size: "));
 	}
 	
 	private void addButton(JButton button, String label) {
@@ -471,7 +478,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	}
 
 	private void createBoardSizeChooser() {
-		JLabel boardSizeLabel = new JLabel("Board size: ");
 		boardSizeChooser = new JTextField();
 		boardSizeChooser.setPreferredSize(new Dimension(40, boardSizeChooser.getPreferredSize().height));
 		boardSizeChooser.setMaximumSize(boardSizeChooser.getPreferredSize());
@@ -479,18 +485,11 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		
 		setBoardSizeButton = new JButton("Set size");
 		setBoardSizeButton.setActionCommand("setBoardSize");
-		setBoardSizeButton.addActionListener(this);
-		
-		Box boardSizeChooserContainer = new Box(BoxLayout.LINE_AXIS);
-		boardSizeChooserContainer.add(boardSizeLabel);
-		boardSizeChooserContainer.add(boardSizeChooser);
-		boardSizeChooserContainer.add(setBoardSizeButton);
-		
-		this.add(boardSizeChooserContainer);
+
+		this.add(containerForComponents(new JComponent[] {boardSizeChooser, setBoardSizeButton}, "Board size: "));
 	}
 	
 	private void createFramesPerSecondChooser() {
-		JLabel fpsLabel = new JLabel("FPS: ");
 		fpsSlider = new JSlider(JSlider.HORIZONTAL, 30, 120, 60);
 		fpsSlider.setMinorTickSpacing(30);
 		fpsSlider.setMajorTickSpacing(30);
@@ -502,13 +501,8 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	    
 	    //Connect to control
 	    fpsSlider.addChangeListener(this);
-	    
-	    Box fpsContainer = new Box(BoxLayout.LINE_AXIS);
-		fpsContainer.add(fpsLabel);
-		fpsContainer.add(fpsSlider);
 
-		
-		this.add(fpsContainer);
+		this.add(containerForComponents(new JComponent[] {fpsSlider}, "FPS: "));
 	}
 
 

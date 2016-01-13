@@ -72,6 +72,12 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	private void scrambleBoard() {
 		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().getRandomizingMoveSequence();
 		
+		while (scramblingSequence.size() > 40) {
+			gamePanel.getBoard().setToAnimationState(scramblingSequence.get(0));
+			gamePanel.getBoard().moveWithoutAnimation();
+			scramblingSequence.remove(0);
+		}
+		
 		if (Window.getSettings().isAnimationScramblingOn()) {
 			//Show scramble
 			Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
