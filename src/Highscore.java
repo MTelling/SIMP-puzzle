@@ -16,7 +16,7 @@ public class Highscore implements Serializable {
 	
 	public Highscore(String diff) {
 		this.difficulty = diff;
-		if(new File(FILE_NAME + this.difficulty + SaveLoad.FILE_EXT).exists()) {
+		if(new File(FILE_NAME + this.difficulty + "." + SaveLoad.FILE_EXT).exists()) {
 			this.loadHighscores();
 		} else {
 			for(int i = 3; i <= 100; i++) {
