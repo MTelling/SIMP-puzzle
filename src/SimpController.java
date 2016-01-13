@@ -66,6 +66,11 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.repaint();
 
 			this.setAnimating(false);
+			
+			//After each move, check if the game is won. 
+			if (getGamePanel().getBoard().isGameOver()) {
+				getGamePanel().getGameState().setGameDone(true);
+			}
 		}
 	}
 
