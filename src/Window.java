@@ -18,6 +18,9 @@ public class Window extends JFrame {
 	private static ImageCropPanel imageCropPanel;
 	private static GamePanel gamePanel;
 	private static InGameMenuPanel inGameMenuPanel;
+	private static HighscorePanel highscorePanel;
+	private JLayeredPane puzzlePane;
+
 	
 	public static boolean menuToggle;
 	
@@ -26,8 +29,6 @@ public class Window extends JFrame {
 		Window game = new Window();
 	}
 
-	private JLayeredPane puzzlePane;
-	private HighscorePanel highscorePanel;
 
 	public Window() {
 		super("N-Puzzle Game");
@@ -138,6 +139,8 @@ public class Window extends JFrame {
 			gamePanel.requestFocus();
 		} else if(key.equals("imageCrop")) {
 			imageCropPanel.init();
+		} else if (key.equals("highscore")) {
+			highscorePanel.reset();
 		}
 	}
 	

@@ -31,6 +31,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	private Highscore hardHighscore;
 	private Highscore easyHighscore;
 	private int lookingAtBoardSize;
+	private Box highscore;
 
 	public HighscorePanel(Highscore easyHighscore, Highscore mediumHighscore, Highscore hardHighscore) {
 		this.easyHighscore = easyHighscore;
@@ -41,7 +42,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		
 		this.setPreferredSize(Window.getSettings().getCurrWindowSize().getDimension());
 		container = new Box(BoxLayout.Y_AXIS);
-		container.setPreferredSize(new Dimension(WindowSize.SMALL.getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
+		container.setPreferredSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
 		
 		JLabel title = new JLabel("HIGHSCORE");
 		title.setFont(new Font("Monospaced", Font.BOLD, 50));
@@ -53,7 +54,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		
 		container.add(difficultyChooser());
 
-		Box highscore = highscorePresenter();
+		highscore = highscorePresenter();
 		highscore.setMaximumSize(container.getPreferredSize());
 		container.add(highscore);
 		
@@ -61,20 +62,21 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		//Add some space below the close button. 
 		container.add(Box.createVerticalStrut(WindowSize.LARGE.getGAME_BORDER()));
 		
-		initLabelText();
+		reset();
+		
+		for (int i = 0; i < numbers.length; i++) {
+			numbers[i].setText((i+1)+":");
+		}
 		
 		this.add(container);
 		this.setVisible(true);
 	}
 	
-	private void initLabelText() {
-		for (int i = 0; i < numbers.length; i++) {
-			numbers[i].setText((i+1)+":");
-		}
+	public void reset() {
 		
-		loadHighscore();
-		
+		highscore.setMaximumSize(container.getPreferredSize());
 		selectSizeTextField.setText(this.lookingAtBoardSize+"");
+		
 		if (Window.getSettings().getDifficulty() == Difficulty.EASY.getValue()) {
 			easyDifficulty.setSelected(true);
 		} else if(Window.getSettings().getDifficulty() == Difficulty.MEDIUM.getValue()) {
@@ -82,6 +84,9 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		} else {
 			hardDifficulty.setSelected(true);
 		}
+		
+		loadHighscore();
+
 		
 	}
 	
@@ -111,7 +116,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	//Method to reset size for this view. 
 	public void resetSize() {
 		this.setPreferredSize(Window.getSettings().getCurrWindowSize().getDimension());
-		container.setPreferredSize(new Dimension(WindowSize.SMALL.getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
+		container.setPreferredSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
 	}
 	
 	private JButton closeButton() {
@@ -154,9 +159,9 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		//Set the maximum width so that the three boxes lie equally beside each other. 
 		//The maximum height is just set to larger than they will ever be. 
 		//The numberBox is 1/9 of the width, the names 6/9 and the scores 2/9 
-		numberBox.setMaximumSize(new Dimension(WindowSize.SMALL.getWINDOW_WIDTH()/9, WindowSize.LARGE.getWINDOW_HEIGHT()));
-		nameBox.setMaximumSize(new Dimension((WindowSize.SMALL.getWINDOW_WIDTH()*6)/9, WindowSize.LARGE.getWINDOW_HEIGHT()));
-		scoreBox.setMaximumSize(new Dimension((WindowSize.SMALL.getWINDOW_WIDTH()*2)/9, WindowSize.LARGE.getWINDOW_HEIGHT()));
+		numberBox.setMaximumSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE()/9, WindowSize.LARGE.getWINDOW_HEIGHT()));
+		nameBox.setMaximumSize(new Dimension((WindowSize.SMALL.getBOARD_SIZE()*6)/9, WindowSize.LARGE.getWINDOW_HEIGHT()));
+		scoreBox.setMaximumSize(new Dimension((WindowSize.SMALL.getBOARD_SIZE()*2)/9, WindowSize.LARGE.getWINDOW_HEIGHT()));
 
 		//Add all boxes to the container.
 		container.add(numberBox);

@@ -83,7 +83,7 @@ public class Settings implements Serializable{
 		settings.putInt("refreshRate", this.refreshRate);
 
 		settings.putBoolean("animateMoves", this.isAnimationOn);
-		settings.putInt("moveAnimationSpeed", this.animationSpeed);
+		settings.putInt("animationSpeed", this.animationSpeed);
 		settings.putBoolean("animateBoardScramble", this.isAnimationScramblingOn);
 		settings.putInt("scrambleAnimationSpeed", this.scrambleAnimationSpeed);
 
