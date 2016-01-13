@@ -20,7 +20,15 @@ public class Score implements Serializable{
 	}
 	
 	public int calculateScore() {
-		return Math.max(10, 10000 - (this.seconds * 10) - (this.moves) * 5);
+		if(this.seconds > Window.getSettings().getDifficulty() * Window.getSettings().getTilesPerRowInBoard()) {
+			if(this.moves > (Window.getSettings().getTilesPerRowInBoard() - Window.getSettings().getDifficulty()) * 2) {
+				return 10000 - (this.seconds * 2) - (this.moves * 10);
+			} else {
+				return 10000;
+			}
+		} else {
+			return 10000;
+		}
 	}
 	
 	public int getSeconds () {
