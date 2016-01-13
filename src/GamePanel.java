@@ -215,7 +215,7 @@ public class GamePanel extends JPanel {
 	
 	private void loadImages() {
 		//Load boardImage
-		ImageIcon boardIc = new ImageIcon(THEME_PATH + "board.jpeg");
+		ImageIcon boardIc = new ImageIcon(THEME_PATH + "board" + Window.getSettings().getCurrWindowSize().getBOARD_SIZE() +".png");
 		this.boardImg = boardIc.getImage();
 		
 		//Load cogwheelImage
