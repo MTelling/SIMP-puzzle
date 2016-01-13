@@ -16,7 +16,7 @@ public class Highscore implements Serializable {
 	
 	public Highscore(String diff) {
 		this.difficulty = diff;
-		if(new File(FILE_NAME + "/" + this.difficulty + SaveLoad.FILE_EXT).exists()) {
+		if(new File(FILE_NAME + this.difficulty + SaveLoad.FILE_EXT).exists()) {
 			this.loadHighscores();
 		} else {
 			for(int i = 3; i <= 100; i++) {
@@ -37,7 +37,7 @@ public class Highscore implements Serializable {
 	}
 	
 	private void loadHighscores() {
-		Object tempObj = SaveLoad.loadFromFile(FILE_NAME + "/" + this.difficulty);
+		Object tempObj = SaveLoad.loadFromFile(FILE_NAME + this.difficulty);
 		if(tempObj instanceof Highscore) {
 			this.highscores = ((Highscore)tempObj).getHighscores();
 		}
@@ -45,7 +45,7 @@ public class Highscore implements Serializable {
 	
 
 	public void saveHighscores() {
-		SaveLoad.saveToFile(this, FILE_NAME + "/" + this.difficulty);
+		SaveLoad.saveToFile(this, FILE_NAME + this.difficulty);
 	}
 	
 	public int isHighscore(int score) {
