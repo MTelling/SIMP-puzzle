@@ -38,6 +38,9 @@ public class Highscore implements Serializable {
 		this.saveHighscores();
 	}
 	
+	/**
+	 * Loads the highscores from the difficulty determined file
+	 */
 	private void loadHighscores() {
 		Object tempObj = SaveLoad.loadFromFile(FILE_NAME + this.difficulty);
 		if(tempObj instanceof Highscore) {
@@ -45,11 +48,18 @@ public class Highscore implements Serializable {
 		}
 	}
 	
-
+	/*
+	 * Writes the highscores to a difficulty dertermined file
+	 */
 	public void saveHighscores() {
 		SaveLoad.saveToFile(this, FILE_NAME + this.difficulty);
 	}
 	
+	/**
+	 * Checks whether or not the score is better then any of the current highscores for the current boardSize
+	 * @param score - The players score
+	 * @return An int 1 and HIGHSCORE_SIZE depending on where the score is supposed to be, return -1 if it's not a new highscore
+	 */
 	public int isHighscore(int score) {
 		int highscorePosition = -1;
 		int i = 0;
@@ -63,6 +73,12 @@ public class Highscore implements Serializable {
 		return highscorePosition;
 	}
 	
+	/**
+	 * Adds a highscore linked with the players name to the approriate position and boardSize
+	 * @param name - Name of the player
+	 * @param score - The players Score
+	 * @param index - Highscore Place
+	 */
 	public void addHighscore(String name, int score, int index) {
 		LinkedList<String> currentHighscores = this.highscores.get(Window.getSettings().getTilesPerRowInBoard());
 		currentHighscores.add(index, name + "," + score);
@@ -73,28 +89,45 @@ public class Highscore implements Serializable {
 		this.saveHighscores();
 	}
 	
+	/**
+	 * Gets the highscore name and score from the board size and position specified
+	 * @param boardSize - numberOfTilesPerRow to get highscores for
+	 * @param highscorePos - position of the highscore
+	 * @return a 2 position String array with the name and the score
+	 */
 	public String[] getHighscoreAt(int boardSize, int highscorePos) {
 		LinkedList<String> currentHighscores = this.highscores.get(boardSize);
 		String[] highscore = currentHighscores.get(highscorePos).split(",");
 		return highscore;
 	}
 	
+	/**
+	 * Adds default scores to fill out the scoreboards
+	 * @param highscores - The LinkedList holding the highscores
+	 * @param amount - The ammount of default scores to add
+	 */
 	private void addMissingScores(LinkedList<String> highscores, int amount) {
 		for(int i = 0; i < amount; i++) {
 			highscores.add(STD_NAME + "," + STD_SCORE);
 		}
 	}
 	
+	/**
+	 * Removes scores incase there are too many
+	 * @param highscores - The LinkedList holding the highscores
+	 * @param amount - The amount of scores to remove
+	 */
 	private void removeExtraScores(LinkedList<String> highscores, int amount) {
 		for(int i = 0; i < amount; i++) {
 			highscores.removeLast();
 		}
 	}
 	
+	/**
+	 * A function to fetch all of the highscores, used for loading
+	 * @return - The entire list of highscores
+	 */
 	private ArrayList<LinkedList<String>> getHighscores() {
 		return this.highscores;
 	}
-
-	
-
 }
