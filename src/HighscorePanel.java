@@ -2,6 +2,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,8 +27,18 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	private JLabel[] numbers;
 	private JLabel[] names;
 	private JLabel[] scores;
+	private Highscore mediumHighscore;
+	private Highscore hardHighscore;
+	private Highscore easyHighscore;
+	private int lookingAtBoardSize;
 
-	public HighscorePanel() {
+	public HighscorePanel(Highscore easyHighscore, Highscore mediumHighscore, Highscore hardHighscore) {
+		this.easyHighscore = easyHighscore;
+		this.mediumHighscore = mediumHighscore;
+		this.hardHighscore = hardHighscore;
+		
+		this.lookingAtBoardSize = Window.getSettings().getTilesPerRowInBoard();
+		
 		this.setPreferredSize(Window.getSettings().getCurrWindowSize().getDimension());
 		container = new Box(BoxLayout.Y_AXIS);
 		container.setPreferredSize(new Dimension(WindowSize.SMALL.getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
@@ -34,7 +46,6 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		JLabel title = new JLabel("HIGHSCORE");
 		title.setFont(new Font("Monospaced", Font.BOLD, 50));
 		title.setAlignmentX(CENTER_ALIGNMENT);
-		
 		
 		container.add(title);
 		
@@ -50,16 +61,30 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		//Add some space below the close button. 
 		container.add(Box.createVerticalStrut(WindowSize.LARGE.getGAME_BORDER()));
 		
-		loadHighscore();
+		initLabelText();
 		
 		this.add(container);
 		this.setVisible(true);
 	}
 	
-	public void loadHighscore() {
+	private void initLabelText() {
 		for (int i = 0; i < numbers.length; i++) {
 			numbers[i].setText((i+1)+":");
 		}
+		
+		if (easyDifficulty.isSelected()) {
+			loadHighscore(easyHighscore);
+		} else if(mediumDifficulty.isSelected()) {
+			loadHighscore(mediumHighscore);
+		} else { //Must be hard difficulty
+			loadHighscore(hardHighscore);
+		}
+		
+	}
+	
+	private void loadHighscore(Highscore highscore) {
+		
+		
 	}
 	
 	//Method to reset size for this view. 

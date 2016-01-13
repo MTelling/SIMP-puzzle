@@ -82,8 +82,8 @@ public class Highscore implements Serializable {
 	}
 	
 	//Get hashmap with highscores for current boardsize.
-	public HashMap<String, Integer> getHighscores() {
-		return highscores.get(currentBoardSize);
+	public HashMap<String, Integer> getHighscores(int boardSize) {
+		return highscores.get(boardSize);
 	}
 	
 	//Get entire hashmap of all highscores for all boardsizes.
@@ -127,4 +127,7 @@ public class Highscore implements Serializable {
 		
 		SaveLoad.saveToFile(this, FILE_NAME);
 	}
+
+	
+
 }
