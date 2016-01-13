@@ -21,7 +21,7 @@ public class MainMenuPanel extends JPanel {
 		//Create Buttons
 		addButton(btnNewGame, "New Game", "NewGame");
 		addButton(btnLoadGame, "Load Game", "LoadGame");
-		addButton(btnHighscore, "Highscores", "Highscores");
+		addButton(btnHighscore, "Highscore", "Highscore");
 		addButton(btnSettings, "Settings", "Settings");
 		addButton(btnExit, "Exit Game", "ExitGame");
 		this.add(Box.createVerticalGlue());

@@ -256,6 +256,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			Window.swapView("settings");
 		} else if(e.getActionCommand().equals("mainMenuExitGame")) {
 			System.exit(0);
+		} else if(e.getActionCommand().equals("mainMenuHighscore")) {
+			Window.swapView("highscore");
 		} else if(e.getActionCommand().equals("inGameContinueGame")) {
 			Window.toggleMenu();
 			if (!gamePanel.getGameState().isGameDone()) {

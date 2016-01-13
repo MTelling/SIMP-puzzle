@@ -27,6 +27,7 @@ public class Window extends JFrame {
 	}
 
 	private JLayeredPane puzzlePane;
+	private HighscorePanel highscorePanel;
 
 	public Window() {
 		super("N-Puzzle Game");
@@ -79,15 +80,20 @@ public class Window extends JFrame {
 		//Add gamePanel and inGameMenuPanel to puzzlePane
 		puzzlePane.add(gamePanel, new Integer(0), 0);
 		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
+		
+		//Create highscorePanel
+		highscorePanel = new HighscorePanel();
 
 		//Add controller to panels
 		gamePanel.addKeyListener(controller);
 		gamePanel.addMouseListener(controller);
 		gamePanel.addMouseMotionListener(controller);		
 		
+		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
 		cardPanel.add(settingsPanel, "settings");
+		cardPanel.add(highscorePanel, "highscore");
 		cardPanel.add(imageCropPanel, "imageCrop");
 		cardPanel.add(puzzlePane, "puzzle");
 		
@@ -109,6 +115,7 @@ public class Window extends JFrame {
 		inGameMenuPanel.resetBounds();
 		puzzlePane.setSize(newDimension);
 		gamePanel.setSize(newDimension);
+		highscorePanel.resetSize();
 		
 		this.pack();
 		
