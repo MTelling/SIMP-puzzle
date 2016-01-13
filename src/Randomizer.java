@@ -6,13 +6,13 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Randomizer {
-	private Point currEmptyTile;
+	private Point emptyTile;
 	private int tilesPerRow;
 	private Board board;
 
 	public Randomizer(Board board) {
 		this.board = board;
-		this.currEmptyTile = ObjectCopy.point(board.getCurrEmptyTile());
+		this.emptyTile = ObjectCopy.point(board.getCurrEmptyTile());
 		this.tilesPerRow = board.getTilesPerRow();
 
 	}
@@ -41,6 +41,7 @@ public class Randomizer {
 		emptyTile.translate(move.dx, move.dy);
 		moveSequence.add(move);
 	}
+	
 
 	private void generateRandomMovesInCloseArea(LinkedList<Move> moveSequence, Point emptyTile, int numberOfMoves) {
 		//Move x, then y, then x etc. Was x moved last?
@@ -78,7 +79,7 @@ public class Randomizer {
 	//Returns a list of movements required to randomize the current board. 
 	public LinkedList<Move> getRandomizingMoveSequence() {
 		LinkedList<Move> moveSequence = new LinkedList<Move>();
-		Point empty = currEmptyTile;
+		Point empty = emptyTile;
 
 		int difficulty = Window.getSettings().getDifficulty();
 		//If the board is larger than 8, the difficulty shouldn't be linear. Only if difficulty is easy. 
