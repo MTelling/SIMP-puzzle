@@ -18,6 +18,10 @@ public class Highscore implements Serializable {
 		this.difficulty = diff;
 		if(new File(FILE_NAME + "/" + this.difficulty + SaveLoad.FILE_EXT).exists()) {
 			this.loadHighscores();
+		} else {
+			for(int i = 3; i<=100; i++) {
+				this.highscores.add(new LinkedList<String>());
+			}
 		}
 		
 		for(LinkedList<String> sizeDependantHighscores : highscores) {

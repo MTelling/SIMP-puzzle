@@ -72,6 +72,21 @@ public class HighscorePanel extends JPanel implements ActionListener{
 			numbers[i].setText((i+1)+":");
 		}
 		
+		loadHighscore();
+		
+		selectSizeTextField.setText(this.lookingAtBoardSize+"");
+		if (Window.getSettings().getDifficulty() == Difficulty.EASY.getValue()) {
+			easyDifficulty.setSelected(true);
+		} else if(Window.getSettings().getDifficulty() == Difficulty.MEDIUM.getValue()) {
+			mediumDifficulty.setSelected(true);
+		} else {
+			hardDifficulty.setSelected(true);
+		}
+		
+	}
+	
+	//Selects which highscore to 
+	private void loadHighscore() {
 		if (easyDifficulty.isSelected()) {
 			loadHighscore(easyHighscore);
 		} else if(mediumDifficulty.isSelected()) {
@@ -79,11 +94,17 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		} else { //Must be hard difficulty
 			loadHighscore(hardHighscore);
 		}
-		
 	}
 	
+	//Helper method for loadHighscore()
 	private void loadHighscore(Highscore highscore) {
-		
+		//collect and set highscore from the current highscorelist. 
+		for (int i = 0; i < names.length; i++) {
+			String[] currHighscore = highscore.getHighscoreAt(lookingAtBoardSize, i);
+			
+			names[i].setText(currHighscore[0]);
+			scores[i].setText(currHighscore[1]);
+		}
 		
 	}
 	
@@ -121,7 +142,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		
 		//Create a box for the names
 		names = new JLabel[fieldsToShow];
-		Box nameBox = createBoxWithLabels(names, "RobertTHESECONDLLAALA");
+		Box nameBox = createBoxWithLabels(names, "Robert");
 
 		//Create a box for the scores. 
 		scores = new JLabel[fieldsToShow];
@@ -211,6 +232,41 @@ public class HighscorePanel extends JPanel implements ActionListener{
 			case "closeButton":
 				//TODO: Should do something different depending on where it's coming from. 
 				Window.swapView("mainMenu");
+				break;
+			
+			case "easyDifficulty":
+				easyDifficulty.setSelected(true);
+				loadHighscore();
+				break;
+			case "mediumDifficulty":
+				mediumDifficulty.setSelected(true);
+				loadHighscore();
+				break;
+			case "hardDifficulty":
+				hardDifficulty.setSelected(true);
+				loadHighscore();
+				break;
+			
+			case "selectSizeButton": 
+				//Regular expression to remove everything but digits from the string.
+				String newBoardSize = selectSizeTextField.getText().replaceAll("[^0-9]+", "");
+
+				//Try to convert to int. If it doesn't succeed set back to original num.
+				//Should only happen if the field doesn't contain any integers at all. 
+				try {
+					int boardSize = Integer.parseInt(newBoardSize);
+
+					//Check if it's a valid boardSize and set it or revert to the one before. 
+					if (boardSize >= 3 && boardSize <= 100) {
+						this.lookingAtBoardSize = boardSize;
+						selectSizeTextField.setText(newBoardSize);
+						loadHighscore();
+					} else {
+						selectSizeTextField.setText("" + this.lookingAtBoardSize);
+					}
+				} catch (Exception exc){
+					selectSizeTextField.setText("" + this.lookingAtBoardSize);
+				}
 				break;
 				
 			default: break;
