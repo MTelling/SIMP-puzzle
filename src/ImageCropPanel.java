@@ -87,7 +87,7 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 			if(e.getY() > this.currWindowSize.getTOP_CONTROLS_SIZE() && e.getY() < this.currWindowSize.getTOP_CONTROLS_SIZE() + this.currWindowSize.getBOARD_SIZE()) {
 				this.sx1 += this.mouseStartX - e.getX();
 				this.sx1 = Math.max(this.sx1, 0);
-				if(this.sx2 + this.currWindowSize.getBOARD_SIZE() + this.sx1 <= image.getWidth()) {
+				if(this.currWindowSize.getBOARD_SIZE() + this.sx1 <= image.getWidth()) {
 					this.sx2 = this.sx1 + this.currWindowSize.getBOARD_SIZE();
 				} else {
 					this.sx1 = this.sx2 - this.currWindowSize.getBOARD_SIZE();
@@ -95,7 +95,7 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 				
 				this.sy1 += this.mouseStartY - e.getY();
 				this.sy1 = Math.max(this.sy1, 0);
-				if(this.sy2 + this.currWindowSize.getBOARD_SIZE() + this.sy1 <= image.getHeight()) {
+				if(this.currWindowSize.getBOARD_SIZE() + this.sy1 <= image.getHeight()) {
 					this.sy2 = this.sy1 + this.currWindowSize.getBOARD_SIZE();
 				} else {
 					this.sy1 = this.sy2 - this.currWindowSize.getBOARD_SIZE();
@@ -103,7 +103,7 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 				
 				mouseStartX = e.getX();
 				mouseStartY = e.getY();
-				
+				System.out.println(this.sx1 + " " + this.sy1 + " " + this.sx2 + " " + this.sy2 + " " + this.mouseStartX + " " + this.mouseStartY);
 				this.repaint();
 			}
 		}
@@ -114,7 +114,7 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		settings.setGamePicture("resources/pics/" + ImageHandler.cropAndSave(image, this.sx1, this.sx2));
+		settings.setGamePicture("resources/pics/" + ImageHandler.cropAndSave(image, this.sx1, this.sy1));
 		Window.swapView("settings");
 	}
 }
