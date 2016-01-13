@@ -40,8 +40,13 @@ public class Window extends JFrame {
 		}
 		
 		//Initialize the model.
+		
+		
 		settings = new Settings();
 		settings.loadSettings();
+		Highscore easyHighscore = new Highscore("easy");
+		Highscore mediumHighscore = new Highscore("medium");
+		Highscore hardHighscore = new Highscore("hard");
 		Board board = new Board();
 		board.init();
 		Score score = new Score();	
@@ -82,7 +87,7 @@ public class Window extends JFrame {
 		puzzlePane.add(inGameMenuPanel, new Integer(1), 0);
 		
 		//Create highscorePanel
-		highscorePanel = new HighscorePanel();
+		highscorePanel = new HighscorePanel(easyHighscore, mediumHighscore, hardHighscore);
 
 		//Add controller to panels
 		gamePanel.addKeyListener(controller);
