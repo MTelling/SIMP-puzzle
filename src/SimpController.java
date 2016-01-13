@@ -1,4 +1,6 @@
+import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,6 +10,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -57,7 +62,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 		this.setAnimating(true);
 
-		if (shouldAnimate) { //asks the moveAnimator to animate the move. 
+		if (shouldAnimate) { //asks the moveAnimator to animate and make the move. 
 			this.moveAnimator.start();	
 		} else {
 			//Just sets the board to the new default state and then repaints. 
@@ -67,10 +72,14 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 			this.setAnimating(false);
 			
-			//After each move, check if the game is won. 
-			if (getGamePanel().getBoard().isGameOver()) {
-				getGamePanel().getGameState().setGameDone(true);
-			}
+			checkIfGameIsWon();
+		}
+	}
+	
+	//Helper method to check if game is won
+	protected void checkIfGameIsWon() {
+		if (getGamePanel().getBoard().isGameOver()) {
+			getGamePanel().getGameState().setGameDone(true);
 		}
 	}
 
@@ -108,18 +117,38 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 			//TODO: We must agree on where to put this. 
 			if (gamePanel.getGameState().isGameDone()) {
-				gamePanel.getGameState().setGameDone(true);
-				JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
-				stopClock();
-				Highscore highscore = gamePanel.getHighscore(Window.getSettings().getDifficulty());
-				int score = gamePanel.getScore().calculateScore();
-				int highscorePos = highscore.isHighscore(score);
-				if(highscorePos > -1) {
-					highscore.addHighscore("Tobias", score, highscorePos);
-				}
+				presentGameDoneMenu();
 			}
 		}
 	});
+	
+	private void presentGameDoneMenu() {
+		stopClock();
+				
+		Highscore highscore = gamePanel.getHighscore(Window.getSettings().getDifficulty());
+		int score = gamePanel.getScore().calculateScore();
+		int highscorePos = highscore.isHighscore(score);
+		if(highscorePos > -1) {
+			presentNewHighscoreDialog(score, highscorePos, highscore);
+		} else {
+			presentGameDoneDialog(score);
+		}
+	}
+	
+	private void presentNewHighscoreDialog(int score, int highscorePos, Highscore highscore) {
+		String name = JOptionPane.showInputDialog("New highscore! Enter your name: ");
+		highscore.addHighscore(name, score, highscorePos);
+		//Present highscore window. 
+		Window.swapView("highscore");
+	}
+	
+	private void presentGameDoneDialog(int score) {
+		int reply = JOptionPane.showConfirmDialog(null, "You won the game!\nDo you want to restart?", "Won", JOptionPane.YES_NO_OPTION);
+		if (reply == JOptionPane.YES_OPTION) {
+			resetInGame();
+		}
+	}
+	
 
 	public void startClock () {
 		clock.start();
@@ -243,7 +272,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("mainMenuNewGame")) {
+		String actionCommand = e.getActionCommand();
+		if(actionCommand.equals("mainMenuNewGame")) {
 			Window.swapView("puzzle");
 
 			//Settings could have changed so reinit moveAnimator to get the new FPS
@@ -254,7 +284,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.reset();
 
 			this.scrambleBoard();
-		} else if (e.getActionCommand().equals("mainMenuLoadGame")) {
+		} else if (actionCommand.equals("mainMenuLoadGame")) {
 			//Load the game from file
 			Object obj = SaveLoad.loadFromFile("SavedGame");
 			if(obj instanceof GameState) {
@@ -263,37 +293,42 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				this.gamePanel.reset();
 				Window.swapView("puzzle");
 			}
-		} else if(e.getActionCommand().equals("mainMenuSettings")) {
+		} else if(actionCommand.equals("mainMenuSettings")) {
 			Window.swapView("settings");
-		} else if(e.getActionCommand().equals("mainMenuExitGame")) {
+		} else if(actionCommand.equals("mainMenuExitGame")) {
 			System.exit(0);
-		} else if(e.getActionCommand().equals("mainMenuHighscore")) {
+		} else if(actionCommand.equals("mainMenuHighscore")) {
 			Window.swapView("highscore");
-		} else if(e.getActionCommand().equals("inGameContinueGame")) {
+		} else if(actionCommand.equals("inGameContinueGame")) {
 			Window.toggleMenu();
 			if (!gamePanel.getGameState().isGameDone()) {
 				this.startClock();
 			}
-		} else if (e.getActionCommand().equals("inGameNewGame")) {
+		} else if (actionCommand.equals("inGameNewGame")) {
 			this.stopClock();
 			Window.toggleMenu();
-			this.gamePanel.getGameState().restartGame();
-			this.gamePanel.reset();
-			this.scrambleBoard();
-		} else if (e.getActionCommand().equals("inGameSaveGame")) {
+			resetInGame();
+		} else if (actionCommand.equals("inGameSaveGame")) {
 			SaveLoad.saveToFile(this.gamePanel.getGameState(), "SavedGame");
-		} else if(e.getActionCommand().equals("inGameExitToMainMenu")) {
+		} else if(actionCommand.equals("inGameExitToMainMenu")) {
 			this.gamePanel.getGameState().restartGame();
 			this.gamePanel.reset();
 			this.stopClock();
 			Window.toggleMenu();
 			Window.swapView("mainMenu");
-		} else if (e.getActionCommand().equals("inGameSolveGame")) {
+		} else if (actionCommand.equals("inGameSolveGame")) {
 			System.out.println("solving game");
+		} else if (actionCommand.equals("inGameHighscores")) {
+			Window.swapView("highscore", "puzzle");
 		}
 	}
 
-
+	private void resetInGame() {
+		this.gamePanel.getGameState().restartGame();
+		this.gamePanel.reset();
+		this.scrambleBoard();
+	}
+	
 	/// SETTERS FROM HERE ///
 
 	public void setAnimating(boolean isAnimating) {

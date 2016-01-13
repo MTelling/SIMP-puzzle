@@ -134,6 +134,10 @@ public class Window extends JFrame {
 	}
 	
 	public static void swapView(String key) {
+		swapView(key, "mainMenu");
+	}
+	
+	public static void swapView(String key, String origin) {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			gamePanel.requestFocus();
@@ -141,6 +145,7 @@ public class Window extends JFrame {
 			imageCropPanel.init();
 		} else if (key.equals("highscore")) {
 			highscorePanel.reset();
+			highscorePanel.setOrigin(origin);
 		}
 	}
 	

@@ -30,6 +30,8 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	private Highscore easyHighscore;
 	private int lookingAtBoardSize;
 	private Box highscore;
+	
+	private String origin;
 
 	public HighscorePanel(Highscore easyHighscore, Highscore mediumHighscore, Highscore hardHighscore) {
 		this.easyHighscore = easyHighscore;
@@ -68,6 +70,10 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		
 		this.add(container);
 		this.setVisible(true);
+	}
+	
+	public void setOrigin(String origin) {
+		this.origin = origin;
 	}
 	
 	public void reset() {
@@ -233,8 +239,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		String actionCommand = e.getActionCommand();
 		switch (actionCommand) {
 			case "closeButton":
-				//TODO: Should do something different depending on where it's coming from. 
-				Window.swapView("mainMenu");
+				Window.swapView(this.origin);
 				break;
 			
 			case "easyDifficulty":
