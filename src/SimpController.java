@@ -106,6 +106,12 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				gamePanel.getGameState().setGameDone(true);
 				JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!!");
 				stopClock();
+				Highscore highscore = gamePanel.getHighscore(Window.getSettings().getDifficulty());
+				int score = gamePanel.getScore().calculateScore();
+				int highscorePos = highscore.isHighscore(score);
+				if(highscorePos > -1) {
+					highscore.addHighscore("Tobias", score, highscorePos);
+				}
 			}
 		}
 	});

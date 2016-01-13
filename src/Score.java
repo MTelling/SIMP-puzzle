@@ -19,6 +19,10 @@ public class Score implements Serializable{
 		this.newMoves = moves;
 	}
 	
+	public int calculateScore() {
+		return Math.max(10, 10000 - (this.seconds * 10) - (this.moves) * 5);
+	}
+	
 	public int getSeconds () {
 		return this.seconds;
 	}

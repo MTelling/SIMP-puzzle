@@ -21,6 +21,7 @@ public class GamePanel extends JPanel {
 	private final Color TILE_TEXT_COLOR = Color.WHITE;
 	private final Color LABEL_WHEN_CORNERED_BACKGROUND_COLOR = new Color(100,100,100,150);
 	private GameState gameState;
+	private Highscore[] highscores;
 	
 	private Image boardImg;
 	private Image menuButtonImg;
@@ -39,12 +40,13 @@ public class GamePanel extends JPanel {
 	
 	private WindowSize currWindowSize;
 	
-	public GamePanel(GameState gs) {
+	public GamePanel(GameState gs, Highscore[] highscores) {
 		
 		this.setBounds(0, 0, Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT());
 		this.setOpaque(true);
 		
 		this.gameState = gs;
+		this.highscores = highscores;
 		
 		this.setBackground(BACKGROUND_COLOR);
 				
@@ -288,6 +290,10 @@ public class GamePanel extends JPanel {
 	//Helper method to retrieve score from gameState
 	public Score getScore() {
 		return this.gameState.getScore();
+	}
+	
+	public Highscore getHighscore(int difficulty) {
+		return this.highscores[difficulty - 1];
 	}
 	
 }

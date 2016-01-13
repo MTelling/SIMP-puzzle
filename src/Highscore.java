@@ -18,6 +18,10 @@ public class Highscore implements Serializable {
 		this.difficulty = diff;
 		if(new File(FILE_NAME + "/" + this.difficulty + SaveLoad.FILE_EXT).exists()) {
 			this.loadHighscores();
+		} else {
+			for(int i = 3; i <= 100; i++) {
+				highscores.add(new LinkedList<String>());
+			}
 		}
 		
 		for(LinkedList<String> sizeDependantHighscores : highscores) {
@@ -28,6 +32,7 @@ public class Highscore implements Serializable {
 				this.removeExtraScores(sizeDependantHighscores, Math.abs(sizeDifference));
 			}
 		}
+		
 		this.saveHighscores();
 	}
 	
@@ -43,7 +48,7 @@ public class Highscore implements Serializable {
 		SaveLoad.saveToFile(this, FILE_NAME + "/" + this.difficulty);
 	}
 	
-	public int isHighscore(String name, int score) {
+	public int isHighscore(int score) {
 		int highscorePosition = -1;
 		int i = 0;
 		while(highscorePosition == -1 && i < HIGHSCORE_SIZE) {
@@ -62,6 +67,8 @@ public class Highscore implements Serializable {
 		if(currentHighscores.size() > HIGHSCORE_SIZE) {
 			this.removeExtraScores(currentHighscores, Math.abs(HIGHSCORE_SIZE - currentHighscores.size()));
 		}
+		
+		this.saveHighscores();
 	}
 	
 	public String[] getHighscoreAt(int boardSize, int highscorePos) {

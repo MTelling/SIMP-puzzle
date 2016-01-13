@@ -60,7 +60,7 @@ public class Window extends JFrame {
 		cardPanel.setPreferredSize(settings.getCurrWindowSize().getDimension());
 		
 		//Create Controller
-		gamePanel = new GamePanel(gs);
+		gamePanel = new GamePanel(gs, new Highscore[]{easyHighscore, mediumHighscore, hardHighscore});
 		SimpController controller = new SimpController(gamePanel);
 		
 		//Create mainManuPanel
