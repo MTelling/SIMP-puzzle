@@ -1,6 +1,5 @@
-import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,12 +7,15 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class SimpController implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
@@ -135,14 +137,35 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	}
 	
 	private void presentNewHighscoreDialog(int score, int highscorePos, Highscore highscore) {
-		String name = JOptionPane.showInputDialog("New highscore! Enter your name: ");
+		//Create input dialog with only an ok button
+		String[] options = {"Ok"};
+		JPanel dialogPane = new JPanel();
+		dialogPane.setLayout(new BoxLayout(dialogPane, BoxLayout.Y_AXIS));
+		JLabel dialogText1 = new JLabel("New highscore!");
+		JLabel dialogText2 = new JLabel("Enter Your name:");
+		JTextField nameField = new JTextField(10);
+		dialogPane.add(dialogText1);
+		dialogPane.add(dialogText2);
+		dialogPane.add(nameField);
+		
+		int enteredName = JOptionPane.showOptionDialog(null, dialogPane, "Congratulations", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options , options[0]);
+	    
+		String name;
+		if (enteredName == 0 && nameField.getText().length() != 0) {
+			name = nameField.getText();
+		} else {
+			name = "AnonymousRobert";
+		}
+		
 		highscore.addHighscore(name, score, highscorePos);
 		//Present highscore window. 
 		Window.swapView("highscore");
 	}
 	
 	private void presentGameDoneDialog(int score) {
-		int reply = JOptionPane.showConfirmDialog(null, "You won the game!\nDo you want to restart?", "Won", JOptionPane.YES_NO_OPTION);
+		Image image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		//Create confirm dialog without image
+		int reply = JOptionPane.showConfirmDialog(null, "You won the game!\nDo you want to restart?", "Congratulations!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, new ImageIcon(image));
 		if (reply == JOptionPane.YES_OPTION) {
 			resetInGame();
 		}

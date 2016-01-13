@@ -77,7 +77,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	}
 	
 	public void reset() {
-		
+		this.lookingAtBoardSize = Window.getSettings().getTilesPerRowInBoard();
 		highscore.setMaximumSize(container.getPreferredSize());
 		selectSizeTextField.setText(this.lookingAtBoardSize+"");
 		

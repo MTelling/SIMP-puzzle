@@ -19,8 +19,6 @@ public class Highscore implements Serializable {
 		if(new File(FILE_NAME + this.difficulty + "." + SaveLoad.FILE_EXT).exists()) {
 			this.loadHighscores();
 		} else {
-			System.out.println("Got here");
-
 			for(int i = 3; i <= 100; i++) {
 				highscores.add(new LinkedList<String>());
 			}
