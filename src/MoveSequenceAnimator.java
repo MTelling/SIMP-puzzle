@@ -9,7 +9,7 @@ public class MoveSequenceAnimator implements ActionListener{
 	private boolean animating;
 	private LinkedList<Move> moves;
 	private SimpController controller;
-	
+
 	public MoveSequenceAnimator(SimpController controller, LinkedList<Move> moves) {
 		this.animating = false;
 		this.controller = controller;
@@ -23,7 +23,7 @@ public class MoveSequenceAnimator implements ActionListener{
 			this.controller.getGamePanel().getBoard().setToAnimationState(moves.get(0));
 			animating = true;
 		}
-		
+
 		if(this.controller.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getScrambleAnimationSpeed())) {
 			this.controller.getGamePanel().repaint();
 			animating = false;
@@ -31,7 +31,7 @@ public class MoveSequenceAnimator implements ActionListener{
 		} else {
 			this.controller.getGamePanel().repaint();
 		}
-		
+
 		//If there are no more moves, stop animating. 
 		if (moves.size() < 1) {
 			((Timer)(e.getSource())).stop();

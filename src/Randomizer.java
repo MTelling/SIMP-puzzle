@@ -41,7 +41,7 @@ public class Randomizer {
 		emptyTile.translate(move.dx, move.dy);
 		moveSequence.add(move);
 	}
-	
+
 
 	private void generateRandomMovesInCloseArea(LinkedList<Move> moveSequence, Point emptyTile, int numberOfMoves) {
 		//Move x, then y, then x etc. Was x moved last?
