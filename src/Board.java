@@ -63,7 +63,19 @@ public class Board implements Serializable {
 		this.nextEmptyTile = new Point(this.tilesPerRow - 1 , this.tilesPerRow - 1);	
 	}
 
-	/// Methods for randomizer ///
+	public void recalcTilePositions() {
+		this.tileSize = (Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH() 
+				- Window.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 
+				- Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
+		for(int y = 0; y < this.tilesPerRow; y++) {
+			for(int x = 0; x < this.tilesPerRow; x++) {
+				//create all tiles in board. 
+				int xCoord = Window.getSettings().getCurrWindowSize().getGAME_BORDER() + Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() + (x * this.tileSize);
+				int yCoord =  Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT() - Window.getSettings().getCurrWindowSize().getGAME_BORDER() - ((this.tilesPerRow - y) * (this.tileSize)) - Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE();
+				this.tiles[x][y].setCoords(xCoord, yCoord);
+			}
+		}
+	}
 
 
 	//Moves tile to the currEmptyTile position and swaps in tileArray + sets what the nextEmptyTile should be.

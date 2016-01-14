@@ -1,6 +1,7 @@
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -15,15 +16,19 @@ public class ImageHandler {
 
 		BufferedImage mainPic = ImageIO.read(new File(fileName));
 		BufferedImage[] tilePics = new BufferedImage[(int) Math.pow(tilesPerRow, 2)];
-    	for(int y = 0; y < tilesPerRow; y++) {
-    		for(int x = 0; x < tilesPerRow; x++) {
-    			
-    			tilePics[y*tilesPerRow + x] = mainPic.getSubimage(
-    					x * tileSize, 	// x coordinates
-    					y * tileSize, 	// y coordinates
-    					tileSize, 		// width
-    					tileSize);		// height
-    		}
+    	try {
+			for(int y = 0; y < tilesPerRow; y++) {
+	    		for(int x = 0; x < tilesPerRow; x++) {
+	    			
+	    			tilePics[y*tilesPerRow + x] = mainPic.getSubimage(
+	    					x * tileSize, 	// x coordinates
+	    					y * tileSize, 	// y coordinates
+	    					tileSize, 		// width
+	    					tileSize);		// height
+	    		}
+	    	}
+    	} catch (RasterFormatException e) {
+    		throw new RasterFormatException("Error choosing image");
     	}
     	
     	return tilePics;

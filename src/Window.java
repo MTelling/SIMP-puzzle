@@ -124,7 +124,6 @@ public class Window extends JFrame {
 		highscorePanel.resetSize();
 		
 		this.pack();
-		
 		//Make sure the window stays centered. 
 		this.setLocationRelativeTo(null);
 	}
@@ -146,6 +145,8 @@ public class Window extends JFrame {
 		} else if (key.equals("highscore")) {
 			highscorePanel.reset();
 			highscorePanel.setOrigin(origin);
+		} else if (key.equals("settings")) {
+			settingsPanel.loadSettings();
 		}
 	}
 	

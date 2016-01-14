@@ -103,7 +103,6 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 				
 				mouseStartX = e.getX();
 				mouseStartY = e.getY();
-				System.out.println(this.sx1 + " " + this.sy1 + " " + this.sx2 + " " + this.sy2 + " " + this.mouseStartX + " " + this.mouseStartY);
 				this.repaint();
 			}
 		}

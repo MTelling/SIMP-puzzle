@@ -5,9 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -167,8 +169,8 @@ public class GamePanel extends JPanel {
 				tileHeight++;
 			}
 			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
-				//Draw all tiles except for the empty one.
-				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2) || this.gameState.isGameDone()) {
+				//Draw all tiles except for the empty one. If the game is done and pictures are shown. Show the full image. 
+				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2) || (this.gameState.isGameDone() && Window.getSettings().isPictureOn())) {
 				
 					//Get x and y position
 					int xCoord = tiles[x][y].getX() + extraX;
@@ -186,7 +188,7 @@ public class GamePanel extends JPanel {
 					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, tileWidth, tileHeight, null);
 					
 					//Draws text on image
-					if(this.gameState.isPictureOn()) {
+					if(Window.getSettings().isPictureOn()) {
 
 						//Draw border around unfinished picture
 						if (!this.gameState.isGameDone()){
@@ -225,13 +227,22 @@ public class GamePanel extends JPanel {
 		//Create list of tileImages
 		try {
 			//If picture is set to on in settings, get the picture. Otherwise just get a plain image. 
-			if (this.gameState.isPictureOn()) {
+			if (Window.getSettings().isPictureOn()) {
 				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), Window.getSettings().getGamePicture());
 			} else {
 				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic.jpg");
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("IOException, error loading image somehow");
+		} catch (RasterFormatException e) {
+			//If the image can't be loaded. Reset to basic without pciture and repaint the view. 
+			JOptionPane.showMessageDialog(null, "Error loading image. You have probably changed window size, since you chose it.\n"+
+					"I've reset to numbers for you. If you want to use a picture, go into settings and choose a new", "Image error", JOptionPane.ERROR_MESSAGE);
+			Window.getSettings().setPictureOn(false);
+			Window.getSettings().setGamePicture(RESOURCE_PATH + "pics/basic.jpg"); 
+			//Reload images. 
+			loadImages();
+			this.repaint();
 		}
 	}
 	

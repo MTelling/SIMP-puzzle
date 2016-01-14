@@ -297,7 +297,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void actionPerformed(ActionEvent e) {
 		String actionCommand = e.getActionCommand();
 		if(actionCommand.equals("mainMenuNewGame")) {
-			Window.swapView("puzzle");
 
 			//Settings could have changed so reinit moveAnimator to get the new FPS
 			initMoveAnimator();
@@ -305,6 +304,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			//Reset the game
 			gamePanel.getGameState().restartGame();
 			gamePanel.reset();
+			
+			Window.swapView("puzzle");
+
 
 			this.scrambleBoard();
 		} else if (actionCommand.equals("mainMenuLoadGame")) {
@@ -312,6 +314,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			Object obj = SaveLoad.loadFromFile("SavedGame");
 			if(obj instanceof GameState) {
 				this.gamePanel.updateGameState((GameState) obj);
+				
+				this.gamePanel.getBoard().recalcTilePositions();
 				this.gamePanel.getScore().setNewMoves(0);
 				this.gamePanel.reset();
 				Window.swapView("puzzle");
