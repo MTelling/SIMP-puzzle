@@ -27,8 +27,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public SimpController(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 		this.isAnimating = false;
-
-		initMoveAnimator();
 	}
 
 	public void initMoveAnimator() {
@@ -316,6 +314,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				this.gamePanel.getBoard().recalcTilePositions();
 				this.gamePanel.getScore().setNewMoves(0);
 				this.gamePanel.reset();
+
+				initMoveAnimator();
+
 				Window.swapView("puzzle");
 			}
 		} else if(actionCommand.equals("mainMenuSettings")) {

@@ -15,7 +15,7 @@ public class MoveAnimator implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getAnimationSpeed());
+		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getAnimationSpeed().getValue());
 		
 		if(arrivedAtFinalPosition) {	
 			//Ask the timer to stop ticking, because the tile should now be in the correct place. 

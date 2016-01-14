@@ -3,6 +3,8 @@ import java.io.Serializable;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import javafx.animation.Animation;
+
 public class Settings implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -29,7 +31,7 @@ public class Settings implements Serializable{
 
 	//Animation speeds
 	private int scrambleAnimationSpeed;
-	private int animationSpeed;
+	private AnimationSpeed animationSpeed;
 
 	//Board difficulty
 	private int difficulty;
@@ -37,10 +39,6 @@ public class Settings implements Serializable{
 
 
 	private WindowSize CurrWindowSize;
-
-	public Settings() {
-		this.setCurrWindowSize(WindowSize.MEDIUM);
-	}
 
 	public void loadSettings() {
 		Preferences settings = Preferences.userNodeForPackage(this.getClass());
@@ -65,7 +63,7 @@ public class Settings implements Serializable{
 		this.refreshRate = settings.getInt("refreshRate", (int)Math.round(1000.0/framesPerSecond));
 
 		this.setAnimationOn(settings.getBoolean("animateMoves", true));
-		this.setAnimationSpeed(settings.getInt("animationSpeed", AnimationSpeed.MEDIUM.getValue()));
+		this.setAnimationSpeed(AnimationSpeed.getAnimationSpeedFromOrdinal(settings.getInt("animationSpeed", 1)));
 		this.setAnimationScramblingOn(settings.getBoolean("animateBoardScramble", true));
 		this.setScrambleAnimationSpeed(settings.getInt("scrambleAnimationSpeed", 2));
 
@@ -83,7 +81,7 @@ public class Settings implements Serializable{
 		settings.putInt("refreshRate", this.refreshRate);
 
 		settings.putBoolean("animateMoves", this.isAnimationOn);
-		settings.putInt("animationSpeed", this.animationSpeed);
+		settings.putInt("animationSpeed", this.animationSpeed.ordinal());
 		settings.putBoolean("animateBoardScramble", this.isAnimationScramblingOn);
 		settings.putInt("scrambleAnimationSpeed", this.scrambleAnimationSpeed);
 
@@ -103,6 +101,7 @@ public class Settings implements Serializable{
 		}
 	}
 
+	
 	/// SETTERS FROM HERE ///
 
 	public void setControlsNormal() {
@@ -122,7 +121,7 @@ public class Settings implements Serializable{
 		this.scrambleAnimationSpeed = this.CurrWindowSize.getBOARD_SIZE() / this.tilesPerRowInBoard;
 	}
 
-	public void setAnimationSpeed(int animationSpeed) {
+	public void setAnimationSpeed(AnimationSpeed animationSpeed) {
 		this.animationSpeed = animationSpeed;
 	}
 
@@ -205,7 +204,7 @@ public class Settings implements Serializable{
 		return scrambleAnimationSpeed;
 	}
 
-	public int getAnimationSpeed() {
+	public AnimationSpeed getAnimationSpeed() {
 		return animationSpeed;
 	}
 

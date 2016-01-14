@@ -47,6 +47,7 @@ public class Window extends JFrame {
 		Highscore easyHighscore = new Highscore("easy");
 		Highscore mediumHighscore = new Highscore("medium");
 		Highscore hardHighscore = new Highscore("hard");
+		
 		Board board = new Board();
 		Score score = new Score();	
 		GameState gs = new GameState(board, score);

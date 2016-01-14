@@ -170,13 +170,13 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 
 			//Set animation speed
 		case "slowAnimation":
-			settings.setAnimationSpeed(AnimationSpeed.SLOW.getValue());
+			settings.setAnimationSpeed(AnimationSpeed.SLOW);
 			break;
 		case "mediumAnimation":
-			settings.setAnimationSpeed(AnimationSpeed.MEDIUM.getValue());
+			settings.setAnimationSpeed(AnimationSpeed.MEDIUM);
 			break;
 		case "fastAnimation":
-			settings.setAnimationSpeed(AnimationSpeed.FAST.getValue());
+			settings.setAnimationSpeed(AnimationSpeed.FAST);
 			break;
 
 		//Set difficulty
@@ -352,9 +352,9 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	}
 
 	private void loadAnimationSpeed() {
-		if (settings.getAnimationSpeed() == AnimationSpeed.SLOW.getValue()) {
+		if (settings.getAnimationSpeed() == AnimationSpeed.SLOW) {
 			slowAnimation.setSelected(true);
-		} else if (settings.getAnimationSpeed() == AnimationSpeed.MEDIUM.getValue()) {
+		} else if (settings.getAnimationSpeed() == AnimationSpeed.MEDIUM) {
 			mediumAnimation.setSelected(true);
 		} else {
 			fastAnimation.setSelected(true);

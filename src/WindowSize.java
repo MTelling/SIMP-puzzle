@@ -32,7 +32,7 @@ public enum WindowSize {
 		case 2:
 			return WindowSize.LARGE;
 		default:
-			return null;
+			return WindowSize.MEDIUM;
 		}
 	}
 
