@@ -254,6 +254,12 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				else if (!gamePanel.getGameState().isGameDone())
 					this.startClock();
 				Window.toggleMenu();
+			} else if (e.getKeyCode() == KeyEvent.VK_S){
+				Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
+				LinkedList<Move> solvedMoves = new LinkedList<Move>();
+				solvedMoves.addAll(solve.AStarSearch(null, null, true));
+				Timer solveAnimator = new Timer(50, new MoveSequenceAnimator(this, solvedMoves));
+				solveAnimator.start();
 			} else if(!Window.menuToggle) {
 				int dx = 0, dy = 0;
 				int keyCode = e.getKeyCode();
@@ -349,14 +355,17 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			//System.out.println("solving game");
 			Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
 			LinkedList<Move> solvedMoves = new LinkedList<>();
-			for (int j = 0; j < gamePanel.getBoard().getTilesPerRow() - 2; j++) {
-				for (int i = 0; i < gamePanel.getBoard().getTilesPerRow() - 2; i++) {
-					solvedMoves.addAll(solve.moveTile((j*gamePanel.getBoard().getTilesPerRow())+i+1, new Point(i,j)));
-				}
-				System.out.println("Now at row: "  + j);
+
+			for(int i = 0; i < gamePanel.getBoard().getTilesPerRow() - 3; i++){
+				solvedMoves.addAll(solve.solveUpperAndLeft(i));	
 			}
-			Timer solveAnimator = new Timer(50, new MoveSequenceAnimator(this, solvedMoves));
-			solveAnimator.start();
+			gamePanel.getScore().addMoves(solvedMoves.size());
+
+			while(!solvedMoves.isEmpty()){
+				gamePanel.getBoard().setToAnimationState(solvedMoves.get(0));
+				gamePanel.getBoard().moveWithoutAnimation();
+				solvedMoves.remove(0);
+			}
 			
 		} else if (actionCommand.equals("inGameHighscores")) {
 			Window.swapView("highscore", "puzzle");

@@ -325,4 +325,68 @@ public class Solver {
 		return moveSequence;
 	}
 	
+	//solve upper and left 
+	public LinkedList<Move> solveUpperAndLeft(int i){
+		LinkedList<Move> result = new LinkedList<Move>();
+		int x = i;
+		while (x < this.tilesPerRow - 2){
+			result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x,i)));
+			x++;
+		}
+		
+		
+		LinkedList<Point> illegals = new LinkedList<Point>();
+		illegals.add(new Point(this.tilesPerRow - 2, i));
+		illegals.add(new Point(this.tilesPerRow - 2, i+1));
+		illegals.add(new Point(this.tilesPerRow - 1, i));
+		illegals.add(new Point(this.tilesPerRow - 1, i+1));
+		
+		if(illegals.contains(numberToPoint(i*this.tilesPerRow+2+x))){
+			result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(this.tilesPerRow-1,i+2)));
+			unBlockPoint(new Point(this.tilesPerRow-1,i+2));
+		}
+		
+		result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x+1,i)));
+		result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(x+1,i+1)));
+		unBlockPoint(new Point(x+1, i));
+		result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x,i)));
+		unBlockPoint(new Point(x+1,i+1));
+		result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(x+1,i)));
+		
+		int y = i+1;
+		while (y < this.tilesPerRow - 2) {
+			result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y)));
+			y++;
+		}
+		
+		illegals.clear();
+		illegals.add(new Point(i, this.tilesPerRow - 2));
+		illegals.add(new Point(i+1, this.tilesPerRow - 2));
+		illegals.add(new Point(i, this.tilesPerRow - 1));
+		illegals.add(new Point(i+1, this.tilesPerRow - 1));
+		
+		if(illegals.contains(numberToPoint(this.tilesPerRow*(y+1)+1+x))){
+			result.addAll(moveTile(this.tilesPerRow*(y+1)+1+x, new Point(i+2, this.tilesPerRow-1)));
+			unBlockPoint(new Point(i+2, this.tilesPerRow-1));
+		}
+		
+		result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y+1)));
+		result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i+1,y+1)));
+		unBlockPoint(new Point(i,y+1));
+		result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y)));
+		unBlockPoint(new Point(i+1,y+1));
+		result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i,y+1)));
+		return result;
+	}
+	
+	public void unBlockPoint(Point toUnblock){
+		if(this.blockedTiles.contains(toUnblock)){
+			this.blockedTiles.remove(this.blockedTiles.indexOf(toUnblock));
+		}
+	}
+	
+	public void clearBlocked() {
+		this.blockedTiles.clear();
+	}
+	
 }
