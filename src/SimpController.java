@@ -256,11 +256,40 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					this.startClock();
 				Window.toggleMenu();
 			} else if (e.getKeyCode() == KeyEvent.VK_S){
-				Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
-				LinkedList<Move> solvedMoves = new LinkedList<Move>();
-				solvedMoves.addAll(solve.AStarSearch(null, null, true));
-				Timer solveAnimator = new Timer(50, new MoveSequenceAnimator(this, solvedMoves));
-				solveAnimator.start();
+				Tile[][] newTileArray = new Tile[3][3];
+				Point newEmptyTile = new Point(0,0);
+				
+				int number = gamePanel.getBoard().getTilesPerRow() * (gamePanel.getBoard().getTilesPerRow() - 3) + gamePanel.getBoard().getTilesPerRow() - 2;
+				int counter = 1;
+				for(int i = 0; i < 9; i++){
+					for(int y = 0; y < 3; y++){
+						for(int x = 0; x < 3; x++){
+							if(gamePanel.getBoard().getTiles()[gamePanel.getBoard().getTilesPerRow() - 1 - x][gamePanel.getBoard().getTilesPerRow() - 1 - y].getNumber() == number){
+								newTileArray[2-x][2-y] = new Tile(counter, 0, 0);
+								counter++;
+								if(counter == 4){
+									number = gamePanel.getBoard().getTilesPerRow() * (gamePanel.getBoard().getTilesPerRow() - 2) + gamePanel.getBoard().getTilesPerRow() - 2;
+								} else if(counter == 7){
+									number = gamePanel.getBoard().getTilesPerRow() * (gamePanel.getBoard().getTilesPerRow() - 1) + gamePanel.getBoard().getTilesPerRow() - 2;
+								} else {
+									number++;
+								}
+							} 
+							if(gamePanel.getBoard().getTilesPerRow()*gamePanel.getBoard().getTilesPerRow() == gamePanel.getBoard().getTiles()[gamePanel.getBoard().getTilesPerRow() - 1 - x][gamePanel.getBoard().getTilesPerRow() - 1 - y].getNumber()){
+								newEmptyTile = new Point(2-x,2-y);
+							}
+						}
+					}
+				}
+				
+				Solver solveFinal = new Solver(newTileArray, newEmptyTile);
+				LinkedList<Move> moveSequence = new LinkedList<>();
+				moveSequence.addAll(solveFinal.AStarSearch(null, null, true));
+				
+				Timer show = new Timer(17, new MoveSequenceAnimator(this, moveSequence));
+				show.start();
+				
+				
 			} else if(!Window.menuToggle) {
 				int dx = 0, dy = 0;
 				int keyCode = e.getKeyCode();
