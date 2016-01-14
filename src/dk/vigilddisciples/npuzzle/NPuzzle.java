@@ -150,6 +150,7 @@ public class NPuzzle extends JFrame {
 	public static void swapView(String key, String origin) {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
+			settings.setScrambleAnimationSpeed();
 			gamePanel.requestFocus();
 		} else if(key.equals("imageCrop")) {
 			imageCropPanel.init();

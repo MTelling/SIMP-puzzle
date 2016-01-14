@@ -316,6 +316,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 			this.scrambleBoard();
 		} else if (actionCommand.equals("mainMenuLoadGame")) {
+			
 			//Load the game from file
 			try {
 				Object obj = SaveLoad.loadFromFile("SavedGame");

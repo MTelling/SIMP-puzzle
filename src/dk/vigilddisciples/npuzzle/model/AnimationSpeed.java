@@ -24,7 +24,11 @@ public enum AnimationSpeed {
 	}
 	
 	public int getValue() {
-		int speed = (int)Math.round((NPuzzle.getSettings().getCurrWindowSize().getBOARD_SIZE() / NPuzzle.getSettings().getTilesPerRowInBoard()) / this.stepsPerMove);
+		return getValue(NPuzzle.getSettings().getTilesPerRowInBoard());
+	}
+	
+	public int getValue(int tilesPerRow) {
+		int speed = (int)Math.round((NPuzzle.getSettings().getCurrWindowSize().getBOARD_SIZE() / tilesPerRow) / this.stepsPerMove);
 		//If speed is set to 0 because of rounding, tell it to be 1 instead. 
 		return (speed == 0) ? 1 : speed;
 	}

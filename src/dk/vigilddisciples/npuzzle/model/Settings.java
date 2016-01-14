@@ -67,7 +67,7 @@ public class Settings implements Serializable{
 		this.setAnimationOn(settings.getBoolean("animateMoves", true));
 		this.setAnimationSpeed(AnimationSpeed.getAnimationSpeedFromOrdinal(settings.getInt("animationSpeed", 1)));
 		this.setAnimationScramblingOn(settings.getBoolean("animateBoardScramble", true));
-		this.setScrambleAnimationSpeed(settings.getInt("scrambleAnimationSpeed", 2));
+		this.setScrambleAnimationSpeed();
 
 		this.setPictureOn(settings.getBoolean("usePictureAsTiles", false));
 		this.setGamePicture(settings.get("picturePath", "resources/pics/test.jpg"));
@@ -118,9 +118,8 @@ public class Settings implements Serializable{
 		this.controls = INVERTED_CONTROLS;
 	}
 
-	public void setScrambleAnimationSpeed(int movesPerAnimation) {
-		//TODO: Fix this
-		this.scrambleAnimationSpeed = this.CurrWindowSize.getBOARD_SIZE() / this.tilesPerRowInBoard;
+	public void setScrambleAnimationSpeed() {
+		this.scrambleAnimationSpeed = (this.CurrWindowSize.getBOARD_SIZE() / this.tilesPerRowInBoard) / 3;
 	}
 
 	public void setAnimationSpeed(AnimationSpeed animationSpeed) {
