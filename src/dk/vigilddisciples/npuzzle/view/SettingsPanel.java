@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,13 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import dk.vigilddisciples.npuzzle.ImageHandler;
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.model.AnimationSpeed;
+import dk.vigilddisciples.npuzzle.model.Difficulty;
+import dk.vigilddisciples.npuzzle.model.Settings;
+import dk.vigilddisciples.npuzzle.model.WindowSize;
 
 
 public class SettingsPanel extends JPanel implements ActionListener, ChangeListener{
@@ -53,11 +61,11 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	private JRadioButton scrambleAnimationOn;
 	private JRadioButton scrambleAnimationOff;
 
-	private Window window;
+	private NPuzzle window;
 	private Settings settings;
 
 
-	public SettingsPanel(Settings settings, Window window) {
+	public SettingsPanel(Settings settings, NPuzzle window) {
 		this.settings = settings;
 		this.window = window;
 
@@ -167,6 +175,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 			} catch (Exception exc){
 				boardSizeChooser.setText("" + settings.getTilesPerRowInBoard());
 			}
+			break;
 
 			//Set animation speed
 		case "slowAnimation":
@@ -203,7 +212,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 					settings.setGamePicture(imagePath);
 				} else if(image != null && (image.getWidth() > boardSize && image.getHeight() >= boardSize)
 						|| (image.getWidth() >= boardSize && image.getHeight() > boardSize)){
-					Window.swapView("imageCrop");
+					NPuzzle.swapView("imageCrop");
 					ImageCropPanel.setImageToCrop(image);
 				} else {
 					JOptionPane.showMessageDialog(null, "Image is too small for the current window size", "Error", JOptionPane.ERROR_MESSAGE);
@@ -214,8 +223,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 			//Close settings window
 		case "Close settings":
 			settings.saveSettings();
-			//TODO: Should do something different depending on where it's coming from. 
-			Window.swapView("mainMenu");
+			NPuzzle.swapView("mainMenu");
 			break;
 
 
@@ -352,9 +360,9 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	}
 
 	private void loadAnimationSpeed() {
-		if (settings.getAnimationSpeed() == AnimationSpeed.SLOW) {
+		if (settings.getAnimationSpeed().equals(AnimationSpeed.SLOW)) {
 			slowAnimation.setSelected(true);
-		} else if (settings.getAnimationSpeed() == AnimationSpeed.MEDIUM) {
+		} else if (settings.getAnimationSpeed().equals(AnimationSpeed.MEDIUM)) {
 			mediumAnimation.setSelected(true);
 		} else {
 			fastAnimation.setSelected(true);

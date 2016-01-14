@@ -1,5 +1,7 @@
+package dk.vigilddisciples.npuzzle;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,24 +38,21 @@ public class SaveLoad {
 		}
 	}
 	
-	public static Object loadFromFile(String fileName) {
-		try {
-			file = new File(fileName + "." + FILE_EXT);
-			f_in = new FileInputStream(file);
-			obj_in = new ObjectInputStream (f_in);
-			
-			// continue only if file exists
-			if (file.exists()) {
-				return obj_in.readObject();
-			}
-			
-			obj_out.close();
-			f_out.close();
-			
-			return null;
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
+	public static Object loadFromFile(String fileName) throws Exception{
+		
+		file = new File(fileName + "." + FILE_EXT);
+		f_in = new FileInputStream(file);
+		obj_in = new ObjectInputStream (f_in);
+		
+		// continue only if file exists
+		if (file.exists()) {
+			return obj_in.readObject();
 		}
+		
+		obj_out.close();
+		f_out.close();
+		
+		return null;
+	
 	}
 }

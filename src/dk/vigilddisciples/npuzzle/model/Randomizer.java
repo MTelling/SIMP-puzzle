@@ -1,9 +1,13 @@
+package dk.vigilddisciples.npuzzle.model;
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Stack;
+
+import dk.vigilddisciples.npuzzle.ObjectCopy;
+import dk.vigilddisciples.npuzzle.NPuzzle;
 
 public class Randomizer {
 	private Point emptyTile;
@@ -81,7 +85,7 @@ public class Randomizer {
 		LinkedList<Move> moveSequence = new LinkedList<Move>();
 		Point empty = emptyTile;
 
-		int difficulty = Window.getSettings().getDifficulty();
+		int difficulty = NPuzzle.getSettings().getDifficulty();
 		//If the board is larger than 8, the difficulty shouldn't be linear. Only if difficulty is easy. 
 		if  (tilesPerRow > 8 && difficulty != Difficulty.EASY.getValue()) {
 			difficulty += 1 +  (tilesPerRow % 10);

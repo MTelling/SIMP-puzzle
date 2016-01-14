@@ -1,7 +1,13 @@
+package dk.vigilddisciples.npuzzle.model;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import javax.swing.JOptionPane;
+
+import dk.vigilddisciples.npuzzle.SaveLoad;
+import dk.vigilddisciples.npuzzle.NPuzzle;
 
 public class Highscore implements Serializable {
 	
@@ -40,10 +46,16 @@ public class Highscore implements Serializable {
 	 * Loads the highscores from the difficulty determined file
 	 */
 	private void loadHighscores() {
-		Object tempObj = SaveLoad.loadFromFile(FILE_NAME + this.difficulty);
-		if(tempObj instanceof Highscore) {
-			this.highscores = ((Highscore)tempObj).getHighscores();
+		Object tempObj;
+		try {
+			tempObj = SaveLoad.loadFromFile(FILE_NAME + this.difficulty);
+			if(tempObj instanceof Highscore) {
+				this.highscores = ((Highscore)tempObj).getHighscores();
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Couldn't load highscores", "Error loading highscores", JOptionPane.ERROR_MESSAGE);
 		}
+		
 	}
 	
 	/*
@@ -62,7 +74,7 @@ public class Highscore implements Serializable {
 		int highscorePosition = -1;
 		int i = 0;
 		while(highscorePosition == -1 && i < HIGHSCORE_SIZE) {
-			if(Integer.parseInt(getHighscoreAt(Window.getSettings().getTilesPerRowInBoard(), i)[1]) < score) {
+			if(Integer.parseInt(getHighscoreAt(NPuzzle.getSettings().getTilesPerRowInBoard(), i)[1]) < score) {
 				highscorePosition = i;
 			}
 			i++;
@@ -78,7 +90,7 @@ public class Highscore implements Serializable {
 	 * @param index - Highscore Place
 	 */
 	public void addHighscore(String name, int score, int index) {
-		LinkedList<String> currentHighscores = this.highscores.get(Window.getSettings().getTilesPerRowInBoard());
+		LinkedList<String> currentHighscores = this.highscores.get(NPuzzle.getSettings().getTilesPerRowInBoard());
 		currentHighscores.add(index, name + "," + score);
 		if(currentHighscores.size() > HIGHSCORE_SIZE) {
 			this.removeExtraScores(currentHighscores, Math.abs(HIGHSCORE_SIZE - currentHighscores.size()));

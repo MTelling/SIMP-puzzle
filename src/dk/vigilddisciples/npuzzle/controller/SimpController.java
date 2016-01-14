@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.controller;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
@@ -17,6 +19,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+
+import dk.vigilddisciples.npuzzle.SaveLoad;
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.controller.animation.MoveAnimator;
+import dk.vigilddisciples.npuzzle.controller.animation.MoveSequenceAnimator;
+import dk.vigilddisciples.npuzzle.model.GameState;
+import dk.vigilddisciples.npuzzle.model.Highscore;
+import dk.vigilddisciples.npuzzle.model.Move;
+import dk.vigilddisciples.npuzzle.model.WindowSize;
+import dk.vigilddisciples.npuzzle.view.GamePanel;
 
 public class SimpController implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
@@ -30,7 +42,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	}
 
 	public void initMoveAnimator() {
-		this.moveAnimator = new Timer(Window.getSettings().getRefreshRate(), new MoveAnimator(this));
+		this.moveAnimator = new Timer(NPuzzle.getSettings().getRefreshRate(), new MoveAnimator(this));
 	}
 
 	private void makeMove(Move move) {
@@ -52,7 +64,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.getScore().addMoves(1);			
 
 			//Move with or without animation depending on what the setting is in settings. 
-			showMove(Window.getSettings().isAnimationOn());
+			showMove(NPuzzle.getSettings().isAnimationOn());
 
 		}
 	}
@@ -77,7 +89,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	}
 	
 	//Helper method to check if game is won
-	protected void checkIfGameIsWon() {
+	public void checkIfGameIsWon() {
 		if (getGamePanel().getBoard().isGameOver()) {
 			getGamePanel().getGameState().setGameDone(true);
 		}
@@ -92,9 +104,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			scramblingSequence.remove(0);
 		}
 
-		if (Window.getSettings().isAnimationScramblingOn()) {
+		if (NPuzzle.getSettings().isAnimationScramblingOn()) {
 			//Show scramble
-			Timer scrambleAnimationTimer = new Timer(Window.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
+			Timer scrambleAnimationTimer = new Timer(NPuzzle.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 			scrambleAnimationTimer.start();
 		} else {//Don't show scramble
 			while (scramblingSequence.size() != 0) {
@@ -124,7 +136,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	private void presentGameDoneMenu() {
 		stopClock();
 				
-		Highscore highscore = gamePanel.getHighscore(Window.getSettings().getDifficulty());
+		Highscore highscore = gamePanel.getHighscore(NPuzzle.getSettings().getDifficulty());
 		int score = gamePanel.getScore().calculateScore();
 		int highscorePos = highscore.isHighscore(score);
 		if(highscorePos > -1) {
@@ -157,7 +169,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		
 		highscore.addHighscore(name, score, highscorePos);
 		//Present highscore window. 
-		Window.swapView("highscore");
+		NPuzzle.swapView("highscore");
 	}
 	
 	private void presentGameDoneDialog(int score) {
@@ -169,7 +181,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		}
 	}
 	
-
 	
 	public void startClock () {
 		clock.start();
@@ -183,14 +194,14 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		WindowSize currWindowSize = NPuzzle.getSettings().getCurrWindowSize();
 		if (!this.isAnimating) {
-			if (!Window.menuToggle) {
+			if (!NPuzzle.menuToggle) {
 				if (e.getY() > (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 
 						&& e.getY() < (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
 					if (e.getX() > currWindowSize.getWINDOW_WIDTH()-currWindowSize.getGAME_BORDER()-GamePanel.MENUBUTTON_SIZE 
 							&& e.getX() < currWindowSize.getWINDOW_WIDTH() - currWindowSize.getGAME_BORDER()) {
-						Window.toggleMenu();
+						NPuzzle.toggleMenu();
 					}
 				} else {
 					int xPos = (e.getX() - currWindowSize.getGAME_BORDER()) / (int)gamePanel.getBoard().getTileSize();
@@ -223,7 +234,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void keyReleased(KeyEvent e) {
 		if (!this.isAnimating) {
 			//Redo undo if ctrl+z and ctrl+y
-			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !Window.menuToggle && !gamePanel.getGameState().isGameDone()) {
+			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !NPuzzle.menuToggle && !gamePanel.getGameState().isGameDone()) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
@@ -232,9 +243,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 						this.startClock();
 					}
 
-					showMove(Window.getSettings().isAnimationOn());
+					showMove(NPuzzle.getSettings().isAnimationOn());
 				}
-			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !Window.menuToggle && !gamePanel.getGameState().isGameDone()) {
+			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !NPuzzle.menuToggle && !gamePanel.getGameState().isGameDone()) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
@@ -243,19 +254,19 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 						this.startClock();
 					}
 
-					showMove(Window.getSettings().isAnimationOn());
+					showMove(NPuzzle.getSettings().isAnimationOn());
 				}
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				if(!Window.menuToggle)
+				if(!NPuzzle.menuToggle)
 					this.stopClock();
 				else if (!gamePanel.getGameState().isGameDone())
 					this.startClock();
-				Window.toggleMenu();
-			} else if(!Window.menuToggle) {
+				NPuzzle.toggleMenu();
+			} else if(!NPuzzle.menuToggle) {
 				int dx = 0, dy = 0;
 				int keyCode = e.getKeyCode();
 
-				int[] controls = Window.getSettings().getControls();
+				int[] controls = NPuzzle.getSettings().getControls();
 
 				if (keyCode == controls[0]) { //Moves tile to the left
 					dx = -1;
@@ -277,9 +288,9 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		WindowSize currWindowSize = NPuzzle.getSettings().getCurrWindowSize();
 		//Check if the mouse is over the cogwheel.
-		if (!Window.menuToggle && e.getY() > (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 
+		if (!NPuzzle.menuToggle && e.getY() > (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 
 				&& e.getY() < (currWindowSize.getTOP_CONTROLS_SIZE() - GamePanel.MENUBUTTON_SIZE) / 2 + GamePanel.MENUBUTTON_SIZE) {
 			if (e.getX() > currWindowSize.getWINDOW_WIDTH()-currWindowSize.getGAME_BORDER()-GamePanel.MENUBUTTON_SIZE 
 					&& e.getX() < currWindowSize.getWINDOW_WIDTH() - currWindowSize.getGAME_BORDER()) {
@@ -302,37 +313,43 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.getGameState().restartGame();
 			gamePanel.reset();
 			
-			Window.swapView("puzzle");
+			NPuzzle.swapView("puzzle");
 
 			this.scrambleBoard();
 		} else if (actionCommand.equals("mainMenuLoadGame")) {
 			//Load the game from file
-			Object obj = SaveLoad.loadFromFile("SavedGame");
-			if(obj instanceof GameState) {
-				this.gamePanel.updateGameState((GameState) obj);
+			try {
+				Object obj = SaveLoad.loadFromFile("SavedGame");
 				
-				this.gamePanel.getBoard().recalcTilePositions();
-				this.gamePanel.getScore().setNewMoves(0);
-				this.gamePanel.reset();
+				if(obj instanceof GameState) {
+					this.gamePanel.updateGameState((GameState) obj);
+					
+					this.gamePanel.getBoard().recalcTilePositions();
+					this.gamePanel.getScore().setNewMoves(0);
+					this.gamePanel.reset();
 
-				initMoveAnimator();
+					initMoveAnimator();
 
-				Window.swapView("puzzle");
+					NPuzzle.swapView("puzzle");
+				}
+			} catch (Exception exc) {
+				JOptionPane.showMessageDialog(null, "No saved game to load!", "Failed to load game", JOptionPane.ERROR_MESSAGE);
 			}
+			
 		} else if(actionCommand.equals("mainMenuSettings")) {
-			Window.swapView("settings");
+			NPuzzle.swapView("settings");
 		} else if(actionCommand.equals("mainMenuExitGame")) {
 			System.exit(0);
 		} else if(actionCommand.equals("mainMenuHighscore")) {
-			Window.swapView("highscore");
+			NPuzzle.swapView("highscore");
 		} else if(actionCommand.equals("inGameContinueGame")) {
-			Window.toggleMenu();
+			NPuzzle.toggleMenu();
 			if (!gamePanel.getGameState().isGameDone()) {
 				this.startClock();
 			}
 		} else if (actionCommand.equals("inGameNewGame")) {
 			this.stopClock();
-			Window.toggleMenu();
+			NPuzzle.toggleMenu();
 			resetInGame();
 		} else if (actionCommand.equals("inGameSaveGame")) {
 			SaveLoad.saveToFile(this.gamePanel.getGameState(), "SavedGame");
@@ -340,12 +357,12 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			this.gamePanel.getGameState().restartGame();
 			this.gamePanel.reset();
 			this.stopClock();
-			Window.toggleMenu();
-			Window.swapView("mainMenu");
+			NPuzzle.toggleMenu();
+			NPuzzle.swapView("mainMenu");
 		} else if (actionCommand.equals("inGameSolveGame")) {
 			System.out.println("solving game");
 		} else if (actionCommand.equals("inGameHighscores")) {
-			Window.swapView("highscore", "puzzle");
+			NPuzzle.swapView("highscore", "puzzle");
 		}
 	}
 

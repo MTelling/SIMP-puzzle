@@ -1,8 +1,13 @@
+package dk.vigilddisciples.npuzzle.controller.animation;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 import javax.swing.Timer;
+
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.controller.SimpController;
+import dk.vigilddisciples.npuzzle.model.Move;
 
 public class MoveSequenceAnimator implements ActionListener{
 
@@ -24,7 +29,7 @@ public class MoveSequenceAnimator implements ActionListener{
 			animating = true;
 		}
 
-		if(this.controller.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getScrambleAnimationSpeed())) {
+		if(this.controller.getGamePanel().getBoard().moveWithAnimation(NPuzzle.getSettings().getScrambleAnimationSpeed())) {
 			this.controller.getGamePanel().repaint();
 			animating = false;
 			moves.remove(0);

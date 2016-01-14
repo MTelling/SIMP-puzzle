@@ -1,5 +1,8 @@
+package dk.vigilddisciples.npuzzle.model;
 import java.io.Serializable;
 import java.util.Stack;
+
+import dk.vigilddisciples.npuzzle.NPuzzle;
 
 public class GameState implements Serializable {
 
@@ -68,8 +71,8 @@ public class GameState implements Serializable {
 		
 		this.undoMoveStack.clear();
 		
-		this.useCornerLabels = Window.getSettings().isLabelsOn();
-		this.gameDifficulty = Window.getSettings().getDifficulty();
+		this.useCornerLabels = NPuzzle.getSettings().isLabelsOn();
+		this.gameDifficulty = NPuzzle.getSettings().getDifficulty();
 		
 		this.setGameDone(false);
 	}

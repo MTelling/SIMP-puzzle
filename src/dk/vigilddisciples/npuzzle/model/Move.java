@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.model;
 import java.io.Serializable;
 
 public class Move implements Serializable{

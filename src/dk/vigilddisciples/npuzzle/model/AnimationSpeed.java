@@ -1,3 +1,6 @@
+package dk.vigilddisciples.npuzzle.model;
+
+import dk.vigilddisciples.npuzzle.NPuzzle;
 
 public enum AnimationSpeed {
 	SLOW(60), MEDIUM(20), FAST(10);
@@ -21,7 +24,7 @@ public enum AnimationSpeed {
 	}
 	
 	public int getValue() {
-		int speed = (int)Math.round((Window.getSettings().getCurrWindowSize().getBOARD_SIZE() / Window.getSettings().getTilesPerRowInBoard()) / this.stepsPerMove);
+		int speed = (int)Math.round((NPuzzle.getSettings().getCurrWindowSize().getBOARD_SIZE() / NPuzzle.getSettings().getTilesPerRowInBoard()) / this.stepsPerMove);
 		//If speed is set to 0 because of rounding, tell it to be 1 instead. 
 		return (speed == 0) ? 1 : speed;
 	}

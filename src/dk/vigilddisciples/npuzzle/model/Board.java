@@ -1,6 +1,10 @@
+package dk.vigilddisciples.npuzzle.model;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.LinkedList;
+
+import dk.vigilddisciples.npuzzle.ObjectCopy;
+import dk.vigilddisciples.npuzzle.NPuzzle;
 
 public class Board implements Serializable {
 
@@ -16,11 +20,11 @@ public class Board implements Serializable {
 
 	public Board() {	
 		//Check if boardsize is within allowed range
-		if(Window.getSettings().getTilesPerRowInBoard() >= MIN_BOARDSIZE 
-				&& Window.getSettings().getTilesPerRowInBoard() <= MAX_BOARDSIZE) {
-			this.tilesPerRow = Window.getSettings().getTilesPerRowInBoard();
+		if(NPuzzle.getSettings().getTilesPerRowInBoard() >= MIN_BOARDSIZE 
+				&& NPuzzle.getSettings().getTilesPerRowInBoard() <= MAX_BOARDSIZE) {
+			this.tilesPerRow = NPuzzle.getSettings().getTilesPerRowInBoard();
 			this.tiles = new Tile[tilesPerRow][tilesPerRow];
-			this.tileSize = (Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH() - Window.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 - Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
+			this.tileSize = (NPuzzle.getSettings().getCurrWindowSize().getWINDOW_WIDTH() - NPuzzle.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 - NPuzzle.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
 		} else {
 			throw new IllegalArgumentException("Invalid board size");
 		}
@@ -29,11 +33,11 @@ public class Board implements Serializable {
 	//Helper method to make start new game more understandable. 
 	public void reset() {
 		// Make a new, solved board.
-		this.tilesPerRow = Window.getSettings().getTilesPerRowInBoard();
+		this.tilesPerRow = NPuzzle.getSettings().getTilesPerRowInBoard();
 		this.tiles = new Tile[tilesPerRow][tilesPerRow];
-		this.tileSize = (Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH() 
-				- Window.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 
-				- Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
+		this.tileSize = (NPuzzle.getSettings().getCurrWindowSize().getWINDOW_WIDTH() 
+				- NPuzzle.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 
+				- NPuzzle.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
 
 		this.makeSolvedBoard();		
 	}
@@ -45,8 +49,8 @@ public class Board implements Serializable {
 		for(int y = 0; y < this.tilesPerRow; y++) {
 			for(int x = 0; x < this.tilesPerRow; x++) {
 				//create all tiles in board. 
-				int xCoord = Window.getSettings().getCurrWindowSize().getGAME_BORDER() + Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() + (x * this.tileSize);
-				int yCoord =  Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT() - Window.getSettings().getCurrWindowSize().getGAME_BORDER() - ((this.tilesPerRow - y) * (this.tileSize)) - Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE();
+				int xCoord = NPuzzle.getSettings().getCurrWindowSize().getGAME_BORDER() + NPuzzle.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() + (x * this.tileSize);
+				int yCoord =  NPuzzle.getSettings().getCurrWindowSize().getWINDOW_HEIGHT() - NPuzzle.getSettings().getCurrWindowSize().getGAME_BORDER() - ((this.tilesPerRow - y) * (this.tileSize)) - NPuzzle.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE();
 				this.tiles[x][y] = new Tile(tileCount, xCoord, yCoord);
 				tileCount++;
 			}
@@ -59,14 +63,14 @@ public class Board implements Serializable {
 	}
 
 	public void recalcTilePositions() {
-		this.tileSize = (Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH() 
-				- Window.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 
-				- Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
+		this.tileSize = (NPuzzle.getSettings().getCurrWindowSize().getWINDOW_WIDTH() 
+				- NPuzzle.getSettings().getCurrWindowSize().getGAME_BORDER() * 2 
+				- NPuzzle.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() * 2) / tilesPerRow;
 		for(int y = 0; y < this.tilesPerRow; y++) {
 			for(int x = 0; x < this.tilesPerRow; x++) {
 				//create all tiles in board. 
-				int xCoord = Window.getSettings().getCurrWindowSize().getGAME_BORDER() + Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() + (x * this.tileSize);
-				int yCoord =  Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT() - Window.getSettings().getCurrWindowSize().getGAME_BORDER() - ((this.tilesPerRow - y) * (this.tileSize)) - Window.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE();
+				int xCoord = NPuzzle.getSettings().getCurrWindowSize().getGAME_BORDER() + NPuzzle.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE() + (x * this.tileSize);
+				int yCoord =  NPuzzle.getSettings().getCurrWindowSize().getWINDOW_HEIGHT() - NPuzzle.getSettings().getCurrWindowSize().getGAME_BORDER() - ((this.tilesPerRow - y) * (this.tileSize)) - NPuzzle.getSettings().getCurrWindowSize().getBOARD_BORDER_SIZE();
 				this.tiles[x][y].setCoords(xCoord, yCoord);
 			}
 		}

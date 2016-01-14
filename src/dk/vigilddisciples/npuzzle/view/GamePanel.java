@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -12,10 +13,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import dk.vigilddisciples.npuzzle.ImageHandler;
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.model.Board;
+import dk.vigilddisciples.npuzzle.model.GameState;
+import dk.vigilddisciples.npuzzle.model.Highscore;
+import dk.vigilddisciples.npuzzle.model.Score;
+import dk.vigilddisciples.npuzzle.model.Tile;
+import dk.vigilddisciples.npuzzle.model.WindowSize;
+
 public class GamePanel extends JPanel {
 
-	public static final int MENUBUTTON_SIZE = Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE() 
-			- Window.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE()/4;
+	public static final int MENUBUTTON_SIZE = NPuzzle.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE() 
+			- NPuzzle.getSettings().getCurrWindowSize().getTOP_CONTROLS_SIZE()/4;
 	public static final String RESOURCE_PATH = "resources/";
 	public static final String THEME_PATH = RESOURCE_PATH + "themes/default/";
  	private static final long serialVersionUID = 1L;
@@ -43,7 +53,7 @@ public class GamePanel extends JPanel {
 	private WindowSize currWindowSize;
 	
 	public GamePanel(GameState gs, Highscore[] highscores) {
-		this.setBounds(0, 0, Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT());
+		this.setBounds(0, 0, NPuzzle.getSettings().getCurrWindowSize().getWINDOW_WIDTH(), NPuzzle.getSettings().getCurrWindowSize().getWINDOW_HEIGHT());
 		this.setOpaque(true);
 		
 		this.gameState = gs;
@@ -56,7 +66,7 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void reset() {
-		this.currWindowSize = Window.getSettings().getCurrWindowSize();
+		this.currWindowSize = NPuzzle.getSettings().getCurrWindowSize();
 		this.labelTextSize = getGameState().getBoard().getTileSize()/4;
 		
 		this.firstPaint = true;
@@ -97,7 +107,7 @@ public class GamePanel extends JPanel {
 		g2d.drawImage(boardImg, gameBorder, windowHeight - gameBorder - boardSize, boardSize, boardSize, null);
 		
 		//Set font for text when picture and labels are on
-		if (Window.getSettings().isPictureOn() && Window.getSettings().isLabelsOn()) {
+		if (NPuzzle.getSettings().isPictureOn() && NPuzzle.getSettings().isLabelsOn()) {
 			g2d.setFont(new Font("Sans Serif", Font.ITALIC, this.getBoard().getTileSize()/5));
 		} else { //No picture is showing. Set font to usual
 			g2d.setFont(new Font("Sans Serif", Font.ITALIC, labelTextSize));
@@ -164,7 +174,7 @@ public class GamePanel extends JPanel {
 			}
 			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
 				//Draw all tiles except for the empty one. If the game is done and pictures are shown. Show the full image. 
-				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2) || (this.gameState.isGameDone() && Window.getSettings().isPictureOn())) {
+				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2) || (this.gameState.isGameDone() && NPuzzle.getSettings().isPictureOn())) {
 				
 					//Get x and y position
 					int xCoord = tiles[x][y].getX() + extraX;
@@ -182,7 +192,7 @@ public class GamePanel extends JPanel {
 					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, tileWidth, tileHeight, null);
 					
 					//Draws text on image
-					if(Window.getSettings().isPictureOn()) {
+					if(NPuzzle.getSettings().isPictureOn()) {
 
 						//Draw border around unfinished picture
 						if (!this.gameState.isGameDone()){
@@ -211,7 +221,7 @@ public class GamePanel extends JPanel {
 	
 	private void loadImages() {
 		//Load boardImage
-		ImageIcon boardIc = new ImageIcon(THEME_PATH + "board" + Window.getSettings().getCurrWindowSize().getBOARD_SIZE() +".png");
+		ImageIcon boardIc = new ImageIcon(THEME_PATH + "board" + NPuzzle.getSettings().getCurrWindowSize().getBOARD_SIZE() +".png");
 		this.boardImg = boardIc.getImage();
 		
 		//Load cogwheelImage
@@ -221,8 +231,8 @@ public class GamePanel extends JPanel {
 		//Create list of tileImages
 		try {
 			//If picture is set to on in settings, get the picture. Otherwise just get a plain image. 
-			if (Window.getSettings().isPictureOn()) {
-				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), Window.getSettings().getGamePicture());
+			if (NPuzzle.getSettings().isPictureOn()) {
+				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), NPuzzle.getSettings().getGamePicture());
 			} else {
 				this.picList = ImageHandler.getTilePics(this.getBoard().getTilesPerRow(), this.getBoard().getTileSize(), RESOURCE_PATH + "pics/basic.jpg");
 			}
@@ -232,8 +242,8 @@ public class GamePanel extends JPanel {
 			//If the image can't be loaded. Reset to basic without pciture and repaint the view. 
 			JOptionPane.showMessageDialog(null, "Error loading image. You have probably changed window size, since you chose it.\n"+
 					"I've reset to numbers for you. If you want to use a picture, go into settings and choose a new", "Image error", JOptionPane.ERROR_MESSAGE);
-			Window.getSettings().setPictureOn(false);
-			Window.getSettings().setGamePicture(RESOURCE_PATH + "pics/basic.jpg"); 
+			NPuzzle.getSettings().setPictureOn(false);
+			NPuzzle.getSettings().setGamePicture(RESOURCE_PATH + "pics/basic.jpg"); 
 			//Reload images. 
 			loadImages();
 			this.repaint();

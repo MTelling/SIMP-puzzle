@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -5,6 +6,10 @@ import java.awt.Graphics;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.controller.SimpController;
+import dk.vigilddisciples.npuzzle.model.WindowSize;
 
 public class InGameMenuPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +41,7 @@ public class InGameMenuPanel extends JPanel {
 	}
 	
 	public void resetBounds() {
-		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		WindowSize currWindowSize = NPuzzle.getSettings().getCurrWindowSize();
 		this.setBounds(currWindowSize.getGAME_BORDER(), 
 				currWindowSize.getGAME_BORDER(), 
 				currWindowSize.getWINDOW_WIDTH() - 2 * currWindowSize.getGAME_BORDER(), 
@@ -67,7 +72,7 @@ public class InGameMenuPanel extends JPanel {
 		super.paintComponent(g);
 		
 		g.setColor(new Color(128, 128, 128, 225));
-		WindowSize currWindowSize = Window.getSettings().getCurrWindowSize();
+		WindowSize currWindowSize = NPuzzle.getSettings().getCurrWindowSize();
 		g.fillRect(0, 0, currWindowSize.getWINDOW_WIDTH() - currWindowSize.getGAME_BORDER() * 2, currWindowSize.getWINDOW_HEIGHT() - currWindowSize.getGAME_BORDER() * 2);
 	}	
 }

@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.view;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.model.Difficulty;
+import dk.vigilddisciples.npuzzle.model.Highscore;
+import dk.vigilddisciples.npuzzle.model.WindowSize;
 
 public class HighscorePanel extends JPanel implements ActionListener{
 	
@@ -38,11 +44,11 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		this.mediumHighscore = mediumHighscore;
 		this.hardHighscore = hardHighscore;
 		
-		this.lookingAtBoardSize = Window.getSettings().getTilesPerRowInBoard();
+		this.lookingAtBoardSize = NPuzzle.getSettings().getTilesPerRowInBoard();
 		
-		this.setPreferredSize(Window.getSettings().getCurrWindowSize().getDimension());
+		this.setPreferredSize(NPuzzle.getSettings().getCurrWindowSize().getDimension());
 		container = new Box(BoxLayout.Y_AXIS);
-		container.setPreferredSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
+		container.setPreferredSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE(), NPuzzle.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
 		
 		JLabel title = new JLabel("HIGHSCORE");
 		title.setFont(new Font("Monospaced", Font.BOLD, 50));
@@ -77,13 +83,13 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	}
 	
 	public void reset() {
-		this.lookingAtBoardSize = Window.getSettings().getTilesPerRowInBoard();
+		this.lookingAtBoardSize = NPuzzle.getSettings().getTilesPerRowInBoard();
 		highscore.setMaximumSize(container.getPreferredSize());
 		selectSizeTextField.setText(this.lookingAtBoardSize+"");
 		
-		if (Window.getSettings().getDifficulty() == Difficulty.EASY.getValue()) {
+		if (NPuzzle.getSettings().getDifficulty() == Difficulty.EASY.getValue()) {
 			easyDifficulty.setSelected(true);
-		} else if(Window.getSettings().getDifficulty() == Difficulty.MEDIUM.getValue()) {
+		} else if(NPuzzle.getSettings().getDifficulty() == Difficulty.MEDIUM.getValue()) {
 			mediumDifficulty.setSelected(true);
 		} else {
 			hardDifficulty.setSelected(true);
@@ -119,8 +125,8 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	
 	//Method to reset size for this view. 
 	public void resetSize() {
-		this.setPreferredSize(Window.getSettings().getCurrWindowSize().getDimension());
-		container.setPreferredSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
+		this.setPreferredSize(NPuzzle.getSettings().getCurrWindowSize().getDimension());
+		container.setPreferredSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE(), NPuzzle.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
 	}
 	
 	private JButton closeButton() {
@@ -239,7 +245,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		String actionCommand = e.getActionCommand();
 		switch (actionCommand) {
 			case "closeButton":
-				Window.swapView(this.origin);
+				NPuzzle.swapView(this.origin);
 				break;
 			
 			case "easyDifficulty":

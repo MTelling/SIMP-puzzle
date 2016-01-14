@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 
@@ -7,7 +8,20 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-public class Window extends JFrame {
+import dk.vigilddisciples.npuzzle.controller.SimpController;
+import dk.vigilddisciples.npuzzle.model.Board;
+import dk.vigilddisciples.npuzzle.model.GameState;
+import dk.vigilddisciples.npuzzle.model.Highscore;
+import dk.vigilddisciples.npuzzle.model.Score;
+import dk.vigilddisciples.npuzzle.model.Settings;
+import dk.vigilddisciples.npuzzle.view.GamePanel;
+import dk.vigilddisciples.npuzzle.view.HighscorePanel;
+import dk.vigilddisciples.npuzzle.view.ImageCropPanel;
+import dk.vigilddisciples.npuzzle.view.InGameMenuPanel;
+import dk.vigilddisciples.npuzzle.view.MainMenuPanel;
+import dk.vigilddisciples.npuzzle.view.SettingsPanel;
+
+public class NPuzzle extends JFrame {
 	
 	private static final long serialVersionUID = 1L;	
 	private static Settings settings;
@@ -26,11 +40,11 @@ public class Window extends JFrame {
 	
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
-		Window game = new Window();
+		NPuzzle game = new NPuzzle();
 	}
 
 
-	public Window() {
+	public NPuzzle() {
 		super("N-Puzzle Game");
 		
 		//Set look to system default

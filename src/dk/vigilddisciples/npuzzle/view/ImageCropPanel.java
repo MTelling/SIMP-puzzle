@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.view;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import dk.vigilddisciples.npuzzle.ImageHandler;
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.model.Settings;
+import dk.vigilddisciples.npuzzle.model.WindowSize;
 
 public class ImageCropPanel extends JPanel implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -114,6 +120,6 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		settings.setGamePicture("resources/pics/" + ImageHandler.cropAndSave(image, this.sx1, this.sy1));
-		Window.swapView("settings");
+		NPuzzle.swapView("settings");
 	}
 }

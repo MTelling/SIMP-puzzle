@@ -1,7 +1,11 @@
+package dk.vigilddisciples.npuzzle.controller.animation;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
+
+import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.controller.SimpController;
 
 public class MoveAnimator implements ActionListener {
 	
@@ -15,7 +19,7 @@ public class MoveAnimator implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(Window.getSettings().getAnimationSpeed().getValue());
+		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(NPuzzle.getSettings().getAnimationSpeed().getValue());
 		
 		if(arrivedAtFinalPosition) {	
 			//Ask the timer to stop ticking, because the tile should now be in the correct place. 

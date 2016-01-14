@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.model;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.prefs.BackingStoreException;
@@ -36,10 +37,13 @@ public class Settings implements Serializable{
 	//Board difficulty
 	private int difficulty;
 	private int tilesPerRowInBoard;
-
-
+	
 	private WindowSize CurrWindowSize;
 
+	public Settings() {
+		this.setCurrWindowSize(WindowSize.MEDIUM);
+	}
+	
 	public void loadSettings() {
 		Preferences settings = Preferences.userNodeForPackage(this.getClass());
 		try {

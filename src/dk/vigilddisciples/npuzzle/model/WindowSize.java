@@ -1,3 +1,4 @@
+package dk.vigilddisciples.npuzzle.model;
 import java.awt.Dimension;
 
 public enum WindowSize {
