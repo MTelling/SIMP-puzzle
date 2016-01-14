@@ -155,7 +155,9 @@ public class Solver {
 		//get heuristic and weigh it drastically if tile is blocked
 		int heuristic;
 		if(entireBoard){
+			long startTime = System.nanoTime();
 			heuristic = getHeuristic(current.getTiles());
+			//System.out.println("heuristic runtime in nanoseconds: " + (System.nanoTime() - startTime));
 		} else {
 			if(this.blockedTiles.contains(current.getEmpty())){
 				heuristic = 99999999;

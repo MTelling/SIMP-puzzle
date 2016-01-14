@@ -256,6 +256,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 					this.startClock();
 				Window.toggleMenu();
 			} else if (e.getKeyCode() == KeyEvent.VK_S){
+				
 				Tile[][] newTileArray = new Tile[3][3];
 				Point newEmptyTile = new Point(0,0);
 				
@@ -285,7 +286,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				Solver solveFinal = new Solver(newTileArray, newEmptyTile);
 				LinkedList<Move> moveSequence = new LinkedList<>();
 				moveSequence.addAll(solveFinal.AStarSearch(null, null, true));
-				
+				gamePanel.getScore().addMoves(moveSequence.size());
 				Timer show = new Timer(17, new MoveSequenceAnimator(this, moveSequence));
 				show.start();
 				
