@@ -1,5 +1,6 @@
 import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -344,7 +345,19 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			Window.toggleMenu();
 			Window.swapView("mainMenu");
 		} else if (actionCommand.equals("inGameSolveGame")) {
-			System.out.println("solving game");
+			Window.toggleMenu();
+			//System.out.println("solving game");
+			Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
+			LinkedList<Move> solvedMoves = new LinkedList<>();
+			for (int j = 0; j < gamePanel.getBoard().getTilesPerRow() - 2; j++) {
+				for (int i = 0; i < gamePanel.getBoard().getTilesPerRow() - 2; i++) {
+					solvedMoves.addAll(solve.moveTile((j*gamePanel.getBoard().getTilesPerRow())+i+1, new Point(i,j)));
+				}
+				System.out.println("Now at row: "  + j);
+			}
+			Timer solveAnimator = new Timer(50, new MoveSequenceAnimator(this, solvedMoves));
+			solveAnimator.start();
+			
 		} else if (actionCommand.equals("inGameHighscores")) {
 			Window.swapView("highscore", "puzzle");
 		}
