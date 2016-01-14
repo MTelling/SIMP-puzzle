@@ -43,7 +43,6 @@ public class GamePanel extends JPanel {
 	private WindowSize currWindowSize;
 	
 	public GamePanel(GameState gs, Highscore[] highscores) {
-		
 		this.setBounds(0, 0, Window.getSettings().getCurrWindowSize().getWINDOW_WIDTH(), Window.getSettings().getCurrWindowSize().getWINDOW_HEIGHT());
 		this.setOpaque(true);
 		
@@ -54,12 +53,9 @@ public class GamePanel extends JPanel {
 				
 		//Set doublebuffering to true. It should be by default, but just in case. 
 		this.setDoubleBuffered(true);
-		
-		this.reset();
 	}
 	
 	public void reset() {
-		
 		this.currWindowSize = Window.getSettings().getCurrWindowSize();
 		this.labelTextSize = getGameState().getBoard().getTileSize()/4;
 		
@@ -67,9 +63,7 @@ public class GamePanel extends JPanel {
 		
 		this.loadImages();
 		
-		this.repaint();
-		
-		
+		this.repaint();		
 	}
 	
 	

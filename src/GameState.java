@@ -22,9 +22,6 @@ public class GameState implements Serializable {
 		
 		this.score = score;
 		this.board = board;
-		
-		this.useCornerLabels = Window.getSettings().isLabelsOn();
-		this.gameDifficulty = Window.getSettings().getDifficulty();
 	}
 	
 	public void saveCurrentMove(Move move) {

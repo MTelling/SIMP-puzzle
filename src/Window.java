@@ -41,15 +41,13 @@ public class Window extends JFrame {
 		}
 		
 		//Initialize the model.
-		
-		
 		settings = new Settings();
 		settings.loadSettings();
+		
 		Highscore easyHighscore = new Highscore("easy");
 		Highscore mediumHighscore = new Highscore("medium");
 		Highscore hardHighscore = new Highscore("hard");
 		Board board = new Board();
-		board.init();
 		Score score = new Score();	
 		GameState gs = new GameState(board, score);
 				
@@ -109,8 +107,6 @@ public class Window extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-		
-		
 	}
 	
 	
