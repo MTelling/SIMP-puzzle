@@ -1,8 +1,6 @@
 package dk.vigilddisciples.npuzzle.model;
 import java.io.Serializable;
 
-import dk.vigilddisciples.npuzzle.NPuzzle;
-
 public class Score implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -22,16 +20,19 @@ public class Score implements Serializable{
 		this.newMoves = moves;
 	}
 	
-	public int calculateScore() {
-		if(this.seconds > NPuzzle.getSettings().getDifficulty() * NPuzzle.getSettings().getTilesPerRowInBoard()) {
-			if(this.moves > (NPuzzle.getSettings().getTilesPerRowInBoard() - NPuzzle.getSettings().getDifficulty()) * 2) {
-				return 10000 - (this.seconds * 2) - (this.moves * 10);
-			} else {
-				return 10000;
-			}
-		} else {
-			return 10000;
+	public int calculateScore(int boardSize) {
+		int tempScore = 10000;
+		int timePenalty = 0;
+		int movePenalty = 10;
+		
+		tempScore -= this.moves * movePenalty;
+		
+		int freeTime = 20 * (boardSize - 2);
+		if(this.seconds > freeTime) {
+			timePenalty = 2;
 		}
+		
+		return tempScore;
 	}
 	
 	public int getSeconds () {

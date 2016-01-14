@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
@@ -20,8 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-import dk.vigilddisciples.npuzzle.SaveLoad;
 import dk.vigilddisciples.npuzzle.NPuzzle;
+import dk.vigilddisciples.npuzzle.SaveLoad;
 import dk.vigilddisciples.npuzzle.controller.animation.MoveAnimator;
 import dk.vigilddisciples.npuzzle.controller.animation.MoveSequenceAnimator;
 import dk.vigilddisciples.npuzzle.model.GameState;
@@ -137,8 +136,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		stopClock();
 				
 		Highscore highscore = gamePanel.getHighscore(NPuzzle.getSettings().getDifficulty());
-		int score = gamePanel.getScore().calculateScore();
-		int highscorePos = highscore.isHighscore(score);
+		int score = gamePanel.getScore().calculateScore(gamePanel.getBoard().getTilesPerRow());
+		int highscorePos = highscore.isHighscore(gamePanel.getBoard().getTilesPerRow(), score);
 		if(highscorePos > -1) {
 			presentNewHighscoreDialog(score, highscorePos, highscore);
 		} else {
@@ -167,7 +166,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			name = "AnonymousRobert";
 		}
 		
-		highscore.addHighscore(name, score, highscorePos);
+		highscore.addHighscore(this.gamePanel.getBoard().getTilesPerRow(), name, score, highscorePos);
 		//Present highscore window. 
 		NPuzzle.swapView("highscore");
 	}

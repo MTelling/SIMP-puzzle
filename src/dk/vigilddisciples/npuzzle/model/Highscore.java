@@ -25,7 +25,7 @@ public class Highscore implements Serializable {
 		if(new File(FILE_NAME + this.difficulty + "." + SaveLoad.FILE_EXT).exists()) {
 			this.loadHighscores();
 		} else {
-			for(int i = 3; i <= 100; i++) {
+			for(int i = 0; i <= 100; i++) {
 				highscores.add(new LinkedList<String>());
 			}
 		}
@@ -70,11 +70,11 @@ public class Highscore implements Serializable {
 	 * @param score - The players score
 	 * @return An int 1 and HIGHSCORE_SIZE depending on where the score is supposed to be, return -1 if it's not a new highscore
 	 */
-	public int isHighscore(int score) {
+	public int isHighscore(int boardSize, int score) {
 		int highscorePosition = -1;
 		int i = 0;
 		while(highscorePosition == -1 && i < HIGHSCORE_SIZE) {
-			if(Integer.parseInt(getHighscoreAt(NPuzzle.getSettings().getTilesPerRowInBoard(), i)[1]) < score) {
+			if(Integer.parseInt(getHighscoreAt(boardSize, i)[1]) < score) {
 				highscorePosition = i;
 			}
 			i++;
@@ -89,8 +89,8 @@ public class Highscore implements Serializable {
 	 * @param score - The players Score
 	 * @param index - Highscore Place
 	 */
-	public void addHighscore(String name, int score, int index) {
-		LinkedList<String> currentHighscores = this.highscores.get(NPuzzle.getSettings().getTilesPerRowInBoard());
+	public void addHighscore(int boardSize, String name, int score, int index) {
+		LinkedList<String> currentHighscores = this.highscores.get(boardSize);
 		currentHighscores.add(index, name + "," + score);
 		if(currentHighscores.size() > HIGHSCORE_SIZE) {
 			this.removeExtraScores(currentHighscores, Math.abs(HIGHSCORE_SIZE - currentHighscores.size()));

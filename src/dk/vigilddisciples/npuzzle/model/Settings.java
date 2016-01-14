@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import javafx.animation.Animation;
-
 public class Settings implements Serializable{
 
 	private static final long serialVersionUID = 1L;
