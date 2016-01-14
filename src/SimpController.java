@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
@@ -352,20 +353,39 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			Window.swapView("mainMenu");
 		} else if (actionCommand.equals("inGameSolveGame")) {
 			Window.toggleMenu();
-			//System.out.println("solving game");
-			Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
-			LinkedList<Move> solvedMoves = new LinkedList<>();
-
-			for(int i = 0; i < gamePanel.getBoard().getTilesPerRow() - 3; i++){
-				solvedMoves.addAll(solve.solveUpperAndLeft(i));	
+		
+			ArrayList<Long> testerTimes = new ArrayList<>();
+			int testTimes = 0;
+			for (int s = 0; s <= testTimes; s++) {
+				long startTime = System.currentTimeMillis();
+				//System.out.println("solving game");
+				Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
+				LinkedList<Move> solvedMoves = new LinkedList<>();
+		
+				for(int i = 0; i < gamePanel.getBoard().getTilesPerRow() - 3; i++){
+					solvedMoves.addAll(solve.solveUpperAndLeft(i));	
+				}
+				gamePanel.getScore().addMoves(solvedMoves.size());
+		
+				while(!solvedMoves.isEmpty()){
+					gamePanel.getBoard().setToAnimationState(solvedMoves.get(0));
+					gamePanel.getBoard().moveWithoutAnimation();
+					solvedMoves.remove(0);
+				}
+				
+				
+				/*Timer show = new Timer(17, new MoveSequenceAnimator(this, solvedMoves));
+				show.start();*/
+				
+				testerTimes.add(System.currentTimeMillis() - startTime);
+				//if(s != testTimes) this.scrambleBoard();
 			}
-			gamePanel.getScore().addMoves(solvedMoves.size());
-
-			while(!solvedMoves.isEmpty()){
-				gamePanel.getBoard().setToAnimationState(solvedMoves.get(0));
-				gamePanel.getBoard().moveWithoutAnimation();
-				solvedMoves.remove(0);
+			
+			long timeSum = 0;
+			for (long time: testerTimes) {
+				timeSum += time;
 			}
+			System.out.println(timeSum / testerTimes.size());
 			
 		} else if (actionCommand.equals("inGameHighscores")) {
 			Window.swapView("highscore", "puzzle");

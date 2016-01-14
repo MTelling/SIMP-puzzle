@@ -365,12 +365,14 @@ public class Solver {
 		illegals.add(new Point(i, this.tilesPerRow - 1));
 		illegals.add(new Point(i+1, this.tilesPerRow - 1));
 		
-		if(illegals.contains(numberToPoint(this.tilesPerRow*(y+1)+1+x))){
-			result.addAll(moveTile(this.tilesPerRow*(y+1)+1+x, new Point(i+2, this.tilesPerRow-1)));
-			unBlockPoint(new Point(i+2, this.tilesPerRow-1));
+		boolean moved2 = false;
+		if(illegals.contains(numberToPoint(this.tilesPerRow*(y+1)+1+i))){
+			result.addAll(moveTile(this.tilesPerRow*(y+1)+1+i, new Point(i+3, this.tilesPerRow-1)));
+			moved2 = true;
 		}
 		
 		result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y+1)));
+		if (moved2) unBlockPoint(new Point(i+3, this.tilesPerRow-1));
 		result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i+1,y+1)));
 		unBlockPoint(new Point(i,y+1));
 		result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y)));
