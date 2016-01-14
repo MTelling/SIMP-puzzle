@@ -10,18 +10,16 @@ import dk.vigilddisciples.npuzzle.controller.SimpController;
 public class MoveAnimator implements ActionListener {
 	
 	private SimpController simpController;
-	private int tilesPerRow;
 	
 	public MoveAnimator(SimpController simpController) {
 		this.simpController = simpController;
-		this.tilesPerRow = simpController.getGamePanel().getGameState().getBoard().getTilesPerRow(); 
 	}
 	
 	//This function will be called every time the timer ticks.
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(NPuzzle.getSettings().getAnimationSpeed().getValue(this.tilesPerRow));
+		boolean arrivedAtFinalPosition = simpController.getGamePanel().getBoard().moveWithAnimation(NPuzzle.getSettings().getAnimationSpeed().getValue(simpController.getGamePanel().getGameState().getBoard().getTilesPerRow()));
 		
 		if(arrivedAtFinalPosition) {	
 			//Ask the timer to stop ticking, because the tile should now be in the correct place. 

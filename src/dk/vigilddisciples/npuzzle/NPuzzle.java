@@ -151,6 +151,7 @@ public class NPuzzle extends JFrame {
 		cardLayout.show(cardPanel, key);
 		if(key.equals("puzzle")) {
 			settings.setScrambleAnimationSpeed();
+			
 			gamePanel.requestFocus();
 		} else if(key.equals("imageCrop")) {
 			imageCropPanel.init();
