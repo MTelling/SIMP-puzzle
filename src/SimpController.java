@@ -216,6 +216,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	}
 	
 	public void solveBoard() {
+
 		LinkedList<Move> scramblingSequence = this.gamePanel.getBoard().Solve(this.gamePanel.getBoard().getTiles(), this.gamePanel.getBoard().getCurrEmptyTile());
 		System.out.println(scramblingSequence);
 		Timer scrambleAnimationTimer = new Timer(50, new MoveSequenceAnimator(this, scramblingSequence));

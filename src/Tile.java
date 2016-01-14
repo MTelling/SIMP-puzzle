@@ -23,6 +23,11 @@ public class Tile implements Serializable, Cloneable {
 		return new Tile(this.number, this.xCoord, this.yCoord);
 	}
 	
+	@Override
+	public String toString() {
+		return Integer.toString(this.number);
+	}
+	
 	/// SETTERS FROM HERE ///
 	
 	public void setCoords (int xCoord, int yCoord) {

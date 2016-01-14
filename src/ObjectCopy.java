@@ -1,6 +1,7 @@
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ObjectCopy {
@@ -12,9 +13,15 @@ public class ObjectCopy {
 		return newArray;
 	}
 	
-	public static List<Integer> cloneList(List<Integer> list) {
-	    List<Integer> clone = new ArrayList<Integer>(list.size());
-	    for(Integer item: list) clone.add(item);
+	public static LinkedList<Integer> cloneList(LinkedList<Integer> list) {
+	    LinkedList<Integer> clone = new LinkedList<Integer>();
+	    for(Integer item: list) clone.add(new Integer(item));
+	    return clone;
+	}
+	
+	public static LinkedList<Move> cloneListMoves(LinkedList<Move> list) {
+	    LinkedList<Move> clone = new LinkedList<Move>();
+	    for(Move item: list) clone.add(new Move(item.dx, item.dy));
 	    return clone;
 	}
 	
