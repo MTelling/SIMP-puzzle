@@ -38,46 +38,101 @@ public class Solver {
 		return xDistance + yDistance;
 	}
 	
-	//Method to get heuristic for AStar search (Manhattan with Linear Conflict)
-	//TODO: Can this be done less heavy?
-	private int getHeuristic(LinkedList<Integer> tiles){
-		int sum = 0;
-		//Save cols for Linear Conflict
-		ArrayList<Integer> xRow = new ArrayList<Integer>();
-		ArrayList<ArrayList<Integer>> yRows = new ArrayList<ArrayList<Integer>>();
-		//Init inner ArrayList
-		for(int i = 0; i < this.tilesPerRow; i++){
-			yRows.add(new ArrayList<Integer>());
+	//Helper method to check for linear conflicts
+	public boolean containsHigher(int[] start, int number) {
+		for(int i = 0; i < start.length - 1; i++){
+			if(start[i] > number){
+				return true;
+			}
 		}
-		// Go through all the tiles
-		for(int y = 0; y < this.tilesPerRow; y++){
-			for(int x = 0; x < this.tilesPerRow; x++){
-				//Get the current number
-				int number = tiles.get(this.tilesPerRow * y + x);
-				//Don't check manhattan distance for the empty tile (Highest number on board)
-				if(number != this.tilesPerRow * this.tilesPerRow){
-					//Calculate target point for this number
-					int targetX = (number - 1) % this.tilesPerRow;
-					int targetY = (number - 1) / this.tilesPerRow;
-					//add distance
-					sum += manhattan(new Point(targetX,targetY), new Point(x,y));
-					//Divide rows and columns to check for linear conflict
-					xRow.add(number);
-					yRows.get(targetY).add(number);
-				} else {
-					xRow.add(this.tilesPerRow * this.tilesPerRow);
-					yRows.get((number - 1) / this.tilesPerRow).add(number);
+		return false;
+	}
+	
+	public int getHeuristic(LinkedList<Integer> tiles){
+		
+		int size = this.tilesPerRow;
+		int sum = 0;
+		int[] xRow = new int[size];
+		int[][] yRows = new int[size][size];
+		
+		//Iterate through board
+		for(int y = 0; y < size; y++){
+			for(int x = 0; x < size; x++){
+				int currentNumber = tiles.get(size * y + x);
+				//Don't save distance for empty tile
+				if(currentNumber != size * size){
+					int targetX = (currentNumber - 1) % size;
+					int targetY = (currentNumber - 1) / size;
+					int xDistance = Math.abs(x - targetX);
+					int yDistance = Math.abs(y - targetY);
+					
+					if(targetY == y){
+						//If tile is in right column, add it to array to check for linear conflicts
+						xRow[x] = currentNumber;
+					}
+					if(targetX == x){
+						//If tile is in right row, add it to array to check for linear conflicts
+					}
+					//It only checks for 1 linear conflict now.
+					//This doesn't matter, as we're only using it on boardsizes up to 4x4.
+					//On bigger boardsizes than 4x4 this would mean less accuracy, yet still admissible
+					if(x == size - 1){ //When a row is done, check for conflicts
+						if(containsHigher(xRow, currentNumber)){
+							sum += 2;
+						}
+					}
+					if(containsHigher(yRows[x], currentNumber)){
+						sum += 2;
+					}
+					
+					sum += xDistance + yDistance;
+					
 				}
 			}
-			//Check Linear Conflict for this xRow
-			sum += linearConflict(xRow, y, false);
-		}
-		//Check Linear Conflict for columns as well
-		for(int i = 0; i < this.tilesPerRow; i++){
-			sum += linearConflict(yRows.get(i), i, true);
 		}
 		return sum;
 	}
+	
+	//Method to get heuristic for AStar search (Manhattan with Linear Conflict)
+	//TODO: Can this be done less heavy?
+//	private int getHeuristic(LinkedList<Integer> tiles){
+//		int sum = 0;
+//		//Save cols for Linear Conflict
+//		ArrayList<Integer> xRow = new ArrayList<Integer>();
+//		ArrayList<ArrayList<Integer>> yRows = new ArrayList<ArrayList<Integer>>();
+//		//Init inner ArrayList
+//		for(int i = 0; i < this.tilesPerRow; i++){
+//			yRows.add(new ArrayList<Integer>());
+//		}
+//		// Go through all the tiles
+//		for(int y = 0; y < this.tilesPerRow; y++){
+//			for(int x = 0; x < this.tilesPerRow; x++){
+//				//Get the current number
+//				int number = tiles.get(this.tilesPerRow * y + x);
+//				//Don't check manhattan distance for the empty tile (Highest number on board)
+//				if(number != this.tilesPerRow * this.tilesPerRow){
+//					//Calculate target point for this number
+//					int targetX = (number - 1) % this.tilesPerRow;
+//					int targetY = (number - 1) / this.tilesPerRow;
+//					//add distance
+//					sum += manhattan(new Point(targetX,targetY), new Point(x,y));
+//					//Divide rows and columns to check for linear conflict
+//					xRow.add(number);
+//					yRows.get(targetY).add(number);
+//				} else {
+//					xRow.add(this.tilesPerRow * this.tilesPerRow);
+//					yRows.get((number - 1) / this.tilesPerRow).add(number);
+//				}
+//			}
+//			//Check Linear Conflict for this xRow
+//			sum += linearConflict(xRow, y, false);
+//		}
+//		//Check Linear Conflict for columns as well
+//		for(int i = 0; i < this.tilesPerRow; i++){
+//			sum += linearConflict(yRows.get(i), i, true);
+//		}
+//		return sum;
+//	}
 	
 	//Helper method to calculate Linear Conflict
 	private int linearConflict(ArrayList<Integer> row, int number, boolean yAxis){
@@ -328,58 +383,60 @@ public class Solver {
 	}
 	
 	//solve upper and left 
-	public LinkedList<Move> solveUpperAndLeft(int i){
+	public LinkedList<Move> solveUpperAndLeft(){
 		LinkedList<Move> result = new LinkedList<Move>();
-		int x = i;
-		while (x < this.tilesPerRow - 2){
+		for(int i = 0; i < this.tilesPerRow - 3; i++){
+			int x = i;
+			while (x < this.tilesPerRow - 2){
+				result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x,i)));
+				x++;
+			}
+			
+			
+			LinkedList<Point> illegals = new LinkedList<Point>();
+			illegals.add(new Point(this.tilesPerRow - 2, i));
+			illegals.add(new Point(this.tilesPerRow - 2, i+1));
+			illegals.add(new Point(this.tilesPerRow - 1, i));
+			illegals.add(new Point(this.tilesPerRow - 1, i+1));
+			
+			if(illegals.contains(numberToPoint(i*this.tilesPerRow+2+x))){
+				result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(this.tilesPerRow-1,i+2)));
+				unBlockPoint(new Point(this.tilesPerRow-1,i+2));
+			}
+			
+			result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x+1,i)));
+			result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(x+1,i+1)));
+			unBlockPoint(new Point(x+1, i));
 			result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x,i)));
-			x++;
-		}
-		
-		
-		LinkedList<Point> illegals = new LinkedList<Point>();
-		illegals.add(new Point(this.tilesPerRow - 2, i));
-		illegals.add(new Point(this.tilesPerRow - 2, i+1));
-		illegals.add(new Point(this.tilesPerRow - 1, i));
-		illegals.add(new Point(this.tilesPerRow - 1, i+1));
-		
-		if(illegals.contains(numberToPoint(i*this.tilesPerRow+2+x))){
-			result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(this.tilesPerRow-1,i+2)));
-			unBlockPoint(new Point(this.tilesPerRow-1,i+2));
-		}
-		
-		result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x+1,i)));
-		result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(x+1,i+1)));
-		unBlockPoint(new Point(x+1, i));
-		result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x,i)));
-		unBlockPoint(new Point(x+1,i+1));
-		result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(x+1,i)));
-		
-		int y = i+1;
-		while (y < this.tilesPerRow - 2) {
+			unBlockPoint(new Point(x+1,i+1));
+			result.addAll(moveTile(i*this.tilesPerRow+2+x, new Point(x+1,i)));
+			
+			int y = i+1;
+			while (y < this.tilesPerRow - 2) {
+				result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y)));
+				y++;
+			}
+			
+			illegals.clear();
+			illegals.add(new Point(i, this.tilesPerRow - 2));
+			illegals.add(new Point(i+1, this.tilesPerRow - 2));
+			illegals.add(new Point(i, this.tilesPerRow - 1));
+			illegals.add(new Point(i+1, this.tilesPerRow - 1));
+			
+			boolean moved2 = false;
+			if(illegals.contains(numberToPoint(this.tilesPerRow*(y+1)+1+i))){
+				result.addAll(moveTile(this.tilesPerRow*(y+1)+1+i, new Point(i+3, this.tilesPerRow-1)));
+				moved2 = true;
+			}
+			
+			result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y+1)));
+			if (moved2) unBlockPoint(new Point(i+3, this.tilesPerRow-1));
+			result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i+1,y+1)));
+			unBlockPoint(new Point(i,y+1));
 			result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y)));
-			y++;
+			unBlockPoint(new Point(i+1,y+1));
+			result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i,y+1)));
 		}
-		
-		illegals.clear();
-		illegals.add(new Point(i, this.tilesPerRow - 2));
-		illegals.add(new Point(i+1, this.tilesPerRow - 2));
-		illegals.add(new Point(i, this.tilesPerRow - 1));
-		illegals.add(new Point(i+1, this.tilesPerRow - 1));
-		
-		boolean moved2 = false;
-		if(illegals.contains(numberToPoint(this.tilesPerRow*(y+1)+1+i))){
-			result.addAll(moveTile(this.tilesPerRow*(y+1)+1+i, new Point(i+3, this.tilesPerRow-1)));
-			moved2 = true;
-		}
-		
-		result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y+1)));
-		if (moved2) unBlockPoint(new Point(i+3, this.tilesPerRow-1));
-		result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i+1,y+1)));
-		unBlockPoint(new Point(i,y+1));
-		result.addAll(moveTile((this.tilesPerRow*y)+1+i, new Point(i,y)));
-		unBlockPoint(new Point(i+1,y+1));
-		result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i,y+1)));
 		return result;
 	}
 	

@@ -392,9 +392,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
 				LinkedList<Move> solvedMoves = new LinkedList<>();
 		
-				for(int i = 0; i < gamePanel.getBoard().getTilesPerRow() - 3; i++){
-					solvedMoves.addAll(solve.solveUpperAndLeft(i));	
-				}
+				solvedMoves.addAll(solve.solveUpperAndLeft());	
+				
 				gamePanel.getScore().addMoves(solvedMoves.size());
 		
 				while(!solvedMoves.isEmpty()){
