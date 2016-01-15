@@ -17,6 +17,7 @@ public class MainMenuPanel extends JPanel {
 	private JButton btnHighscore;
 	private JButton btnSettings;
 	private JButton btnExit;
+	private JButton btnCredits;
 	
 	public MainMenuPanel(SimpController controller) {	
 		this.controller = controller;
@@ -26,6 +27,7 @@ public class MainMenuPanel extends JPanel {
 		addButton(btnLoadGame, "Load Game", "LoadGame");
 		addButton(btnHighscore, "Highscore", "Highscore");
 		addButton(btnSettings, "Settings", "Settings");
+		addButton(btnCredits, "Credits", "Credits");
 		addButton(btnExit, "Exit Game", "ExitGame");
 		this.add(Box.createVerticalGlue());
 	}

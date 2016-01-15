@@ -372,6 +372,13 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				JOptionPane.showMessageDialog(null, "No saved game to load!", "Failed to load game", JOptionPane.ERROR_MESSAGE);
 			}
 			
+		} else if(actionCommand.equals("mainMenuCredits")) {
+			JOptionPane.showMessageDialog(null, "Credits to:\n"+
+					"Marcus Pagh\n"+
+					"Tobias Lindstrøm\n"+
+					"Louise Justesen\n"+
+					"Morten Telling",
+					"Credits", JOptionPane.INFORMATION_MESSAGE);
 		} else if(actionCommand.equals("mainMenuSettings")) {
 			NPuzzle.swapView("settings");
 		} else if(actionCommand.equals("mainMenuExitGame")) {

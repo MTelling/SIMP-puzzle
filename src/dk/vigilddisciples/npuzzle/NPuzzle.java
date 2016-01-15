@@ -116,6 +116,7 @@ public class NPuzzle extends JFrame {
 		cardPanel.add(imageCropPanel, "imageCrop");
 		cardPanel.add(puzzlePane, "puzzle");
 		
+				
 		//Set settings for main window. 
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
