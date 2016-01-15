@@ -63,8 +63,6 @@ public class Solver {
 				if(currentNumber != size * size){
 					int targetX = (currentNumber - 1) % size;
 					int targetY = (currentNumber - 1) / size;
-					int xDistance = Math.abs(x - targetX);
-					int yDistance = Math.abs(y - targetY);
 					
 					if(targetY == y){
 						//If tile is in right column, add it to array to check for linear conflicts
@@ -85,7 +83,7 @@ public class Solver {
 						sum += 2;
 					}
 					
-					sum += xDistance + yDistance;
+					sum += manhattan(new Point(x,y), new Point (targetX,targetY)); 
 					
 				}
 			}
