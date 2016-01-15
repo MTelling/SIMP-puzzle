@@ -12,12 +12,10 @@ public class SimpWindow extends JFrame {
 	
 	
 	//TODO: Do these need to be private? 
-	Board board;
-	Score score;
-	SimpPuzzleView puzzleView;
-	ControlView controlView;
-	JLabel scoreLabel;
-	JLabel timeLabel;
+	private Board board;
+	private Score score;
+	private SimpPuzzleView puzzleView;
+	private ControlView controlView;
 	
 	public static void main(String[] args) {
 
@@ -27,7 +25,7 @@ public class SimpWindow extends JFrame {
 	}
 	
 	public SimpWindow(Board board) {
-		super("Simp-Puzzle");
+		super("N-Puzzle");
 		
 		this.score = new Score();
 		this.controlView = new ControlView(this.score);

@@ -7,8 +7,8 @@ import javax.swing.JOptionPane;
 
 public class SimpController implements KeyListener, MouseListener {
 
-	SimpPuzzleView puzzleView;
-	ControlView controlView;
+	private SimpPuzzleView puzzleView;
+	private ControlView controlView;
 	
 	public SimpController(SimpPuzzleView puzzleView, ControlView controlView) {
 		this.puzzleView = puzzleView;
@@ -27,21 +27,8 @@ public class SimpController implements KeyListener, MouseListener {
 	public void mouseExited(MouseEvent arg0) {}
 
 	
-	//TODO: It doesn't work when you click right now? The click is registered, but nothing happens. 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		
-		int xPos = (e.getX() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
-		int yPos = (e.getY() - SimpWindow.GAME_BORDER) / puzzleView.getTileSize();
-		
-		//Ask the board to move the tile at the clicked coordinate, if it is movable. And repaint if it is. 
-		System.out.println("X: " + xPos);
-		System.out.println("Y: " + yPos);
-		System.out.println(puzzleView.getBoard().moveTile(xPos, yPos));
-		if(puzzleView.getBoard().moveTile(xPos, yPos)) {
-			makeMove();
-
-		}
 	}
 
 	@Override
@@ -71,6 +58,7 @@ public class SimpController implements KeyListener, MouseListener {
 		
 		puzzleView.repaint();
 		
+		//Check if game is won
 		if(puzzleView.getBoard().isGameOver()){
 			controlView.stopTiming();
 			JOptionPane.showMessageDialog(null, "OMG YOU HAVE WON!");
