@@ -53,7 +53,7 @@ public class GameState implements Serializable {
 		//Update current tiles to last added move in undoStack.
 		this.board.setToAnimationState(redoMove);
 		
-		//You have undone a move. Let score know last move didn't happen
+		//You have redone a move. Let score know last move did actually happen afterall
 		this.score.addMoves(1);
 	}
 	
