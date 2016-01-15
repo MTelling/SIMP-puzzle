@@ -1,6 +1,7 @@
 package dk.vigilddisciples.npuzzle.controller;
 import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -26,6 +27,8 @@ import dk.vigilddisciples.npuzzle.controller.animation.MoveSequenceAnimator;
 import dk.vigilddisciples.npuzzle.model.GameState;
 import dk.vigilddisciples.npuzzle.model.Highscore;
 import dk.vigilddisciples.npuzzle.model.Move;
+import dk.vigilddisciples.npuzzle.model.Solver;
+import dk.vigilddisciples.npuzzle.model.Tile;
 import dk.vigilddisciples.npuzzle.model.WindowSize;
 import dk.vigilddisciples.npuzzle.view.GamePanel;
 
@@ -108,13 +111,44 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			Timer scrambleAnimationTimer = new Timer(NPuzzle.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
 			scrambleAnimationTimer.start();
 		} else {//Don't show scramble
-			while (scramblingSequence.size() != 0) {
-				gamePanel.getBoard().setToAnimationState(scramblingSequence.get(0));
-				gamePanel.getBoard().moveWithoutAnimation();
-				scramblingSequence.remove(0);
-			}
+			showMoveSequenceWithoutAnimation(scramblingSequence);
 		}
 
+	}
+	//Helper method to avoid redundancy
+	private void showMoveSequenceWithoutAnimation(LinkedList<Move> moveSequence) {
+		while (moveSequence.size() != 0) {
+			gamePanel.getBoard().setToAnimationState(moveSequence.get(0));
+			gamePanel.getBoard().moveWithoutAnimation();
+			moveSequence.remove(0);
+		}
+		gamePanel.repaint();
+	}
+	
+	
+	//Method called when the user wants to solve the board. 
+	private void solveBoard() {
+		
+		Solver solve = new Solver(gamePanel.getBoard().getTiles(), gamePanel.getBoard().getCurrEmptyTile());
+		LinkedList<Move> solvedMoves = new LinkedList<>();
+
+		solvedMoves.addAll(solve.solveEntireBoard());	
+		gamePanel.getScore().addMoves(solvedMoves.size());
+		
+		int showAnimation = JOptionPane.showConfirmDialog(null, "Do you want to animate the moves?", "Solve board", JOptionPane.YES_NO_OPTION);
+		if (showAnimation == JOptionPane.YES_OPTION) { //Show animation
+			Timer scrambleAnimationTimer = new Timer(NPuzzle.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, solvedMoves));
+			scrambleAnimationTimer.start();
+		} else {//Don't show animation
+			showMoveSequenceWithoutAnimation(solvedMoves);
+			//Check if game is done, but don't show highscore
+			if (gamePanel.getBoard().isGameOver()) {
+				gamePanel.getGameState().setGameDone(true);
+				gamePanel.repaint();
+				this.stopClock();
+			}
+		}	
+		
 	}
 
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -261,6 +295,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				else if (!gamePanel.getGameState().isGameDone())
 					this.startClock();
 				NPuzzle.toggleMenu();
+			} else if (e.getKeyCode() == KeyEvent.VK_S) {
+				solveBoard();
 			} else if(!NPuzzle.menuToggle) {
 				int dx = 0, dy = 0;
 				int keyCode = e.getKeyCode();
@@ -360,7 +396,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			NPuzzle.toggleMenu();
 			NPuzzle.swapView("mainMenu");
 		} else if (actionCommand.equals("inGameSolveGame")) {
-			System.out.println("solving game");
+			NPuzzle.toggleMenu();
+			solveBoard();
 		} else if (actionCommand.equals("inGameHighscores")) {
 			NPuzzle.swapView("highscore", "puzzle");
 		}

@@ -37,9 +37,14 @@ public class MoveSequenceAnimator implements ActionListener{
 			this.controller.getGamePanel().repaint();
 		}
 
-		//If there are no more moves, stop animating. 
+		//If there are no more moves, stop animating and check if game is solved. 
 		if (moves.size() < 1) {
 			((Timer)(e.getSource())).stop();
+			if (this.controller.getGamePanel().getBoard().isGameOver()) {
+				this.controller.getGamePanel().getGameState().setGameDone(true);
+				this.controller.stopClock();
+			}
+			this.controller.getGamePanel().repaint();
 			this.controller.setAnimating(false);
 		}
 	}
