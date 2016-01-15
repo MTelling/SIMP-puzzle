@@ -51,7 +51,7 @@ public class NPuzzle extends JFrame {
 		try { 
 		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
-		    e.printStackTrace();
+			System.out.println("Tried setting look and feel to current OS default, but failed");
 		}
 		
 		//Initialize the model.
