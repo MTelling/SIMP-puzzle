@@ -11,7 +11,6 @@ public class SimpWindow extends JFrame {
 	public static final int GAME_BORDER = 24;
 	
 	
-	//TODO: Do these need to be private? 
 	private Board board;
 	private Score score;
 	private SimpPuzzleView puzzleView;
