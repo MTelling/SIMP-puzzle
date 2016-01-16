@@ -73,7 +73,7 @@ public class GameState implements Serializable {
 		
 		this.useCornerLabels = NPuzzle.getSettings().isLabelsOn();
 		this.gameDifficulty = NPuzzle.getSettings().getDifficulty();
-		
+
 		this.setGameDone(false);
 	}
 	
@@ -90,11 +90,11 @@ public class GameState implements Serializable {
 	public boolean isGameDone() {
 		return this.isGameDone;
 	}
-	
+
 	public boolean isLabelsOn() {
 		return this.useCornerLabels;
 	}
-	
+
 	public int getDifficulty() {
 		return this.gameDifficulty;
 	}

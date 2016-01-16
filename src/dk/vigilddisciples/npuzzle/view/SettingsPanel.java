@@ -69,7 +69,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		this.settings = settings;
 		this.window = window;
 
-
+        //Create the entire GUI. We use vertical glue to position evenly distrubuted on the y-axis.
 		this.add(Box.createVerticalGlue());
 
 		createFramesPerSecondChooser();
@@ -116,7 +116,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		String actionCommand = e.getActionCommand();
 		switch (actionCommand) {
 

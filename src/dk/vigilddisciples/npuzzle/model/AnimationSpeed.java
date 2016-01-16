@@ -28,6 +28,7 @@ public enum AnimationSpeed {
 	}
 	
 	public int getValue(int tilesPerRow) {
+        //Calculate what speed to return depending on board size and tiles per row.
 		int speed = (int)Math.round((NPuzzle.getSettings().getCurrWindowSize().getBOARD_SIZE() / tilesPerRow) / this.stepsPerMove);
 		//If speed is set to 0 because of rounding, tell it to be 1 instead. 
 		return (speed == 0) ? 1 : speed;

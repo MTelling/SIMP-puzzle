@@ -16,7 +16,7 @@ public class Settings implements Serializable{
 	//Variable for animation
 	private int framesPerSecond;
 	private int refreshRate;
-
+	
 	//Move with or without animation
 	private boolean isAnimationOn;
 	private boolean isAnimationScramblingOn;

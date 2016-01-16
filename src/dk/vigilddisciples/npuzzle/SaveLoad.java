@@ -16,7 +16,8 @@ public class SaveLoad {
 	private static FileInputStream f_in;
 	private static ObjectOutputStream obj_out;
 	private static ObjectInputStream obj_in;
-	
+
+	//Saves object in serialized state to file.
 	public static void saveToFile (Object object, String fileName) {
 		try {
 			file = new File(fileName + "." + FILE_EXT);
@@ -37,7 +38,8 @@ public class SaveLoad {
 			e.printStackTrace();
 		}
 	}
-	
+
+    //Loads object from its serialized state.
 	public static Object loadFromFile(String fileName) throws Exception{
 		
 		file = new File(fileName + "." + FILE_EXT);

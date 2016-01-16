@@ -17,7 +17,7 @@ public class ImageHandler {
 
 		BufferedImage mainPic = ImageIO.read(new File(fileName));
 		BufferedImage[] tilePics = new BufferedImage[(int) Math.pow(tilesPerRow, 2)];
-    	try {
+    	try { //Try to slice the image into pieces to fit to the individual tiles.
 			for(int y = 0; y < tilesPerRow; y++) {
 	    		for(int x = 0; x < tilesPerRow; x++) {
 	    			
@@ -29,6 +29,7 @@ public class ImageHandler {
 	    		}
 	    	}
     	} catch (RasterFormatException e) {
+            //Throw error (We'll handle it in the gamepanel)
     		throw new RasterFormatException("Error choosing image");
     	}
     	
@@ -39,7 +40,6 @@ public class ImageHandler {
     public static String cropAndSave (BufferedImage buffPic, int x, int y) {
     	Random rand = new Random();
     	int size = NPuzzle.getSettings().getCurrWindowSize().getBOARD_SIZE();
-    	
     	try {
     		File file = new File("resources/pics/" + Integer.toString(rand.nextInt(999999999)) + ".jpg");
     		if(!file.exists()) {

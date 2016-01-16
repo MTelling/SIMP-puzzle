@@ -31,7 +31,8 @@ public class MainMenuPanel extends JPanel {
 		addButton(btnExit, "Exit Game", "ExitGame");
 		this.add(Box.createVerticalGlue());
 	}
-	
+
+	//Method to add a nice button to the view.
 	private void addButton(JButton button, String label, String actionCommand) {
 		button = new JButton(label) {
 			private static final long serialVersionUID = 1L;

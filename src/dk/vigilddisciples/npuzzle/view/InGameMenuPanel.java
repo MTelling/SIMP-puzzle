@@ -41,6 +41,7 @@ public class InGameMenuPanel extends JPanel {
 	}
 	
 	public void resetBounds() {
+		//Reset the bounds for this GUI so when the Window is resized it still looks pretty.
 		WindowSize currWindowSize = NPuzzle.getSettings().getCurrWindowSize();
 		this.setBounds(currWindowSize.getGAME_BORDER(), 
 				currWindowSize.getGAME_BORDER(), 

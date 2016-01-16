@@ -159,7 +159,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.getScore().addSeconds(1);
 			gamePanel.repaint();
 
-			//TODO: We must agree on where to put this. 
 			if (gamePanel.getGameState().isGameDone()) {
 				presentGameDoneMenu();
 			}
