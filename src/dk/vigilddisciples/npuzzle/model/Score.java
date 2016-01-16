@@ -36,7 +36,6 @@ public class Score implements Serializable{
 		for(int i = 1; i < (this.seconds - freeTime) / 60; i++) {
 			tempScore -= timePenalty + i;
 		}
-		
 		return tempScore;
 	}
 	
@@ -58,7 +57,6 @@ public class Score implements Serializable{
 	
 	public void addSeconds (int seconds) {
 		this.seconds += seconds;
-
 	}
 	
 	public void addMoves (int moves) {
@@ -88,11 +86,6 @@ public class Score implements Serializable{
 			minutes = this.seconds / 60;
 			seconds = this.seconds % 60;
 		}
-		
 		return String.format("%02d:%02d", minutes, seconds);
-		
 	}
-	
-	
-	
 }

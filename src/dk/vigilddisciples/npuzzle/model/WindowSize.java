@@ -10,7 +10,6 @@ public enum WindowSize {
 	private final int TOP_CONTROLS_SIZE;
 	private final int CONTROLS_TEXT_SIZE;
 	
-	
 	private final int WINDOW_WIDTH;
 	private final int WINDOW_HEIGHT;
 	
@@ -68,5 +67,4 @@ public enum WindowSize {
 	public int getCONTROLS_TEXT_SIZE() {
 		return CONTROLS_TEXT_SIZE;
 	}
-	
 }

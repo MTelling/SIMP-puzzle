@@ -103,7 +103,6 @@ public class Settings implements Serializable{
 		}
 	}
 
-	
 	/// SETTERS FROM HERE ///
 
 	public void setControlsNormal() {
@@ -220,6 +219,4 @@ public class Settings implements Serializable{
 	public boolean isAnimationScramblingOn() {
 		return isAnimationScramblingOn;
 	}
-
-
 }

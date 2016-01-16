@@ -55,9 +55,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		title.setAlignmentX(CENTER_ALIGNMENT);
 		
 		container.add(title);
-		
 		container.add(sizeChooser());
-		
 		container.add(difficultyChooser());
 
 		highscore = highscorePresenter();
@@ -94,10 +92,7 @@ public class HighscorePanel extends JPanel implements ActionListener{
 		} else {
 			hardDifficulty.setSelected(true);
 		}
-		
 		loadHighscore();
-
-		
 	}
 	
 	//Selects which highscore to 
@@ -120,7 +115,6 @@ public class HighscorePanel extends JPanel implements ActionListener{
 			names[i].setText(currHighscore[0]);
 			scores[i].setText(currHighscore[1]);
 		}
-		
 	}
 	
 	//Method to reset size for this view. 
@@ -236,7 +230,6 @@ public class HighscorePanel extends JPanel implements ActionListener{
 				((JButton)component).addActionListener(this);
 			} 
 		}
-
 		return container;
 	}
 
@@ -247,7 +240,6 @@ public class HighscorePanel extends JPanel implements ActionListener{
 			case "closeButton":
 				NPuzzle.swapView(this.origin);
 				break;
-			
 			case "easyDifficulty":
 				easyDifficulty.setSelected(true);
 				loadHighscore();
@@ -260,7 +252,6 @@ public class HighscorePanel extends JPanel implements ActionListener{
 				hardDifficulty.setSelected(true);
 				loadHighscore();
 				break;
-			
 			case "selectSizeButton": 
 				//Regular expression to remove everything but digits from the string.
 				String newBoardSize = selectSizeTextField.getText().replaceAll("[^0-9]+", "");
@@ -285,6 +276,5 @@ public class HighscorePanel extends JPanel implements ActionListener{
 				
 			default: break;
 		}
-		
 	}
 }

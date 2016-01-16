@@ -72,10 +72,8 @@ public class GamePanel extends JPanel {
 		this.firstPaint = true;
 		
 		this.loadImages();
-		
 		this.repaint();		
 	}
-	
 	
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -97,12 +95,10 @@ public class GamePanel extends JPanel {
 			//Determine how many tiles need to have an extra pixel. 
 			tilesNeededToBeLarger = (currWindowSize.getBOARD_SIZE() - currWindowSize.getBOARD_BORDER_SIZE()*2) % this.getBoard().getTilesPerRow();
 		}
-		
 		//Draw everything above the board.
 		this.drawControls(g2d);
 		
 		//Draw board background. 
-		
 		g2d.drawImage(boardImg, gameBorder, windowHeight - gameBorder - boardSize, boardSize, boardSize, null);
 		
 		//Set font for text when picture and labels are on
@@ -118,7 +114,6 @@ public class GamePanel extends JPanel {
 			this.stringHeight = g2d.getFontMetrics().getHeight();
 			this.firstPaint = false;
 		}
-		
 		//Draw Board
 		this.drawBoard(g2d, this.getBoard().getTileSize());
 	}
@@ -148,7 +143,6 @@ public class GamePanel extends JPanel {
 		g2d.fillRect(xCoord, yCoord, width, height);
 		
 		this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, cornerSize);
-		
 	}
 	
 	private void drawControls(Graphics2D g2d) {
@@ -187,7 +181,6 @@ public class GamePanel extends JPanel {
 					}
 					
 					//Draws tile at x and y pos with image gotten from ressources. 
-					
 					g2d.drawImage(picList[tiles[x][y].getNumber() - 1 ], xCoord, yCoord, tileWidth, tileHeight, null);
 					
 					//Draws text on image
@@ -203,11 +196,9 @@ public class GamePanel extends JPanel {
 								this.drawLabelInCorner(g2d, x, y, xCoord, yCoord, tileSize/3);
 							}
 						} 
-						
 					} else { //No picture is showing, just draw label in center. 
 						this.drawLabelInCenter(g2d, x, y, xCoord, yCoord, tileSize);
 					}
-					
 				}
 			}
 			if (extraY < tilesNeededToBeLarger) {
@@ -273,7 +264,6 @@ public class GamePanel extends JPanel {
 			stringWidths[i] = calcWidthOfString(g2d, Integer.toString(counter));
 			counter *= 10;
 		}
-		
 		return stringWidths;
 	}
 	
@@ -307,5 +297,4 @@ public class GamePanel extends JPanel {
 	public Highscore getHighscore(int difficulty) {
 		return this.highscores[difficulty - 1];
 	}
-	
 }

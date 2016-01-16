@@ -18,7 +18,6 @@ public class Randomizer {
 		this.board = board;
 		this.emptyTile = ObjectCopy.point(board.getCurrEmptyTile());
 		this.tilesPerRow = board.getTilesPerRow();
-
 	}
 
 	private void moveEmptyTo(Point target, Point emptyTile, LinkedList<Move> moveSequence) {
@@ -38,14 +37,12 @@ public class Randomizer {
 		while(emptyTile.y > target.y) {
 			makePseudoMove(moveSequence, new Move(0, -1), emptyTile);
 		}
-
 	}
 
 	private void makePseudoMove(LinkedList<Move> moveSequence, Move move, Point emptyTile) {
 		emptyTile.translate(move.dx, move.dy);
 		moveSequence.add(move);
 	}
-
 
 	private void generateRandomMovesInCloseArea(LinkedList<Move> moveSequence, Point emptyTile, int numberOfMoves) {
 		//Move x, then y, then x etc. Was x moved last?
@@ -69,13 +66,11 @@ public class Randomizer {
 					justMovedX = true;
 					hasNotMoved = false;
 				} else if (board.isMoveValid(yMove, emptyTile) && justMovedX ) {
-
 					makePseudoMove(moveSequence, yMove, emptyTile);
 
 					justMovedX = false;
 					hasNotMoved = false;
 				}
-
 			}
 		}
 	}
@@ -133,7 +128,6 @@ public class Randomizer {
 			}
 			generateRandomMovesInCloseArea(moveSequence, empty, areaSizeToRandomize);
 		}
-
 		return moveSequence;
 	}
 }

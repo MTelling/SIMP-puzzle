@@ -34,7 +34,6 @@ public class NPuzzle extends JFrame {
 	private static InGameMenuPanel inGameMenuPanel;
 	private static HighscorePanel highscorePanel;
 	private JLayeredPane puzzlePane;
-
 	
 	public static boolean menuToggle;
 	
@@ -42,7 +41,6 @@ public class NPuzzle extends JFrame {
 		@SuppressWarnings("unused")
 		NPuzzle game = new NPuzzle();
 	}
-
 
 	public NPuzzle() {
 		super("N-Puzzle Game");
@@ -108,14 +106,12 @@ public class NPuzzle extends JFrame {
 		gamePanel.addMouseListener(controller);
 		gamePanel.addMouseMotionListener(controller);		
 		
-		
 		//Add the different panels to the CardLayout
 		cardPanel.add(mainMenuPanel, "mainMenu");
 		cardPanel.add(settingsPanel, "settings");
 		cardPanel.add(highscorePanel, "highscore");
 		cardPanel.add(imageCropPanel, "imageCrop");
 		cardPanel.add(puzzlePane, "puzzle");
-		
 				
 		//Set settings for main window. 
 		this.setResizable(false);
@@ -124,7 +120,6 @@ public class NPuzzle extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
-	
 	
 	public void setNewSize(Dimension newDimension) {
 				

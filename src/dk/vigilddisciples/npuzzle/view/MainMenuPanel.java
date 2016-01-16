@@ -49,5 +49,4 @@ public class MainMenuPanel extends JPanel {
 		this.add(Box.createVerticalGlue());
 		this.add(button);
 	}
-
 }

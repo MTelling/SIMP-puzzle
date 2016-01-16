@@ -27,14 +27,11 @@ public class MoveAnimator implements ActionListener {
 			
 			//Tell the controller that the animation is done, and reset for next time the timer is called. 
 			simpController.setAnimating(false);
-
 			simpController.getGamePanel().repaint();
-
 			simpController.checkIfGameIsWon();
 			
 		} else { //Repaint on each time through - no matter what. 
 			simpController.getGamePanel().repaint();
 		}
 	}
-
 }

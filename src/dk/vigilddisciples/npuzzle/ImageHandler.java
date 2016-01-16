@@ -10,7 +10,6 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-
 public class ImageHandler {	
     
     public static BufferedImage[] getTilePics(int tilesPerRow, int tileSize, String fileName) throws IOException {
@@ -33,7 +32,6 @@ public class ImageHandler {
     	}
     	
     	return tilePics;
-
     }
     
     public static String cropAndSave (BufferedImage buffPic, int x, int y) {
@@ -72,12 +70,5 @@ public class ImageHandler {
 		} 
 		
 		return null;
-    }
-    
-    
-    
-    
-    
-    
-	
+    }	
 }

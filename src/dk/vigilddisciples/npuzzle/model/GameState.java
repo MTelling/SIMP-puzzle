@@ -29,7 +29,6 @@ public class GameState implements Serializable {
 	
 	public void saveCurrentMove(Move move) {
 		this.undoMoveStack.push(move);
-				
 		this.redoMoveStack.clear();
 	}
 	
