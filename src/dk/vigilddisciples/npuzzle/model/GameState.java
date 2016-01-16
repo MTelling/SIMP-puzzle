@@ -101,5 +101,4 @@ public class GameState implements Serializable {
 	public void setGameDone(boolean isGameDone) {
 		this.isGameDone = isGameDone;
 	}
-	
 }
