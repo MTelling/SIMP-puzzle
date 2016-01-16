@@ -1,7 +1,6 @@
 package dk.vigilddisciples.npuzzle.model;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class Solver {
 		return newList;
 	}
 	
-	//Helper method to get manhattan distance between 2 points
+	//Helper method to get Manhattan distance between 2 points
 	private int manhattan(Point from, Point to){
 		int xDistance = Math.abs(from.x - to.x);
 		int yDistance = Math.abs(from.y - to.y);
@@ -49,7 +48,8 @@ public class Solver {
 			return false;
 		}
 		
-		public int getHeuristic(LinkedList<Integer> tiles){
+		//Returns sum of Manhattan distance for all tiles and their respective "right place".
+		private int getHeuristic(LinkedList<Integer> tiles){
 			
 			int size = this.tilesPerRow;
 			int sum = 0;
@@ -83,45 +83,12 @@ public class Solver {
 						if(containsHigher(yRows[x], currentNumber)){
 							sum += 2;
 						}
-						
 						sum += manhattan(new Point(x,y), new Point (targetX,targetY)); 
-						
 					}
 				}
 			}
 			return sum;
 		}
-	
-	//Helper method to calculate Linear Conflict
-	private int linearConflict(ArrayList<Integer> row, int number, boolean yAxis){
-		int[] shouldBe = new int[this.tilesPerRow];
-		int empty = this.tilesPerRow * this.tilesPerRow;
-		int inversions = 0;
-		for(int i = 0; i < this.tilesPerRow; i++) {
-			if(yAxis){
-				shouldBe[i] = i*this.tilesPerRow+number;
-			} else {
-				shouldBe[i] = number*this.tilesPerRow+i;
-			}
-		}
-		
-		for (int i = 1; i < this.tilesPerRow; i++) {
-			//Check if number isnt the empty tile and check if the number should be on this row/column
-			if (row.get(i) != empty && 0 <= Arrays.binarySearch(shouldBe, row.get(i))) {
-				for (int j = 0; j < i; j++) {
-					if (row.get(j) != empty && 0 <= Arrays.binarySearch(shouldBe, row.get(j))) {
-						//We have 2 numbers and both should be in this row or column
-						//Check if they are inverted
-						if ((row.get(i) < row.get(j)) != (i < j)) {
-							//Numbers are inverted!
-							inversions++;
-						}
-					}
-				}
-			}
-		}
-		return inversions*2;
-	}
 	
 	//Helper method to copy tiles list
 	private LinkedList<Integer> copyTilesList(LinkedList<Integer> list){
@@ -168,9 +135,7 @@ public class Solver {
 		//get heuristic and weigh it drastically if tile is blocked
 		int heuristic;
 		if(entireBoard){
-			long startTime = System.nanoTime();
 			heuristic = getHeuristic(current.getTiles());
-			//System.out.println("heuristic runtime in nanoseconds: " + (System.nanoTime() - startTime));
 		} else {
 			if(this.blockedTiles.contains(current.getEmpty())){
 				heuristic = 99999999;
@@ -206,7 +171,7 @@ public class Solver {
 	}
 	
 	//A Star algorithm. Can be used either for a specific route or to solve entire board
-	public LinkedList<Move> AStarSearch(Point from, Point to, boolean entireBoard){
+	private LinkedList<Move> AStarSearch(Point from, Point to, boolean entireBoard){
 		PriorityQueue<SearchNode> queue = new PriorityQueue<SearchNode>();
 		SearchNode first;
 		if(entireBoard){
@@ -255,14 +220,15 @@ public class Solver {
 		}
 	}
 	
-	//TODO: Fuck this though.
+	//Helper method to update state with just one move.
 	private void updateState(Move move){
 		LinkedList<Move> list = new LinkedList<Move>();
 		list.add(move);
 		updateState(list);
 	}
 	
-	public LinkedList<Move> moveEmptyTo(Point to, Point avoidThis){
+	//Helper method to move empty tile somewhere. 
+	private LinkedList<Move> moveEmptyTo(Point to, Point avoidThis){
 		LinkedList<Move> moveSequence;
 		if(avoidThis != null){
 			this.blockedTiles.addLast(avoidThis);
@@ -272,17 +238,6 @@ public class Solver {
 			this.blockedTiles.removeLast();
 		}
 		updateState(moveSequence);
-		return moveSequence;
-	}
-	
-	
-	//SELF HELP! THIS WORKS
-	public LinkedList<Move> test () {
-		LinkedList<Move> moveSequence = new LinkedList<Move>();
-		
-		for(int i = 0; i < 2; i++){
-			moveSequence.addAll(moveTileOnce(1,new Move(1,0)));
-		}
 		return moveSequence;
 	}
 	
@@ -323,8 +278,8 @@ public class Solver {
 		
 	}
 	
-	//Move specific tile to specific Point
-	public LinkedList<Move> moveTile(int tile, Point target){
+	//Moves specific tile to specific Point
+	private LinkedList<Move> moveTile(int tile, Point target){
 		//Get Point representation of tile
 		Point tileToMove = numberToPoint(tile);
 		//Init moveSequence
@@ -341,7 +296,7 @@ public class Solver {
 	}
 	
 	//solve upper and left 
-	public LinkedList<Move> solveUpperAndLeft(){
+	private LinkedList<Move> solveUpperAndLeft(){
 		LinkedList<Move> result = new LinkedList<Move>();
 
 		for (int i = 0; i < this.tilesPerRow - 3; i++) {
@@ -350,7 +305,6 @@ public class Solver {
 				result.addAll(moveTile(i*this.tilesPerRow+1+x, new Point(x,i)));
 				x++;
 			}
-			
 			
 			LinkedList<Point> illegals = new LinkedList<Point>();
 			illegals.add(new Point(this.tilesPerRow - 2, i));
@@ -396,7 +350,6 @@ public class Solver {
 			unBlockPoint(new Point(i+1,y+1));
 			result.addAll(moveTile((this.tilesPerRow*(1+y))+1+i, new Point(i,y+1)));
 		}
-		
 		return result;
 	}
 	
@@ -432,15 +385,14 @@ public class Solver {
 				}
 			}
 		}
+
 		//Now make a new solver that only works on the last 3x3 and let it solve that part. 
+
 		Solver lastSolver = new Solver(newTileArray, newEmptyTile);
 		movesToSolve.addAll(lastSolver.AStarSearch(null, null, true));
 		
-		
 		return movesToSolve;
 	}
-	
-	
 	
 	public void unBlockPoint(Point toUnblock){
 		if(this.blockedTiles.contains(toUnblock)){
@@ -451,5 +403,4 @@ public class Solver {
 	public void clearBlocked() {
 		this.blockedTiles.clear();
 	}
-	
 }

@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import dk.vigilddisciples.npuzzle.ImageHandler;
@@ -39,6 +40,8 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 		JButton btnCrop = new JButton("Crop Image");
 		btnCrop.addActionListener(this);
 		this.add(btnCrop);
+		JLabel lblCrop = new JLabel("Drag image to fit");
+		this.add(lblCrop);
 	}
 	
 	public void init() {
