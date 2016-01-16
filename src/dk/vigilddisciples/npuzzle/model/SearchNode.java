@@ -31,7 +31,7 @@ public class SearchNode implements Comparable<SearchNode>{
 		}
 	}
 	
-	/////// Just getters ///////
+	/////// GETTERS FROM HERE ///////
 	
 	public LinkedList<Integer> getTiles(){
 		return this.tilesList;

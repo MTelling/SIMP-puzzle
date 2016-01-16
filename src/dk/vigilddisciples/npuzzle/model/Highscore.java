@@ -38,7 +38,6 @@ public class Highscore implements Serializable {
 				this.removeExtraScores(sizeDependantHighscores, Math.abs(sizeDifference));
 			}
 		}
-		
 		this.saveHighscores();
 	}
 	
@@ -55,7 +54,6 @@ public class Highscore implements Serializable {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Couldn't load highscores", "Error loading highscores", JOptionPane.ERROR_MESSAGE);
 		}
-		
 	}
 	
 	/*
@@ -79,7 +77,6 @@ public class Highscore implements Serializable {
 			}
 			i++;
 		}
-		
 		return highscorePosition;
 	}
 	
@@ -95,7 +92,6 @@ public class Highscore implements Serializable {
 		if(currentHighscores.size() > HIGHSCORE_SIZE) {
 			this.removeExtraScores(currentHighscores, Math.abs(HIGHSCORE_SIZE - currentHighscores.size()));
 		}
-		
 		this.saveHighscores();
 	}
 	

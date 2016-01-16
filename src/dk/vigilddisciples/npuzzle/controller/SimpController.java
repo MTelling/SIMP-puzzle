@@ -67,7 +67,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 			//Move with or without animation depending on what the setting is in settings. 
 			showMove(NPuzzle.getSettings().isAnimationOn());
-
 		}
 	}
 
@@ -105,7 +104,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.getBoard().moveWithoutAnimation();
 			scramblingSequence.remove(0);
 		}
-
+		
 		if (NPuzzle.getSettings().isAnimationScramblingOn()) {
 			//Show scramble
 			Timer scrambleAnimationTimer = new Timer(NPuzzle.getSettings().getRefreshRate(), new MoveSequenceAnimator(this, scramblingSequence));
@@ -113,8 +112,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		} else {//Don't show scramble
 			showMoveSequenceWithoutAnimation(scramblingSequence);
 		}
-
 	}
+	
 	//Helper method to avoid redundancy
 	private void showMoveSequenceWithoutAnimation(LinkedList<Move> moveSequence) {
 		while (moveSequence.size() != 0) {
@@ -124,7 +123,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		}
 		gamePanel.repaint();
 	}
-	
 	
 	//Method called when the user wants to solve the board. 
 	private void solveBoard() {
@@ -148,7 +146,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				this.stopClock();
 			}
 		}	
-		
 	}
 
 	//1000 is a 1000milliseconds so the timer will fire each second. 
@@ -212,7 +209,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			resetInGame();
 		}
 	}
-	
 	
 	public void startClock () {
 		clock.start();
@@ -311,7 +307,6 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 				} else if (keyCode == controls[3]) { //Moves tile down
 					dy = 1;
 				} else {//Don't make any move
-
 				}
 
 				//Try to make the move. 
@@ -449,5 +444,4 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 	@Override
 	public void keyTyped(KeyEvent e) {}
-
 }

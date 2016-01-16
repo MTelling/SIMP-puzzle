@@ -76,7 +76,6 @@ public class Board implements Serializable {
 		}
 	}
 
-
 	//Moves tile to the currEmptyTile position and swaps in tileArray + sets what the nextEmptyTile should be.
 	//This activates the animationStae
 	public void setToAnimationState(Move move) {
@@ -214,8 +213,6 @@ public class Board implements Serializable {
 			}
 			str += "\n";
 		}
-
 		return str;
 	}
-
 }
