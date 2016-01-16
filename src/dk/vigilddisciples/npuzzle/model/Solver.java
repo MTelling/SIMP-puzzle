@@ -407,6 +407,9 @@ public class Solver {
 		Tile[][] newTileArray = new Tile[3][3];
 		Point newEmptyTile = new Point(0,0);
 		
+		//This goes through the lover right 3x3 corner. Takes the lowest to highest numbers and gives them numbers 1-9.
+		//Then it makes a new tilearray of 3x3 and but the numbers in there. This lets the clever solver figure out
+		//how to solve the last 3x3 in the grid. 
 		int number = tilesPerRow * (tilesPerRow - 3) + tilesPerRow - 2;
 		int counter = 1;
 		for(int i = 0; i < 9; i++){
@@ -429,7 +432,7 @@ public class Solver {
 				}
 			}
 		}
-		
+		//Now make a new solver that only works on the last 3x3 and let it solve that part. 
 		Solver lastSolver = new Solver(newTileArray, newEmptyTile);
 		movesToSolve.addAll(lastSolver.AStarSearch(null, null, true));
 		
