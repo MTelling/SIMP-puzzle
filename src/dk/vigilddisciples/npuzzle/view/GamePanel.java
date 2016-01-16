@@ -85,7 +85,6 @@ public class GamePanel extends JPanel {
 		//Set font. Has to be done on each repaint, because it defaults it otherwise. 
 		g2d.setFont(new Font("Sans Serif", Font.PLAIN, currWindowSize.getCONTROLS_TEXT_SIZE()));
 		
-		
 		int boardSize = currWindowSize.getBOARD_SIZE();
 		int gameBorder = currWindowSize.getGAME_BORDER();
 		int windowHeight = currWindowSize.getWINDOW_HEIGHT();
@@ -214,9 +213,7 @@ public class GamePanel extends JPanel {
 			if (extraY < tilesNeededToBeLarger) {
 				extraY++;
 			}
-			
 		}
-		
 	}
 	
 	private void loadImages() {
