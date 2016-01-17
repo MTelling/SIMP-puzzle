@@ -137,11 +137,7 @@ public class Solver {
 		if(entireBoard){
 			heuristic = getHeuristic(current.getTiles());
 		} else {
-			if(this.blockedTiles.contains(current.getEmpty())){
-				heuristic = 99999999;
-			} else {
-				heuristic = manhattan(current.getEmpty(), to);
-			}
+			heuristic = manhattan(current.getEmpty(), to);
 		}
 		
 		//Make a node, with this move made
@@ -187,7 +183,10 @@ public class Solver {
 			//Check if current node is goalposition. Otherwise continue
 			if(current.getHeuristic() != 0){
 				for(Move move : legalMoves(current.getEmpty())){
-					queue.add(makeMove(to, move, current, entireBoard));
+					//Don't add nodes going through blocked Points
+					if(!this.blockedTiles.contains(new Point(current.getEmpty().x + move.dx, current.getEmpty().y + move.dy))){
+						queue.add(makeMove(to, move, current, entireBoard));
+					}
 				}
 			} else {
 				//This node is at goal position! Backtrack the moves made and return
@@ -293,7 +292,7 @@ public class Solver {
 		return moveSequence;
 	}
 	
-	//solve upper and left 
+	//solve upper row and left column
 	private LinkedList<Move> solveUpperAndLeft(){
 		LinkedList<Move> result = new LinkedList<Move>();
 
