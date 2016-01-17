@@ -76,7 +76,7 @@ public class Randomizer {
 	}
 
 	//Returns a list of movements required to randomize the current board. 
-	public LinkedList<Move> getRandomizingMoveSequence() {
+	public LinkedList<Move> generateRandomizingMoveSequence() {
 		LinkedList<Move> moveSequence = new LinkedList<Move>();
 		Point empty = emptyTile;
 

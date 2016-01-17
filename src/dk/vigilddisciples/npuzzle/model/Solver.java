@@ -39,7 +39,7 @@ public class Solver {
 	}
 	
 	//Helper method to check for linear conflicts
-		public boolean containsHigher(int[] start, int number) {
+		private boolean containsHigher(int[] start, int number) {
 			for(int i = 0; i < start.length - 1; i++){
 				if(start[i] > number){
 					return true;
@@ -171,7 +171,7 @@ public class Solver {
 	}
 	
 	//A Star algorithm. Can be used either for a specific route or to solve entire board
-	private LinkedList<Move> AStarSearch(Point from, Point to, boolean entireBoard){
+	private LinkedList<Move> astarSearch(Point from, Point to, boolean entireBoard){
 		PriorityQueue<SearchNode> queue = new PriorityQueue<SearchNode>();
 		SearchNode first;
 		if(entireBoard){
@@ -233,7 +233,7 @@ public class Solver {
 		if(avoidThis != null){
 			this.blockedTiles.addLast(avoidThis);
 		}
-		moveSequence = AStarSearch(this.emptyTile, to, false);
+		moveSequence = astarSearch(this.emptyTile, to, false);
 		if(avoidThis != null){
 			this.blockedTiles.removeLast();
 		}
@@ -286,7 +286,7 @@ public class Solver {
 		LinkedList<Move> moveSequence = new LinkedList<Move>();
 		
 		//Find route
-		LinkedList<Move> route = AStarSearch(tileToMove, target, false);
+		LinkedList<Move> route = astarSearch(tileToMove, target, false);
 		
 		for(int i = 0; i < route.size(); i++){
 			moveSequence.addAll(moveTileOnce(tile, route.get(i)));
@@ -389,18 +389,14 @@ public class Solver {
 		//Now make a new solver that only works on the last 3x3 and let it solve that part. 
 
 		Solver lastSolver = new Solver(newTileArray, newEmptyTile);
-		movesToSolve.addAll(lastSolver.AStarSearch(null, null, true));
+		movesToSolve.addAll(lastSolver.astarSearch(null, null, true));
 		
 		return movesToSolve;
 	}
 	
-	public void unBlockPoint(Point toUnblock){
+	private void unBlockPoint(Point toUnblock){
 		if(this.blockedTiles.contains(toUnblock)){
 			this.blockedTiles.remove(this.blockedTiles.indexOf(toUnblock));
 		}
-	}
-	
-	public void clearBlocked() {
-		this.blockedTiles.clear();
 	}
 }

@@ -184,10 +184,10 @@ public class Board implements Serializable {
 
 	public LinkedList<Move> getRandomizingMoveSequence() {
 		Randomizer randomBoardGenerator = new Randomizer(this);
-		return randomBoardGenerator.getRandomizingMoveSequence();
+		return randomBoardGenerator.generateRandomizingMoveSequence();
 	}
 
-	/// Getters from here ///
+	///////// Getters from here /////////
 
 	public Point getCurrEmptyTile() {
 		return this.currEmptyTile;

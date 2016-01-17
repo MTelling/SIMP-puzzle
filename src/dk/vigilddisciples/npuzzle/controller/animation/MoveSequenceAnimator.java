@@ -41,7 +41,7 @@ public class MoveSequenceAnimator implements ActionListener{
 		if (moves.size() < 1) {
 			((Timer)(e.getSource())).stop();
 			if (this.controller.getGamePanel().getBoard().isGameOver()) {
-				this.controller.getGamePanel().getGameState().setGameDone(true);
+				this.controller.getGamePanel().getGameState().setGameOver(true);
 				this.controller.stopClock();
 			}
 			this.controller.getGamePanel().repaint();

@@ -36,7 +36,7 @@ public class Settings implements Serializable{
 	private int difficulty;
 	private int tilesPerRowInBoard;
 	
-	private WindowSize CurrWindowSize;
+	private WindowSize currentWindowSize;
 
 	public Settings() {
 		this.setCurrWindowSize(WindowSize.MEDIUM);
@@ -94,7 +94,7 @@ public class Settings implements Serializable{
 		settings.putInt("gameDifficulty", this.difficulty);
 		settings.putInt("tilesPerRowInBoard", this.tilesPerRowInBoard);
 
-		settings.putInt("currWindowSize", this.CurrWindowSize.ordinal());
+		settings.putInt("currWindowSize", this.currentWindowSize.ordinal());
 
 		try {
 			settings.flush();
@@ -110,7 +110,7 @@ public class Settings implements Serializable{
 	}
 
 	public void setCurrWindowSize(WindowSize currWindowSize) {
-		CurrWindowSize = currWindowSize;
+		currentWindowSize = currWindowSize;
 	}
 
 	public void setControlsInverted() {
@@ -118,7 +118,7 @@ public class Settings implements Serializable{
 	}
 
 	public void setScrambleAnimationSpeed() {
-		this.scrambleAnimationSpeed = (this.CurrWindowSize.getBOARD_SIZE() / this.tilesPerRowInBoard) / 3;
+		this.scrambleAnimationSpeed = (this.currentWindowSize.getBOARD_SIZE() / this.tilesPerRowInBoard) / 3;
 	}
 
 	public void setAnimationSpeed(AnimationSpeed animationSpeed) {
@@ -161,7 +161,7 @@ public class Settings implements Serializable{
 	/// GETTERS FROM HERE /////
 
 	public WindowSize getCurrWindowSize() {
-		return CurrWindowSize;
+		return currentWindowSize;
 	}
 
 	public int getFramesPerSecond() {

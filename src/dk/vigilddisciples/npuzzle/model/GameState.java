@@ -17,7 +17,7 @@ public class GameState implements Serializable {
 	private boolean useCornerLabels;
 	private int gameDifficulty;
 	
-	private boolean isGameDone;
+	private boolean isGameOver;
 	
 	public GameState (Board board, Score score) {
 		this.undoMoveStack = new Stack<Move>();
@@ -73,7 +73,7 @@ public class GameState implements Serializable {
 		this.useCornerLabels = NPuzzle.getSettings().isLabelsOn();
 		this.gameDifficulty = NPuzzle.getSettings().getDifficulty();
 		
-		this.setGameDone(false);
+		this.setGameOver(false);
 	}
 	
 	/// GETTERS FROM HERE ///
@@ -86,8 +86,8 @@ public class GameState implements Serializable {
 		return this.board;
 	}
 
-	public boolean isGameDone() {
-		return this.isGameDone;
+	public boolean isGameOver() {
+		return this.isGameOver;
 	}
 	
 	public boolean isLabelsOn() {
@@ -98,7 +98,7 @@ public class GameState implements Serializable {
 		return this.gameDifficulty;
 	}
 
-	public void setGameDone(boolean isGameDone) {
-		this.isGameDone = isGameDone;
+	public void setGameOver(boolean isGameDone) {
+		this.isGameOver = isGameDone;
 	}
 }

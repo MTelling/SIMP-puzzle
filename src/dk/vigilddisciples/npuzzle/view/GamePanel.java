@@ -167,7 +167,7 @@ public class GamePanel extends JPanel {
 			}
 			for(int x = 0; x < this.getBoard().getTilesPerRow(); x++) {
 				//Draw all tiles except for the empty one. If the game is done and pictures are shown. Show the full image. 
-				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2) || (this.gameState.isGameDone() && NPuzzle.getSettings().isPictureOn())) {
+				if(tiles[x][y].getNumber() != Math.pow(this.getBoard().getTilesPerRow(),2) || (this.gameState.isGameOver() && NPuzzle.getSettings().isPictureOn())) {
 				
 					//Get x and y position
 					int xCoord = tiles[x][y].getX() + extraX;
@@ -187,7 +187,7 @@ public class GamePanel extends JPanel {
 					if(NPuzzle.getSettings().isPictureOn()) {
 
 						//Draw border around unfinished picture
-						if (!this.gameState.isGameDone()){
+						if (!this.gameState.isGameOver()){
 							g2d.setColor(Color.BLACK);
 							g2d.drawRect(xCoord, yCoord, tileWidth, tileHeight);
 							
