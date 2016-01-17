@@ -29,3 +29,9 @@ hs_err_pid*
 >>>>>>> 2.0
 
 *.BearnaiseSovs
+
+*.xml
+
+.idea/.name
+
+SIMP-puzzle.iml
