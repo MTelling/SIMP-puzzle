@@ -88,6 +88,9 @@ public class Highscore implements Serializable {
 	 */
 	public void addHighscore(int boardSize, String name, int score, int index) {
 		LinkedList<String> currentHighscores = this.highscores.get(boardSize);
+		if (name.length() > 15) {
+            name = name.substring(0, 16);
+        }
 		currentHighscores.add(index, name + "," + score);
 		if(currentHighscores.size() > HIGHSCORE_SIZE) {
 			this.removeExtraScores(currentHighscores, Math.abs(HIGHSCORE_SIZE - currentHighscores.size()));

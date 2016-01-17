@@ -23,18 +23,20 @@ public class Score implements Serializable{
 	public int calculateScore(int boardSize) {
 		int tempScore = 10000;
 		int timePenalty = 0;
-		int movePenalty = 300 / boardSize;
+		int movePenalty = Math.max(300 / (boardSize*boardSize), 1);
 		
 		tempScore -= this.moves * movePenalty;
 		
 		int freeTime = 20 * (boardSize - 2);
 		if(this.seconds > freeTime) {
 			timePenalty = 2;
-			tempScore -= ((this.seconds - freeTime) % 60) * timePenalty;
+			tempScore -= Math.min((this.seconds - freeTime) * timePenalty, 60*timePenalty);
 		}
-		
-		for(int i = 1; i < (this.seconds - freeTime) / 60; i++) {
-			tempScore -= timePenalty + i;
+
+		if(this.seconds > freeTime + 60) {
+			for (int i = 1; i < (this.seconds - (freeTime + 60)); i++) {
+				tempScore -= timePenalty + (i / 60);
+			}
 		}
 		return tempScore;
 	}

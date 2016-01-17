@@ -180,7 +180,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		String[] options = {"Ok"};
 		JPanel dialogPane = new JPanel();
 		dialogPane.setLayout(new BoxLayout(dialogPane, BoxLayout.Y_AXIS));
-		JLabel dialogText1 = new JLabel("New highscore!");
+		JLabel dialogText1 = new JLabel("New highscore " + score);
 		JLabel dialogText2 = new JLabel("Enter Your name:");
 		JTextField nameField = new JTextField(10);
 		dialogPane.add(dialogText1);
@@ -204,7 +204,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	private void presentGameDoneDialog(int score) {
 		Image image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		//Create confirm dialog without image
-		int reply = JOptionPane.showConfirmDialog(null, "You won the game!\nDo you want to restart?", "Congratulations!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, new ImageIcon(image));
+		int reply = JOptionPane.showConfirmDialog(null, "You won the game with score " + score +"\nDo you want to restart?", "Congratulations!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, new ImageIcon(image));
 		if (reply == JOptionPane.YES_OPTION) {
 			resetInGame();
 		}
