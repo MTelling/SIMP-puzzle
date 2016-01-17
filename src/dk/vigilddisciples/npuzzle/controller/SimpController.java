@@ -1,7 +1,6 @@
 package dk.vigilddisciples.npuzzle.controller;
 import java.awt.Cursor;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -28,7 +27,6 @@ import dk.vigilddisciples.npuzzle.model.GameState;
 import dk.vigilddisciples.npuzzle.model.Highscore;
 import dk.vigilddisciples.npuzzle.model.Move;
 import dk.vigilddisciples.npuzzle.model.Solver;
-import dk.vigilddisciples.npuzzle.model.Tile;
 import dk.vigilddisciples.npuzzle.model.WindowSize;
 import dk.vigilddisciples.npuzzle.view.GamePanel;
 
@@ -51,7 +49,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 		//Before making a move, check if a move should be made. 
 		//If it should be made saveGameState to the current board and then make the move.
 		//Also never allow  a move if the game is won. 
-		if (gamePanel.getBoard().isMoveValid(move) && !gamePanel.getGameState().isGameDone()) {
+		if (gamePanel.getBoard().isMoveValid(move) && !gamePanel.getGameState().isGameOver()) {
 			//Start time if it's the first move in the game, or if it's the first new move after load game. 
 			if (gamePanel.getScore().getMoves() == 0 || gamePanel.getScore().getNewMoves() == 0 ) {
 				this.startClock();
@@ -92,7 +90,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	//Helper method to check if game is won
 	public void checkIfGameIsWon() {
 		if (getGamePanel().getBoard().isGameOver()) {
-			getGamePanel().getGameState().setGameDone(true);
+			getGamePanel().getGameState().setGameOver(true);
 		}
 	}
 
@@ -141,7 +139,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			showMoveSequenceWithoutAnimation(solvedMoves);
 			//Check if game is done, but don't show highscore
 			if (gamePanel.getBoard().isGameOver()) {
-				gamePanel.getGameState().setGameDone(true);
+				gamePanel.getGameState().setGameOver(true);
 				gamePanel.repaint();
 				this.stopClock();
 			}
@@ -156,7 +154,8 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			gamePanel.getScore().addSeconds(1);
 			gamePanel.repaint();
 
-			if (gamePanel.getGameState().isGameDone()) {
+			//TODO: We must agree on where to put this. 
+			if (gamePanel.getGameState().isGameOver()) {
 				presentGameDoneMenu();
 			}
 		}
@@ -262,7 +261,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 	public void keyReleased(KeyEvent e) {
 		if (!this.isAnimating) {
 			//Redo undo if ctrl+z and ctrl+y
-			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !NPuzzle.menuToggle && !gamePanel.getGameState().isGameDone()) {
+			if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown() && !NPuzzle.menuToggle && !gamePanel.getGameState().isGameOver()) {
 				// This is what happens if you press CTRL+Z. This should undo last move.
 				if(gamePanel.getGameState().canUndo()) {
 					gamePanel.getGameState().undoMove();
@@ -273,7 +272,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 
 					showMove(NPuzzle.getSettings().isAnimationOn());
 				}
-			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !NPuzzle.menuToggle && !gamePanel.getGameState().isGameDone()) {
+			} else if(e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown() && !NPuzzle.menuToggle && !gamePanel.getGameState().isGameOver()) {
 				// This is what happens if you press CTRL+Y. This should redo last undo
 				if(gamePanel.getGameState().canRedo()) {
 					gamePanel.getGameState().redoMove();
@@ -287,7 +286,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				if(!NPuzzle.menuToggle)
 					this.stopClock();
-				else if (!gamePanel.getGameState().isGameDone())
+				else if (!gamePanel.getGameState().isGameOver())
 					this.startClock();
 				NPuzzle.toggleMenu();
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
@@ -381,7 +380,7 @@ public class SimpController implements ActionListener, KeyListener, MouseListene
 			NPuzzle.swapView("highscore");
 		} else if(actionCommand.equals("inGameContinueGame")) {
 			NPuzzle.toggleMenu();
-			if (!gamePanel.getGameState().isGameDone()) {
+			if (!gamePanel.getGameState().isGameOver()) {
 				this.startClock();
 			}
 		} else if (actionCommand.equals("inGameNewGame")) {
