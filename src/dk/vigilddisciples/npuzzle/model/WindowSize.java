@@ -14,6 +14,7 @@ public enum WindowSize {
 	private final int WINDOW_HEIGHT;
 	
 	private WindowSize(int boardSize) {
+        //Initialize all of the variables. Most of these are the same for each boardsize.
 		BOARD_SIZE = boardSize;
 		GAME_BORDER = 24;
 		BOARD_BORDER_SIZE = 4;

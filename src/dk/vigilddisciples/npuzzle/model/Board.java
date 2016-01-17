@@ -143,8 +143,7 @@ public class Board implements Serializable {
 	}
 
 	//Check if the game is won.
-	//TODO: Should we allow a gamemode with a set time to win the game?
-	public boolean isGameOver(){	
+	public boolean isGameOver(){
 		//Only do the loops if the empty tile is in the bottom right corner
 		if (this.tiles[tilesPerRow - 1][tilesPerRow - 1].getNumber() == tilesPerRow*tilesPerRow ) {
 			//Check if the tiles are aligned from 1 to tilesPerRow^2
@@ -171,13 +170,13 @@ public class Board implements Serializable {
 	public boolean isMoveValid(Move move, Point emptyTile) {
 		boolean shouldMove = false;
 		if (move.dx == -1) { //Right arrow
-			shouldMove = (emptyTile.x > 0) ? true : false;
+			shouldMove = (emptyTile.x > 0);
 		} else if (move.dx == 1) { //Left arrow
-			shouldMove = (emptyTile.x < tilesPerRow - 1) ? true : false;
+			shouldMove = (emptyTile.x < tilesPerRow - 1);
 		} else if (move.dy == -1) { //Down arrow
-			shouldMove = (emptyTile.y > 0) ? true : false;
+			shouldMove = (emptyTile.y > 0);
 		} else if (move.dy == 1) { //Up arrow
-			shouldMove = (emptyTile.y < tilesPerRow - 1) ? true : false;
+			shouldMove = (emptyTile.y < tilesPerRow - 1);
 		}
 		return shouldMove;
 	}

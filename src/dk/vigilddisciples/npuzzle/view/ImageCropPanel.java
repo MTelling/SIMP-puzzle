@@ -91,7 +91,8 @@ public class ImageCropPanel extends JPanel implements ActionListener, MouseMotio
 	public void mouseReleased(MouseEvent e) { }
 
 	@Override
-	public void mouseDragged(MouseEvent e) { 
+	public void mouseDragged(MouseEvent e) {
+		//This logic moves the image when the user drags it with the mouse.
 		if(e.getX() > this.currWindowSize.getGAME_BORDER() && e.getX() < this.currWindowSize.getGAME_BORDER() + this.currWindowSize.getBOARD_SIZE()) {
 			if(e.getY() > this.currWindowSize.getTOP_CONTROLS_SIZE() && e.getY() < this.currWindowSize.getTOP_CONTROLS_SIZE() + this.currWindowSize.getBOARD_SIZE()) {
 				this.sx1 += this.mouseStartX - e.getX();

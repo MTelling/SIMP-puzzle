@@ -28,9 +28,11 @@ import dk.vigilddisciples.npuzzle.model.Difficulty;
 import dk.vigilddisciples.npuzzle.model.Settings;
 import dk.vigilddisciples.npuzzle.model.WindowSize;
 
+
 public class SettingsPanel extends JPanel implements ActionListener, ChangeListener{
 
 	private static final long serialVersionUID = 1L;
+
 
 	private JButton exitButton;
 	private JButton choosePicture;
@@ -62,10 +64,12 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	private NPuzzle window;
 	private Settings settings;
 
+
 	public SettingsPanel(Settings settings, NPuzzle window) {
 		this.settings = settings;
 		this.window = window;
 
+        //Create the entire GUI. We use vertical glue to position evenly distrubuted on the y-axis.
 		this.add(Box.createVerticalGlue());
 
 		createFramesPerSecondChooser();
@@ -105,13 +109,13 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		this.add(Box.createVerticalGlue());
 
 		this.loadSettings();
+
 	}
 
 	/// ActionListener from here ///
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		String actionCommand = e.getActionCommand();
 		switch (actionCommand) {
 
@@ -122,7 +126,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		case "animationOff": 
 			settings.setAnimationOn(false); 
 			break;
-			
+
 			//Game type picture or numbers
 		case "gameTypeNumbers": 
 			settings.setPictureOn(false); 
@@ -132,7 +136,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 			settings.setPictureOn(true); 
 			loadGameTypeSetting(); 
 			break;
-			
+
 			//Set labels in corners on or off
 		case "labelsOn":
 			settings.setLabelsOn(true);
@@ -148,6 +152,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		case "invertedControls":
 			settings.setControlsInverted();
 			break;
+
 
 			//Set board size
 		case "setBoardSize": 
@@ -220,6 +225,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 			NPuzzle.swapView("mainMenu");
 			break;
 
+
 			//Change size of window
 		case "smallWindow":
 			settings.setCurrWindowSize(WindowSize.SMALL);
@@ -234,6 +240,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 			window.setNewSize(settings.getCurrWindowSize().getDimension());
 			break;
 
+
 			//Set animation scramble to on or off. 
 		case "scrambleAnimationOn": 
 			settings.setAnimationScramblingOn(true);
@@ -244,6 +251,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 
 		default: break;
 		}
+
 	}
 
 	//This listens to the fps slider.
@@ -258,9 +266,11 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				settings.setFramesPerSecond(fpsSlider.getValue());
 			}
 		}
+
 	}
 
-	///////// Methods to set values to what they are in settings /////////
+
+	/// Methods to set values to what they are in settings ///
 
 	//Set all settings to what they are in settings class.
 	public void loadSettings() {
@@ -359,7 +369,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 	}
 
 
-	///////// Methods for creating UI /////////
+	/// Methods for creating UI ///
 
 	private Box containerForComponents(JComponent[] components, String labelText) {
 		ButtonGroup buttonGroup = new ButtonGroup();
@@ -381,6 +391,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 				((JSlider)component).addChangeListener(this);
 			}
 		}
+
 		return container;
 	}
 
@@ -411,6 +422,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		hardGame.setActionCommand("hardGame");
 
 		this.add(containerForComponents(new JRadioButton[]{easyGame,mediumGame,hardGame}, "Difficulty: "));
+
 	}
 
 	private void createAnimationToggle() {
@@ -420,6 +432,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 		animationOff.setActionCommand("animationOff");
 
 		this.add(containerForComponents(new JRadioButton[] {animationOn, animationOff}, "Show move animation: "));
+
 	}
 
 	private void createControlsChooser() {
@@ -519,4 +532,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ChangeListe
 
 		this.add(containerForComponents(new JComponent[] {fpsSlider}, "FPS: "));
 	}
+
+
 }

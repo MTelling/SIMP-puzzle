@@ -1,7 +1,6 @@
 package dk.vigilddisciples.npuzzle.controller;
 import java.awt.Cursor;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -28,7 +27,6 @@ import dk.vigilddisciples.npuzzle.model.GameState;
 import dk.vigilddisciples.npuzzle.model.Highscore;
 import dk.vigilddisciples.npuzzle.model.Move;
 import dk.vigilddisciples.npuzzle.model.Solver;
-import dk.vigilddisciples.npuzzle.model.Tile;
 import dk.vigilddisciples.npuzzle.model.WindowSize;
 import dk.vigilddisciples.npuzzle.view.GamePanel;
 

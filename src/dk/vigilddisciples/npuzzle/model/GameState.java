@@ -13,7 +13,7 @@ public class GameState implements Serializable {
 	private Score score;
 	private Board board;
 	
-	//GameState dependant settings
+	//GameState dependent settings
 	private boolean useCornerLabels;
 	private int gameDifficulty;
 	
@@ -89,11 +89,11 @@ public class GameState implements Serializable {
 	public boolean isGameOver() {
 		return this.isGameOver;
 	}
-	
+
 	public boolean isLabelsOn() {
 		return this.useCornerLabels;
 	}
-	
+
 	public int getDifficulty() {
 		return this.gameDifficulty;
 	}

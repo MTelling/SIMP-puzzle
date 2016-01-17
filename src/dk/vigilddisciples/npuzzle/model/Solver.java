@@ -148,7 +148,6 @@ public class Solver {
 		SearchNode newNode = new SearchNode(current.getMoves() + 1, heuristic, current, copyTilesList(current.getTiles()), move, current.getEmpty());
 		
 		//Reverse the move and be ready for the next move
-		//TODO: is this necessary? Do I ever use this nodes copy of tilesList and position again, or just the move? It IS necessary to reverse the move. But the list?
 		current.getTiles().set(currentPos, currentNum);
 		current.getTiles().set(nextPos, nextNum);
 		current.getEmpty().translate(-move.dx, -move.dy);
@@ -188,7 +187,6 @@ public class Solver {
 			//Check if current node is goalposition. Otherwise continue
 			if(current.getHeuristic() != 0){
 				for(Move move : legalMoves(current.getEmpty())){
-					//TODO: Right now node is still created if tile is blocked, but the node is weighted so it will never be visited. I didn't add this at first, but it didn't work without for some reason.
 					queue.add(makeMove(to, move, current, entireBoard));
 				}
 			} else {

@@ -40,12 +40,13 @@ public class HighscorePanel extends JPanel implements ActionListener{
 	private String origin;
 
 	public HighscorePanel(Highscore easyHighscore, Highscore mediumHighscore, Highscore hardHighscore) {
+		//Load the highscore
 		this.easyHighscore = easyHighscore;
 		this.mediumHighscore = mediumHighscore;
 		this.hardHighscore = hardHighscore;
-		
+
 		this.lookingAtBoardSize = NPuzzle.getSettings().getTilesPerRowInBoard();
-		
+
 		this.setPreferredSize(NPuzzle.getSettings().getCurrWindowSize().getDimension());
 		container = new Box(BoxLayout.Y_AXIS);
 		container.setPreferredSize(new Dimension(WindowSize.SMALL.getBOARD_SIZE(), NPuzzle.getSettings().getCurrWindowSize().getWINDOW_HEIGHT()));
